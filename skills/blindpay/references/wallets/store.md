@@ -41,6 +41,7 @@ You only ever reference the wallet by its ID (`bl_...`) on payin quotes, or by i
 ## In this section
 
 - [Managed wallets](wallets.md): create a wallet, check its balance, and use it on payins and payouts.
+- [Yield](https://blindpay.com/docs/yield): let the wallet balance earn while it sits there.
 
 ## Related
 
@@ -54,6 +55,7 @@ You only ever reference the wallet by its ID (`bl_...`) on payin quotes, or by i
 ## In this section
 
 - [Managed wallet](wallets.md): create a `bl_` wallet, check its balance, and receive stablecoins directly into it.
+- [Yield](https://blindpay.com/docs/yield): sweep the idle USDC balance into a lending vault and read what it earns.
 
 Blockchain wallets (`bw_`) are documented under [Payins](../payins/blockchain-wallets.md), where they serve as the customer-controlled delivery target.
 

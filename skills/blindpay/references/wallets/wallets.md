@@ -145,13 +145,13 @@ curl --request GET \
 
 ```json
 {
-  "USDC": { "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "id": "usdc", "symbol": "USDC", "amount": 100 },
-  "USDT": { "address": null, "id": null, "symbol": "USDT", "amount": 0 },
-  "USDB": { "address": null, "id": null, "symbol": "USDB", "amount": 0 }
+  "USDC": { "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "id": "usdc", "symbol": "USDC", "amount": 100, "earning_amount": 0, "total_amount": 100 },
+  "USDT": { "address": null, "id": null, "symbol": "USDT", "amount": 0, "earning_amount": 0, "total_amount": 0 },
+  "USDB": { "address": null, "id": null, "symbol": "USDB", "amount": 0, "earning_amount": 0, "total_amount": 0 }
 }
 ```
 
-The response always includes all three tokens; one the wallet doesn't hold comes back with `amount: 0`.
+The response always includes all three tokens; one the wallet doesn't hold comes back with `amount: 0`. `amount` is the idle balance, `earning_amount` is the part earning [yield](https://blindpay.com/docs/yield), and `total_amount` is the sum.
 
 ## Receive payments into it
 
@@ -161,9 +161,14 @@ Pass the wallet's `id` as `wallet_id` on a [payin quote](../payins/payin-quotes.
 
 Pass the wallet's `address` as `sender_wallet_address` when you [execute a payout](../payouts/payouts.md). Because BlindPay manages the wallet, the payout is a single call, no extra authorization step.
 
+## Yield
+
+A wallet can earn on the balance it holds. Turn it on with one call and the idle balance moves into a lending vault; payouts keep working and pull the funds back when needed. `yield_status` on the wallet tells you whether it is on. See [Yield](https://blindpay.com/docs/yield).
+
 ## Related
 
 - [Store](store.md): how the wallet fits between payins and payouts
+- [Yield](https://blindpay.com/docs/yield): earn on the wallet balance
 - [Payins](../payins/payins.md): accept a bank transfer and credit the wallet
 - [Payouts](../payouts/payouts.md): pay out from the wallet to a bank account
 - [Webhooks](../essentials/webhooks.md): `wallet.inbound` and the payment lifecycle events
@@ -242,10 +247,15 @@ To move stablecoins out of a managed wallet to another managed wallet or an exte
 
 **Note:**
 
-Transfers are in beta. USDC transfers can move across Ethereum, Polygon, Base, and Arbitrum using Circle CCTP v2; every other token still requires the same network on both sides. The transfer quote expires in 15 seconds, the shortest of any BlindPay quote.
+USDC transfers can move across Ethereum, Polygon, Base, and Arbitrum using Circle CCTP v2; every other token still requires the same network on both sides. The transfer quote expires in 15 seconds, the shortest of any BlindPay quote.
+
+## Yield
+
+A managed wallet can earn on its USDC balance. Enable yield and BlindPay sweeps the idle balance into an ERC-4626 lending vault on the wallet's network, redeems from it when a payout or transfer needs the funds, and reports the position through the yield endpoints and `earning_amount` on the balance. `yield_status` on the wallet is `disabled`, `enabled`, or `disabling`, and every change fires `wallet.update`. See [Yield](https://blindpay.com/docs/yield).
 
 ## Related
 
+- [Yield](https://blindpay.com/docs/yield): earn on the wallet balance
 - [Blockchain wallets](../payins/blockchain-wallets.md): the customer-controlled alternative to a managed wallet
 - [Payins](../payins/payins.md): collect fiat and deliver stablecoins to a wallet
 - [Payouts](../payouts/payouts.md): convert a wallet's stablecoin balance to fiat

@@ -36,12 +36,13 @@ A production instance can only use `USDC` or `USDT` on a mainnet network. A deve
 | Payins (on-ramp delivery) | Ethereum, Polygon, Base, Arbitrum, Tempo, Stellar, Solana, Tron | USDC, USDT (network-dependent; USDC not on Tron) | |
 | Payouts (off-ramp source) | Ethereum, Polygon, Base, Arbitrum, Tempo, Stellar, Solana, Tron | USDC, USDT (network-dependent; USDC not on Tron; USDT not on Base/Arbitrum/Stellar) | |
 | Managed wallets (beta) | Ethereum, Polygon, Base, Arbitrum, Tempo, Solana | USDC, USDT (USDB on testnet) | |
+| Yield on managed wallets | Base, Polygon | USDC | See [Yield](https://blindpay.com/docs/yield) |
 | External blockchain wallets | Ethereum, Polygon, Base, Arbitrum, Tempo, Stellar, Solana, Tron | USDC, USDT (network-dependent; USDC not on Tron; USDT not on Base/Arbitrum/Stellar) | Store an address you already control; see [Managed wallet](../wallets/store.md) |
-| Transfers (beta) | Same network, except USDC which can also cross Ethereum, Polygon, Base, Arbitrum via Circle CCTP v2 | USDC, USDT (USDT restricted to Polygon) | Tempo supports same-network transfers only; it is not part of the CCTP v2 route set. No token conversion. |
+| Transfers | Same network, except USDC which can also cross Ethereum, Polygon, Base, Arbitrum via Circle CCTP v2 | USDC, USDT (USDT restricted to Polygon) | Tempo supports same-network transfers only; it is not part of the CCTP v2 route set. No token conversion. |
 
 **Note:**
 
-Managed wallets and transfers are beta features. Production access for beta features is granted on request.
+Managed wallets are in beta. Production access is granted on request.
 
 Not every token is deployed on every chain. In particular:
 

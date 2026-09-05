@@ -8,7 +8,7 @@ A transfer quote locks in the details of a stablecoin move before you execute it
 
 **Warning:**
 
-Transfers are in beta. `customer_token` must always match `sender_token`, there is no token conversion. `customer_network` must match the source wallet's own network, except when both tokens are `USDC`: a USDC transfer can additionally cross chains using [Circle CCTP v2](#cross-chain-usdc-transfers-circle-cctp-v2).
+`customer_token` must always match `sender_token`, there is no token conversion. `customer_network` must match the source wallet's own network, except when both tokens are `USDC`: a USDC transfer can additionally cross chains using [Circle CCTP v2](#cross-chain-usdc-transfers-circle-cctp-v2).
 
 ## How it works
 
@@ -159,7 +159,7 @@ There is no dedicated test-amount sentinel for transfer quotes or transfers (unl
 
 ## Related
 
-- [Send](send.md): the concept overview and beta scope for transfers
+- [Send](send.md): the concept overview and scope for transfers
 - [Transfers](transfers.md): execute a transfer against this quote
 - [Managed wallets](wallets.md): create and fund the source wallet
 - [Payout quotes](../payouts/payout-quotes.md): compare against the quote used for off-ramp payouts

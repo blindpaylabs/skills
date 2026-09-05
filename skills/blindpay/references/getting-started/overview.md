@@ -107,7 +107,7 @@ BlindPay does not provide wallet services. We operate as a non-custodial payment
 | External blockchain wallets | Customer-controlled wallets you register to receive or authorize stablecoin movement |
 | Payins (on-ramp) | Accept a fiat deposit and deliver stablecoins to any wallet |
 | Payouts (off-ramp) | Pull stablecoins from a wallet and pay out fiat to a bank account |
-| Send / Receive | Move stablecoins in and out of managed wallets (transfers in beta; USDC can move cross-chain via Circle CCTP v2, other tokens stay same-network) |
+| Send / Receive | Move stablecoins in and out of managed wallets (USDC can move cross-chain via Circle CCTP v2, other tokens stay same-network) |
 | Webhooks | Real-time events for every wallet deposit, payout, and transfer |
 
 ## Managed wallets vs external blockchain wallets
