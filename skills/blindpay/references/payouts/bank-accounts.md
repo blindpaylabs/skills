@@ -289,9 +289,9 @@ Save the bank account ID (`ba_...`) for use in payout quotes.
 
 This feature is gated by `subscription_features.plaid` on the instance. Contact BlindPay to enable it. Calling the endpoint below without it enabled returns a 400 `plaid_not_supported` error.
 
-Instead of entering ACH details manually, a customer can connect their bank account through Plaid. BlindPay reads the verified routing and account numbers directly from Plaid, so there's no manual entry and no micro-deposit wait. The resulting bank account is `type: "ach"`, carries the timestamp `plaid_connected_at`, and can fund an ACH payin by pull instead of a manual bank transfer; see [Payins](../payins/payins.md#pull-funding-from-a-plaid-connected-account).
+Instead of entering ACH details manually, a customer can connect their bank account through Plaid. BlindPay reads the verified routing and account numbers directly from Plaid, so there's no manual entry and no micro-deposit wait. The resulting bank account is `type: "ach"`, carries the timestamp `plaid_connected_at`, and can fund an `ach_pull` payin instead of a manual bank transfer; see [Payins](../payins/payins.md#pull-funding-from-a-plaid-connected-account).
 
-There is a single endpoint. It returns a `hosted_link_url`; send the customer there and BlindPay does the rest.
+There is a single endpoint. It returns a `url` to a BlindPay hosted page that renders nothing but Plaid Link; render it in an iframe on your own page, or open it in a new tab, and BlindPay does the rest. The `token` in the URL is a signed, short-lived session token that carries everything the page needs; treat the URL as a secret for that customer.
 
 **Remember:** replace `YOUR_API_KEY` with your API key, `in_000000000000` with your instance ID, `re_000000000000` with your customer ID.
 
@@ -299,14 +299,43 @@ There is a single endpoint. It returns a `hosted_link_url`; send the customer th
 curl --request POST \
   --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/bank-accounts/plaid \
   --header 'Authorization: Bearer YOUR_API_KEY' \
-  --header 'Content-Type: application/json'
+  --header 'Content-Type: application/json' \
+  --data '{
+  "redirect_url": "https://example.com/bank-connected"
+}'
 ```
 
-The call returns `{ "link_token": "...", "expiration": "...", "hosted_link_url": "..." }`. Open `hosted_link_url` in a browser tab or an external webview - Plaid Hosted Link cannot be embedded in an iframe.
+```json [Response]
+{
+  "url": "https://app.blindpay.com/e/plaid?token=eyJhbGciOiJIUzI1NiJ9..."
+}
+```
 
-When the customer finishes, Plaid notifies BlindPay and the bank account is created automatically, one per account the customer selected. All the identity fields on it (beneficiary name, address, tax id) come from the customer record, never from the bank connection, so the account is always first party. Listen to the `bankAccount.new` webhook, or poll [List bank accounts](https://api.blindpay.com/reference#tag/bank-accounts/GET/v1/instances/{instance_id}/customers/{customer_id}/bank-accounts){target="_blank"}, to know when it is available.
+```html [Embed]
+<iframe src="URL_FROM_THE_RESPONSE" title="Connect your bank" width="100%" height="640" allow="clipboard-write"></iframe>
+```
 
-The same connection is never turned into two bank accounts, even if Plaid redelivers the notification.
+| Field | Type | Notes |
+| --- | --- | --- |
+| `redirect_url` | string (URL), optional | Where to send the customer once the account is connected. BlindPay appends `bank_account_ids` (comma separated `ba_...` ids) as a query parameter. Leave it out and the page replaces Plaid Link with a plain "Bank account connected" confirmation and a Close button instead. |
+
+The link is single use and expires after at most 4 hours; request a new one every time the customer opens the flow. Sandbox instances always receive a Plaid sandbox session (use Plaid's `user_good` / `pass_good` test credentials), production instances a Plaid production session.
+
+The bank account is created the moment the customer finishes in Plaid Link, one per account they selected, and the `bankAccount.new` webhook fires for each. If you embed the page in an iframe, it also posts a message to the parent window so you can close the frame without waiting for the redirect:
+
+```json [postMessage payload]
+{ "source": "blindpay-plaid-link", "event": "connected", "bank_account_ids": ["ba_000000000000"] }
+```
+
+`event` is `connected`, `exit` (the customer closed Plaid Link without connecting) or `error` (with a `message`). Check `event.origin === "https://app.blindpay.com"` before trusting the message.
+
+### Connected accounts are always first party
+
+BlindPay only accepts a connected account that belongs to the customer it is being connected for. Before the bank account is created, BlindPay runs Plaid Identity Match between the account holder on file at the bank and the customer record (legal name, plus email, phone, and address when present). The account holder's legal name has to match the customer's name (first and last name for individuals, legal name for businesses) at Plaid's recommended threshold; otherwise the connection is rejected and no bank account is created. Accounts held by someone else fail with `plaid_account_not_first_party`; accounts where the bank returns no holder identity fail with `plaid_identity_unavailable`.
+
+All the identity fields on the resulting bank account (beneficiary name, address, tax id) come from the customer record, never from the bank connection, and `recipient_relationship` is always `first_party`.
+
+The same connection is never turned into two bank accounts, even if the customer reloads the page or Plaid redelivers its notification.
 
 **Note:**
 

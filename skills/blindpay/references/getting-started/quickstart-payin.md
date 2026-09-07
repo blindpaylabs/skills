@@ -159,7 +159,7 @@ Save the `id` from the response: this is your payin quote ID (`pq_...`). You hav
 
 **Note:**
 
-This example uses the default manual bank transfer. If the customer connected a bank account through [Plaid](../payouts/bank-accounts.md#connect-with-plaid), pass its id as `funding_bank_account_id` instead and BlindPay pulls the funds automatically; see [Payins](../payins/payins.md#pull-funding-from-a-plaid-connected-account).
+This example uses the default manual bank transfer. If the customer connected a bank account through [Plaid](../payouts/bank-accounts.md#connect-with-plaid), use `payment_method: "ach_pull"` with the account id in `funding_bank_account_id` instead and BlindPay pulls the funds automatically; see [Payins](../payins/payins.md#pull-funding-from-a-plaid-connected-account).
 
 ### Create the payin
 

@@ -274,11 +274,13 @@ Some `payer_rules` fields are validated against a specific format, not just chec
 | `pse_phone` | `+573` followed by 9 digits, for example `+573001234567` |
 | `pse_full_name` | Up to 50 characters |
 
-## funding_bank_account_id (ach pull)
+## ach_pull and funding_bank_account_id
 
-For `payment_method: "ach"`, you can optionally pass `funding_bank_account_id` (a `ba_...` id) to have BlindPay pull the funds from a bank account the customer already connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid), instead of the payer sending a manual bank transfer. The account must belong to the same customer and be Plaid-connected (`plaid_connected_at` set); otherwise the quote is rejected with 400 `funding_account_not_plaid_connected`. See [Payins](payins.md#pull-funding-from-a-plaid-connected-account) for the full pull flow.
+`payment_method: "ach_pull"` has BlindPay pull the funds from a bank account the customer already connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid), instead of the payer sending a manual bank transfer. It is priced like `ach` and settles in USD.
 
-Pulling this way also requires the `plaid` subscription feature on the instance itself. On an instance without it, passing `funding_bank_account_id` fails with `BANK_ACCOUNTS_PLAID_NOT_ENABLED` before BlindPay even looks up the account. Contact BlindPay to enable Plaid for your instance.
+`funding_bank_account_id` (a `ba_...` id) is **required** on an `ach_pull` quote; omitting it fails with 400 `funding_bank_account_id_required`. The account must belong to the same customer and be Plaid-connected (`plaid_connected_at` set); otherwise the quote is rejected with 400 `funding_account_not_plaid_connected`. Passing `funding_bank_account_id` with any other `payment_method` fails with 400 `funding_account_invalid`. See [Payins](payins.md#pull-funding-from-a-plaid-connected-account) for the full pull flow.
+
+Pulling this way also requires the `plaid` subscription feature on the instance itself. On an instance without it, an `ach_pull` quote fails with `BANK_ACCOUNTS_PLAID_NOT_ENABLED` before BlindPay even looks up the account. Contact BlindPay to enable Plaid for your instance.
 
 Pulling through Plaid adds a flat **$1.00** fee on top of `sender_amount`, since BlindPay's ACH-pull provider charges it back to the payer. The `sender_amount` this endpoint returns already includes that fee, so it's the full amount to show the payer; the pull itself moves `sender_amount` minus the $1.00 fee.
 
@@ -292,7 +294,7 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/payin-quotes \
   "currency_type": "sender",
   "cover_fees": true,
   "request_amount": 10000,
-  "payment_method": "ach",
+  "payment_method": "ach_pull",
   "token": "USDB",
   "funding_bank_account_id": "ba_000000000000"
 }'

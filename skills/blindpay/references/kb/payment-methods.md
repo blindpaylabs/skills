@@ -10,6 +10,7 @@ BlindPay supports bank transfers over local rails in the US, Brazil, Mexico, Col
 | --- | --- | --- | --- |
 | International SWIFT | 🌎 Global | USD | Receive + send |
 | ACH | 🇺🇸 United States | USD | Receive + send |
+| ACH Pull | 🇺🇸 United States | USD | Receive |
 | Domestic Wire | 🇺🇸 United States | USD | Receive + send |
 | RTP | 🇺🇸 United States | USD | Receive + send |
 | Pix | 🇧🇷 Brazil | BRL | Receive + send |
@@ -23,7 +24,7 @@ BlindPay supports bank transfers over local rails in the US, Brazil, Mexico, Col
 
 **Note:**
 
-On the receive side, US payments arrive either into a customer's own [virtual account](../virtual-accounts/virtual-accounts.md) or into BlindPay's bank details with a `memo_code`. Alternatively, an ACH payin can pull the funds directly from a bank account the customer connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid), skipping the manual transfer entirely; see [Payins](../payins/payins.md#pull-funding-from-a-plaid-connected-account).
+On the receive side, US payments arrive either into a customer's own [virtual account](../virtual-accounts/virtual-accounts.md) or into BlindPay's bank details with a `memo_code`. Alternatively, an `ach_pull` payin pulls the funds directly from a bank account the customer connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid), skipping the manual transfer entirely; see [Payins](../payins/payins.md#pull-funding-from-a-plaid-connected-account).
 
 **Note:**
 

@@ -236,7 +236,7 @@ Stellar mainnet deliveries originate from BlindPay's treasury wallet: `GCOSSQDM2
 
 ## Pull funding from a Plaid-connected account
 
-For `ach` payins, instead of the payer sending a manual bank transfer, BlindPay can pull the funds directly from a bank account the customer connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid). Set `funding_bank_account_id` (a `ba_...` id) on the payin quote to a Plaid-connected account belonging to the same customer; the quote rejects any other bank account with 400 `funding_account_not_plaid_connected`.
+With `payment_method: "ach_pull"`, instead of the payer sending a manual bank transfer, BlindPay pulls the funds directly from a bank account the customer connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid). Set `funding_bank_account_id` (a `ba_...` id) on the payin quote to a Plaid-connected account belonging to the same customer; it is required for `ach_pull`, and the quote rejects any other bank account with 400 `funding_account_not_plaid_connected`.
 
 ```bash [cURL]
 curl https://api.blindpay.com/v1/instances/in_000000000000/payin-quotes \
@@ -248,7 +248,7 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/payin-quotes \
   "currency_type": "sender",
   "cover_fees": true,
   "request_amount": 10000,
-  "payment_method": "ach",
+  "payment_method": "ach_pull",
   "token": "USDB",
   "funding_bank_account_id": "ba_000000000000"
 }'
@@ -260,7 +260,7 @@ BlindPay's ACH-pull provider charges a flat **$1.00** fee on every pull, deducte
 
 **Note:**
 
-Omit `funding_bank_account_id` to keep the default manual bank transfer flow described above.
+Use `payment_method: "ach"` without `funding_bank_account_id` to keep the default manual bank transfer flow described above.
 
 ## Monitoring window
 
