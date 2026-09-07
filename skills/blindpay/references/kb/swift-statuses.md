@@ -22,6 +22,8 @@ When you create a [SWIFT payout](../payouts/payouts.md), the flow is:
 
 To submit compliance documents and see the full request body, use the document submission endpoint documented on the [Payouts](../payouts/payouts.md) page.
 
+The same endpoint also accepts an optional document on non-SWIFT payouts that are `processing` or `completed`, without any hold or review step. See [Optional documents on other rails](../payouts/payout-quotes.md#optional-documents-on-other-rails).
+
 ## Tracking Documents Field
 
 All payout responses and [webhooks](../essentials/webhooks.md) include `tracking_documents`:

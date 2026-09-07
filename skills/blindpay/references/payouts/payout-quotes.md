@@ -89,6 +89,10 @@ SWIFT payouts need compliance documents, but they are collected **after** the pa
 
 Documents are only required when the recipient relationship is not `first_party` (sending to a third party). Sending to your own SWIFT account never requires documents.
 
+### Optional documents on other rails
+
+Payouts on any other rail (wire, ACH, RTP, Pix and so on) never wait for documents, but you can still attach one for our compliance team. Call the same document submission endpoint while the payout is `processing` or `completed`. The document is stored on the payout and shown to compliance; the payout `status` and `tracking_documents` are not changed, the `description` field is ignored, and submitting again replaces the previous document. Payouts that are `failed`, `refunded` or `on_hold` return `payout_not_processing_or_completed`.
+
 ## Prerequisites
 
 **Before you start:**
