@@ -8,7 +8,7 @@ Source: https://blindpay.com/docs/kb/naics-codes
 
 NAICS (North American Industry Classification System) codes classify businesses by their primary economic activity. You'll need to provide your industry code during onboarding.
 
-Below is the full list of accepted industry codes, organized by industry. It always matches [`GET /v1/available/naics`](https://blindpay.com/docs/api/reference), which is the authoritative list the API validates against. Some codes were renumbered in NAICS 2022 (for example, Software Publishers moved from 511210 to 513210); send the code as it appears here and BlindPay maps it to the current classification with our banking partners. If your industry isn't listed, contact [compliance@blindpay.com](mailto:compliance@blindpay.com) and we'll add the appropriate code for you.
+Below is the full list of accepted industry codes, organized by industry. It always matches [`GET /v1/available/naics`](https://api.blindpay.com/reference), which is the authoritative list the API validates against. Some codes were renumbered in NAICS 2022 (for example, Software Publishers moved from 511210 to 513210); send the code as it appears here and BlindPay maps it to the current classification with our banking partners. If your industry isn't listed, contact [compliance@blindpay.com](mailto:compliance@blindpay.com) and we'll add the appropriate code for you.
 
 ## Agriculture
 
