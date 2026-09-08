@@ -114,6 +114,12 @@ The result is `approved` or `rejected`. Neither stage guarantees approval. Issua
 
 Webhooks behave identically on development and production: same event names, same payload shapes, same signature verification. Use the webhook events dashboard on your development instance to inspect deliveries and replay events while you build, before relying on the same flow in production. See [Webhooks](webhooks.md) for the full event list and signature verification.
 
+## Rate limits
+
+Development instances are capped at roughly 100 requests per minute per instance, across every API key and dashboard session that uses the instance. Exceeding it returns a `429` with `development_instance_rate_limit_exceeded`, a `Retry-After` header with the seconds until the window resets, and `RateLimit-Limit` / `RateLimit-Remaining` / `RateLimit-Reset` headers on every response so your client can pace itself.
+
+Production instances have no per-instance request cap.
+
 ## Testing amounts
 
 On development instances, you can force a payin or payout into a specific outcome by using one of these amounts as the `request_amount`:
