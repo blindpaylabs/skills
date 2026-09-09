@@ -8,7 +8,7 @@ Source: https://blindpay.com/docs/kb/naics-codes
 
 NAICS (North American Industry Classification System) codes classify businesses by their primary economic activity. You'll need to provide your industry code during onboarding.
 
-Below is the full list of accepted industry codes, organized by industry. It always matches [`GET /v1/available/naics`](https://api.blindpay.com/reference), which is the authoritative list the API validates against. Some codes were renumbered in NAICS 2022 (for example, Software Publishers moved from 511210 to 513210); send the code as it appears here and BlindPay maps it to the current classification with our banking partners. If your industry isn't listed, contact [compliance@blindpay.com](mailto:compliance@blindpay.com) and we'll add the appropriate code for you.
+Below is the full list of accepted industry codes, organized by industry. It always matches [`GET /v1/available/naics`](https://api.blindpay.com/reference), which is the authoritative list the API validates against. Some codes were renumbered in NAICS 2022 (for example, Software Publishers moved from 511210 to 513210); both the 2017 and 2022 numbers below are accepted and map to the same classification with our banking partners. If your industry isn't listed, contact [compliance@blindpay.com](mailto:compliance@blindpay.com) and we'll add the appropriate code for you.
 
 ## Agriculture
 
@@ -167,6 +167,7 @@ Below is the full list of accepted industry codes, organized by industry. It alw
 | 513130     | Book Publishers                                             |
 | 516120     | Television Broadcasting Stations                            |
 | 519130     | Internet Publishing and Broadcasting and Web Search Portals |
+| 519290     | Web Search Portals and All Other Information Services |
 | 711410     | Agents and Managers for Artists, Athletes, Entertainers     |
 | 711510     | Independent Artists, Writers, and Performers                |
 
@@ -198,6 +199,7 @@ Below is the full list of accepted industry codes, organized by industry. It alw
 | 455110     | Department Stores                                          |
 | 455219     | All Other General Merchandise Retailers                    |
 | 456110     | Pharmacies and Drug Retailers                              |
+| 456120     | Cosmetics, Beauty Supplies, and Perfume Retailers |
 | 457110     | Gasoline Stations with Convenience Stores                  |
 | 458110     | Clothing and Clothing Accessories Retailers                |
 | 458210     | Shoe Retailers                                             |
@@ -210,6 +212,7 @@ Below is the full list of accepted industry codes, organized by industry. It alw
 | NAICS Code | Industry Description                                    |
 | ---------- | ------------------------------------------------------- |
 | 511210     | Software Publishers                                     |
+| 513210     | Software Publishers |
 | 517111     | Wired Telecommunications Carriers                       |
 | 517112     | Wireless Telecommunications Carriers (except Satellite) |
 | 517410     | Satellite Telecommunications                            |
