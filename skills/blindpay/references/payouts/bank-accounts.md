@@ -385,7 +385,7 @@ All four are optional and independent of each other; omit them if the beneficiar
 - `swift_code_bic` must be 8 or 11 characters, uppercase, in standard SWIFT/BIC format.
 - `swift_beneficiary_address_line_1` and `_line_2` combined must be 70 characters or fewer; the full beneficiary address (both lines, city, state/province, postal code, country) must be 140 characters or fewer combined.
 - `swift_beneficiary_state_province_region` is exactly 2 alphanumeric characters (some countries use a numeric ISO 3166-2 code here instead of letters), and `swift_beneficiary_postal_code` is capped at 16 alphanumeric characters. Both are uppercased automatically.
-- `swift_account_holder_name` is capped at 50 characters, `swift_bank_name` at 80.
+- `swift_account_holder_name` has no length cap; `swift_bank_name` is capped at 80 characters.
 
 **Note:**
 
