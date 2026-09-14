@@ -29,13 +29,13 @@ A payout descriptor is the sender name shown on the recipient's bank statement. 
 ACH, Domestic Wire, and International SWIFT support Named Accounts, which display the customer's own name as the payout descriptor. To enable named accounts for a customer:
 
 1. Contact BlindPay and specify which customer you want to enable named accounts for.
-2. Allow up to **5 business days** for the request to be processed.
+2. Allow up to **1 business day** for the request to be processed.
 
 Once enabled, recipients see the customer's name on their bank statements instead of BlindPay's name.
 
 **Note:**
 
-**Note:** Named account requests must be submitted to BlindPay directly and take up to 5 business days to process.
+**Note:** Named account requests must be submitted to BlindPay directly and take up to 1 business day to process.
 
 ## Reference / memo text
 

@@ -50,7 +50,7 @@ These arrive on `GET /payins/{id}` and on the `payin.complete` webhook, so your 
 
 ### Whose Name Appears
 
-By default the payout descriptor shows BlindPay's name. The **Named Account** setting replaces it with your customer's name, and it is available on ACH, Domestic Wire and International SWIFT only. It is enabled per customer on request and takes up to 5 business days to process. Full matrix in [Payout descriptor](payout-descriptor.md).
+By default the payout descriptor shows BlindPay's name. The **Named Account** setting replaces it with your customer's name, and it is available on ACH, Domestic Wire and International SWIFT only. It is enabled per customer on request and takes up to 1 business day to process. Full matrix in [Payout descriptor](payout-descriptor.md).
 
 This is the part worth being precise about: your customer's name reaches the payee because the payment is issued against an account titled for that customer, not because BlindPay writes them into a separate ultimate-party field. See [What BlindPay Does Not Do](#what-blindpay-does-not-do) below.
 

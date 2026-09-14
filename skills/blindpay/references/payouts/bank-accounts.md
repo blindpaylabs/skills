@@ -24,7 +24,7 @@ All bank account data must be valid, even on development instances. Validation (
 
 | `type` | Country | Estimated time of arrival |
 | --- | --- | --- |
-| `international_swift` | Global | ~5 business days |
+| `international_swift` | Global | ~5 business days (minimum 100 USD per payout) |
 | `ach` | United States | ~2 business days |
 | `wire` | United States | ~1 business day |
 | `rtp` | United States | instant |

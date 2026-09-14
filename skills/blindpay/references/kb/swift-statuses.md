@@ -6,12 +6,13 @@ Source: https://blindpay.com/docs/kb/swift-statuses
 
 ## Summary
 
-All international SWIFT payouts require compliance document submission before funds are processed. A payout stays on hold until documents are submitted and approved by BlindPay's compliance team. The `tracking_documents` field on payout responses and webhooks reports progress through `waiting_documents`, `compliance_reviewing`, and approval. Documents must be submitted within 30 days of payout creation and reviewed within 8 days of submission.
+All international SWIFT payouts require compliance document submission before funds are processed. A payout stays on hold until documents are submitted and approved by BlindPay's compliance team. The `tracking_documents` field on payout responses and webhooks reports progress through `waiting_documents`, `compliance_reviewing`, and approval. Documents must be submitted within 30 days of payout creation and reviewed within 8 days of submission. The minimum SWIFT payout is 100 USD.
 
 ## Payout Flow for SWIFT
 
 When you create a [SWIFT payout](../payouts/payouts.md), the flow is:
 
+0. **Minimum check** → Requested amounts below 100 USD are rejected with `swift_minimum_is_100_usd` and no payout is created
 1. **Payout created** → Status is `on_hold`
 2. **Waiting for documents** → `tracking_documents.status: waiting_documents`
 3. **Documents submitted** → `tracking_documents.status: compliance_reviewing`

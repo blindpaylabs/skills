@@ -36,6 +36,15 @@ Every payout follows the same three-step pattern:
 
 You can add third-party bank accounts: a customer named "John" can have a payout sent to a bank account belonging to "Jack".
 
+### Minimum amounts
+
+| `type` | Minimum | Error when below |
+| --- | --- | --- |
+| `international_swift` | 100 USD requested amount | `swift_minimum_is_100_usd` |
+| `sepa` | 11 USDC when quoting by sender amount, 10 EUR when quoting by receiver amount | `sepa_minimum_is_11_usdc`, `sepa_minimum_is_10_eur` |
+
+The SWIFT minimum applies to the requested amount before fees, on both quote-based and offramp wallet payouts. Other rails have no minimum beyond the fee itself.
+
 ### Funding source
 
 Every payout needs a funding source, the wallet the settlement stablecoins are pulled from.

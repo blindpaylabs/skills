@@ -6,7 +6,7 @@ Source: https://blindpay.com/docs/kb/swift-deliverability
 
 ## Summary
 
-SWIFT is the global payment network BlindPay uses to send and receive money internationally, processed exclusively through tier 1 banks. To maximize deliverability, every B2B SWIFT payment requires a compliance document proving the relationship between sender and customer, and beneficiary addresses must follow strict formatting rules with a 140-character limit. Documents that fail to establish the sender-customer relationship cause the payment to be rejected.
+SWIFT is the global payment network BlindPay uses to send and receive money internationally, processed exclusively through tier 1 banks. To maximize deliverability, every B2B SWIFT payment requires a compliance document proving the relationship between sender and customer, and beneficiary addresses must follow strict formatting rules with a 140-character limit. Documents that fail to establish the sender-customer relationship cause the payment to be rejected. The minimum SWIFT payout is 100 USD on the requested amount, and payouts below it are rejected with `swift_minimum_is_100_usd`.
 
 ## Compliance Documentation
 
