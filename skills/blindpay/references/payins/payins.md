@@ -276,7 +276,7 @@ On development instances every payin auto-completes about 30 seconds after creat
 | --- | --- | --- |
 | `ach` | USD | up to 5 business days |
 | `wire` | USD | up to 5 business days |
-| `pix` | BRL | typically settles within minutes; BlindPay waits up to 30 minutes before marking a non-OTC `pix` payin `failed` (with a reconciliation check first). OTC `pix` payins wait until the [18:50 BRT cutoff](../kb/cut-off-times.md) instead |
+| `pix` | BRL | typically settles within minutes; BlindPay waits up to 30 minutes before marking a non-OTC `pix` payin `failed` (with a reconciliation check first). OTC `pix` payins wait until the [23:59 BRT cutoff](../kb/cut-off-times.md) instead |
 | `ted` | BRL | up to 7 days (covers a Friday cut-off with next-week reconciliation) |
 | `spei` | MXN | typically settles within minutes; BlindPay waits up to 30 minutes before marking the payin `failed` |
 | `transfers` | ARS | typically settles within minutes; BlindPay waits up to 30 minutes before marking the payin `failed` |

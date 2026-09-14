@@ -64,7 +64,7 @@ On the payout side, `ach_cop_bitso` (Colombia) settles in around 1 business day,
 
 In development, every payin auto-completes about 30 seconds after initiation, regardless of payment method.
 
-Pix payin quotes with `is_otc: true` (BRL-only, quote expires in 10 seconds; see [Quote expiry windows](#quote-expiry-windows)) also close out on a fixed daily cutoff rather than a rolling window: BlindPay waits for the deposit until 18:50 BRT (America/Sao_Paulo) the same day, or the next day if the quote was created after that time. This cutoff is also the expiration BlindPay sets on the Pix QR code itself.
+Pix payin quotes with `is_otc: true` (BRL-only, quote expires in 10 seconds; see [Quote expiry windows](#quote-expiry-windows)) also close out on a fixed daily cutoff rather than a rolling window: BlindPay waits for the deposit until 23:59 BRT (America/Sao_Paulo) the same day, or the next day if the quote was created after that time. This cutoff is also the expiration BlindPay sets on the Pix QR code itself.
 
 ## Currency minimums
 
