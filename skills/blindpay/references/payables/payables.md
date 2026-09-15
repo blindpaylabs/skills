@@ -80,7 +80,7 @@ Quoting a boleto can also update the payable itself, not just price it: `due_dat
 
 Boletos also only clear on Brazilian banking days, 06:30 through 18:30 BRT; above R$250,000.00 the same-day window closes at 14:30 BRT instead. Quoting outside those hours or on a closure defers execution to the next banking day. If that deferral would push execution past the boleto's `due_date`, the quote is rejected with `payable_boleto_would_be_overdue`.
 
-PIX and invoice-with-bank-details payables use the declared `amount` as-is; there is no rail-side recalculation for those.
+PIX and invoice-with-bank-details payables use the declared `amount` as-is; there is no rail-side recalculation for those. A fixed-amount PIX code sets that amount at registration; a PIX code without an embedded amount takes the `line_items` you send and pays exactly that value.
 
 ### Minimum
 
@@ -111,7 +111,7 @@ The attempt's own lifecycle (compliance hold, release, failure reason, refund) l
 
 ## Dedupe
 
-Registering the same `boleto_barcode` or `pix_qrcode` twice for the same instance is rejected with `duplicate_payable`: each code has exactly one payable. If a payment attempt fails or is refunded, do not register the code again. Quote the same payable again and pay it.
+Registering the same `boleto_barcode` or `pix_qrcode` twice for the same instance is rejected with `duplicate_payable`: each code has exactly one payable. If a payment attempt fails or is refunded, do not register the code again. Quote the same payable again and pay it. The exception is a PIX code without an embedded amount: a printed merchant QR is paid many times by many people, so each registration with its own `line_items` is a new payable and the code can be registered again at any time.
 
 ## How to pay one
 

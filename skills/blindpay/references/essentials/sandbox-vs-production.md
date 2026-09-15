@@ -69,7 +69,7 @@ Development instances have no provider connection for boleto and PIX, so registe
 | --- | --- |
 | `11111` | Registration fails: `unresolvable_payable_code` |
 | `22222` | Registration fails: `payable_already_paid_or_expired` (boleto and PIX only) |
-| `33333` | Registration fails: `pix_code_amount_required` (PIX only) |
+| `33333` | Amount-less PIX code: registers with the amount you send as `line_items`, fails with `pix_code_amount_required` without one (PIX only) |
 | `44444` | An arrecadação code resolves as a tax bill instead of a utility bill |
 
 Any other digits resolve successfully. The simulated amount comes from the code itself, the same way it would on production: the last 10 digits of a boleto linha digitável, or the PIX EMV amount field. Use that to test different payable amounts without a real bill.

@@ -70,7 +70,7 @@ const payable = await response.json()
 
 The code is resolved at registration, so the beneficiary, due date and current `amount` come back real (as a single auto line item). See [Amount semantics](payables.md#amount-semantics) for what actually gets charged at payment time.
 
-If you send `line_items` alongside `boleto_barcode` or `pix_qrcode`, they are discarded: this single auto line item, priced from what the rail resolves, always replaces whatever you sent. Use `note` if you want your own reference text on the payable.
+If you send `line_items` alongside `boleto_barcode` or a fixed-amount `pix_qrcode`, they are discarded: this single auto line item, priced from what the rail resolves, always replaces whatever you sent. The one exception is a PIX code without an embedded amount, where your `line_items` set the value (see [PIX](#pix)). Use `note` if you want your own reference text on the payable.
 
 ## PIX
 
@@ -108,7 +108,16 @@ const payable = await response.json()
 
 The response has the same shape as the boleto one, with `pix_qrcode` set and `boleto_barcode` null (and `line_items` discarded the same way). The beneficiary and amount come from the code; a PIX payable has no due date and no document.
 
-Only PIX codes with a fixed amount embedded can be registered. A code that lets the payer choose the amount is rejected with `pix_code_amount_required`; ask for a code generated with a fixed amount instead.
+A PIX code with a fixed amount embedded is priced from the code, and any `line_items` you send are discarded. A code that lets the payer choose the amount (most static merchant QR codes) is registered with the amount you send: pass it as `line_items` (plus `taxes` and `discount` if any) and that total is what gets paid. Sending such a code without an amount is rejected with `pix_code_amount_required`. Because these codes are reused by many payers, they are exempt from `duplicate_payable`: register the same code again for each payment.
+
+```json
+{
+  "customer_id": "re_000000000000",
+  "currency": "BRL",
+  "pix_qrcode": "00020126580014br.gov.bcb.pix0136...",
+  "line_items": [{ "name": "Table 12", "quantity": 1, "price": 8500 }]
+}
+```
 
 ## Attach the document
 
