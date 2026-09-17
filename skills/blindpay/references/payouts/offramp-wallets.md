@@ -21,10 +21,11 @@ BlindPay always creates a [payout](payouts.md) automatically whenever the wallet
 | Arbitrum | USDC only | No fixed minimum* | 0 USDC |
 | Base | USDC only | No fixed minimum* | 0 USDC |
 | Tempo | USDC only | No fixed minimum* | 0 USDC |
+| Arc | USDC only | No fixed minimum* | 0 USDC |
 
 *The deposit only needs to cover its fees (additional fee, percentage fee, and bank transfer fee). A deposit smaller than the total fees is not converted: no payout or quote is created, and the funds stay at the wallet's deposit address rather than being refunded automatically. Nothing fails an API call here since no API call triggered the deposit, and you won't get a payout webhook for it, so treat deposits below the minimum as something to monitor for and recover manually, not something the API surfaces an error for.
 
-Each mainnet network above has a matching testnet for development instances: `solana_devnet`, `sepolia`, `polygon_amoy`, `arbitrum_sepolia`, `base_sepolia`, `tempo_testnet`. Development instances receive USDB, BlindPay's test stablecoin, instead of USDC/USDT, with no additional fee.
+Each mainnet network above has a matching testnet for development instances: `solana_devnet`, `sepolia`, `polygon_amoy`, `arbitrum_sepolia`, `base_sepolia`, `tempo_testnet`, `arc_testnet`. Development instances receive USDB, BlindPay's test stablecoin, instead of USDC/USDT, with no additional fee.
 
 A production instance can only create offramp wallets on mainnet networks; a development instance can only create them on the matching testnet. Requesting the wrong kind fails with `BLOCKCHAIN_NETWORK_NOT_SUPPORTED`.
 
@@ -75,7 +76,7 @@ curl --request POST \
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `network` | enum | Yes | Production: `tron`, `solana`, `ethereum`, `polygon`, `arbitrum`, `base`, `tempo`. Development instances use the matching testnets: `solana_devnet`, `sepolia`, `polygon_amoy`, `arbitrum_sepolia`, `base_sepolia`, `tempo_testnet`. |
+| `network` | enum | Yes | Production: `tron`, `solana`, `ethereum`, `polygon`, `arbitrum`, `base`, `tempo`, `arc`. Development instances use the matching testnets: `solana_devnet`, `sepolia`, `polygon_amoy`, `arbitrum_sepolia`, `base_sepolia`, `tempo_testnet`, `arc_testnet`. |
 | `external_id` | string | No | Your own reference for the wallet, echoed back on the response. |
 
 The response includes `id` (`ow_...`), `network`, `address`, `circle_wallet_id` (null for Tempo-network wallets, which use a different custody provider), and your `external_id`. Share `address` with whoever is paying your customer: any USDC or USDT sent to it on the chosen network is converted and paid out to the linked bank account automatically.
@@ -84,7 +85,7 @@ If your instance has email notifications enabled, BlindPay emails the customer a
 
 ### SEPA bank accounts
 
-An offramp wallet on a `sepa` bank account only supports a subset of deposit networks, since each network needs individual Travel Rule approval. Supported: `ethereum`, `base`, `arbitrum`, `polygon` (and their development testnets), and `solana`/`solana_devnet`. `tron` and `tempo`/`tempo_testnet` are not supported for SEPA. Requesting an unsupported network fails with `sepa_offramp_wallet_network_not_supported`.
+An offramp wallet on a `sepa` bank account only supports a subset of deposit networks, since each network needs individual Travel Rule approval. Supported: `ethereum`, `base`, `arbitrum`, `polygon` (and their development testnets), and `solana`/`solana_devnet`. `tron`, `tempo`/`tempo_testnet` and `arc`/`arc_testnet` are not supported for SEPA. Requesting an unsupported network fails with `sepa_offramp_wallet_network_not_supported`.
 
 ## Retrieve an offramp wallet
 

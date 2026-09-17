@@ -31,6 +31,7 @@ A blockchain wallet is the endpoint on both sides of a stablecoin movement:
 | `solana` | Non-EVM, production | |
 | `tron` | Non-EVM, production | Beta, requires the `otc` subscription feature on the instance |
 | `tempo` | EVM, production | |
+| `arc` | EVM, production | |
 | `sepolia` | EVM, development | Ethereum testnet |
 | `polygon_amoy` | EVM, development | Polygon testnet |
 | `base_sepolia` | EVM, development | Base testnet |
@@ -38,6 +39,7 @@ A blockchain wallet is the endpoint on both sides of a stablecoin movement:
 | `stellar_testnet` | Non-EVM, development | |
 | `solana_devnet` | Non-EVM, development | |
 | `tempo_testnet` | EVM, development | Tempo testnet |
+| `arc_testnet` | EVM, development | Arc testnet |
 
 Development instances only accept the testnet networks; production instances only accept the mainnet networks. See [Supported chains](../kb/supported-chains.md) for the full chain and token matrix.
 
