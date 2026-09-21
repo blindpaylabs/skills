@@ -39,7 +39,7 @@ Skills teach the agent BlindPay's rails, corridors, fees, KYC/KYB flows, and API
 
 ### Get your credentials
 
-Copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up).
+Copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
 
 ### Ask the agent
 

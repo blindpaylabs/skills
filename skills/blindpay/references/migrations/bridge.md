@@ -1,6 +1,6 @@
 # Migrate from Bridge to BlindPay
 
-Move an existing Bridge integration to the BlindPay API: map customers, external accounts, liquidation addresses, and transfers to their BlindPay equivalents.
+Move an existing Bridge integration to the BlindPay API: map customers, external accounts, liquidation addresses, and transfers to their equivalents.
 
 Source: https://blindpay.com/docs/migrations/bridge
 

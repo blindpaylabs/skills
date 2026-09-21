@@ -1,6 +1,6 @@
 # Migrate from Dfns to BlindPay
 
-Keep Dfns for MPC wallet custody and move the stablecoin-to-fiat leg to BlindPay: map transfers and exchange withdrawals to quotes, payouts, and registered external wallets.
+Keep Dfns for MPC wallet custody and move the stablecoin-to-fiat leg to BlindPay: map transfers and withdrawals to quotes, payouts, and registered wallets.
 
 Source: https://blindpay.com/docs/migrations/dfns
 

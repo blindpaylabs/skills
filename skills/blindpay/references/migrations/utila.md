@@ -1,6 +1,6 @@
 # Migrate from Utila to BlindPay
 
-Keep Utila as custodian and signer, and route the stablecoin-to-fiat leg through BlindPay: map vaults, wallets, transactions, and webhooks to their BlindPay equivalents.
+Keep Utila as custodian and signer and route the stablecoin-to-fiat leg through BlindPay: map vaults, wallets, transactions, and webhooks.
 
 Source: https://blindpay.com/docs/migrations/utila
 

@@ -30,7 +30,7 @@ Docs: https://blindpay.com/docs/getting-started/overview
 
 ### Get your credentials
 
-Create an account and a development instance, then copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up).
+Create an account and a development instance, then copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
 
 ### Add secrets in Lovable
 

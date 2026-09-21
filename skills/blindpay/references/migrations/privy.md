@@ -1,6 +1,6 @@
 # Migrate from Privy to BlindPay
 
-Keep Privy for embedded and server wallets, move the stablecoin-to-fiat offramp leg to BlindPay: register the wallet, quote and execute payouts, and verify webhooks.
+Keep Privy for embedded and server wallets and move the stablecoin-to-fiat offramp leg to BlindPay: register the wallet, run payouts, and verify webhooks.
 
 Source: https://blindpay.com/docs/migrations/privy
 

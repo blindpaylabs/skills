@@ -143,7 +143,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 ### Getting started
 
 - [Introduction](references/getting-started/introduction.md) - BlindPay is a global payment API that moves money over bank rails and stablecoins from a single integration.
-- [Overview](references/getting-started/overview.md) - Connect to bank rails or stablecoin networks (or both) through one REST API. Issue virtual accounts and move fiat payins and payouts, or hold, send, and receive USDC and USDT across chains.
+- [Overview](references/getting-started/overview.md) - Connect to bank rails or stablecoin networks through one REST API. Issue virtual accounts, move fiat payins and payouts, or send USDC and USDT.
 - [Stablecoins to bank transfer](references/getting-started/quickstart-payout.md) - Send your first off-ramp payout from a BlindPay-managed wallet to a bank account on a development instance, using only the REST API.
 - [Bank transfer to stablecoins](references/getting-started/quickstart-payin.md) - Accept a bank transfer and have BlindPay deliver the equivalent stablecoins automatically on a development instance, using only the REST API.
 - [SDKs](references/getting-started/sdks.md) - Official BlindPay SDKs for Node.js, Python, Go, PHP, and Swift, plus the OpenAPI spec and REST API reference.
@@ -158,7 +158,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 - [Customers](references/essentials/customers.md) - People or businesses that send or receive payments and stablecoins through BlindPay.
 - [Terms of Service](references/essentials/terms-of-service.md) - A legal agreement your customers must accept before you create them and start KYC.
 - [RFI](references/essentials/rfi.md) - Respond programmatically when BlindPay's compliance team needs additional documentation from a customer.
-- [Limit increase](references/essentials/limit-increase.md) - Request higher per-transaction, daily, or monthly transfer limits for a customer by submitting a supporting document, and track the request through compliance review.
+- [Limit increase](references/essentials/limit-increase.md) - Request higher per-transaction, daily, or monthly limits for a customer by submitting a supporting document, then track the compliance review.
 - [Upload](references/essentials/upload.md) - Generate encrypted file URLs from customer KYC documents and pictures.
 - [Analyze document](references/essentials/analyze-document.md) - Read a KYC document with AI and get an approval-rate signal before you submit it.
 - [API keys](references/essentials/api-keys.md) - Authenticate all BlindPay API requests with an instance-scoped API key created in the dashboard.
@@ -195,7 +195,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 
 ### Virtual accounts
 
-- [Virtual accounts](references/virtual-accounts/virtual-accounts.md) - Issue a virtual account (virtual bank account) that receives USD bank transfers and settles automatically to stablecoins like USDC or USDT in your customer's wallet.
+- [Virtual accounts](references/virtual-accounts/virtual-accounts.md) - Issue a virtual bank account that receives USD bank transfers and settles automatically to stablecoins like USDC or USDT in your customer's wallet.
 - [Create a virtual account](references/virtual-accounts/virtual-accounts-create.md) - Create a virtual account with the BlindPay API, from customer prerequisites and required compliance fields to the webhooks that confirm approval.
 
 ### Wallets, transfers and stablecoins
@@ -233,22 +233,22 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 
 ### Migration guides (moving from another provider)
 
-- [Migrate from Anchorage Digital to BlindPay](references/migrations/anchorage.md) - Keep Anchorage Digital for custody and move the stablecoin-to-fiat leg to BlindPay: map transfers, withdrawals, and settlement events to BlindPay quotes, payouts, and webhooks.
-- [Migrate from BitGo to BlindPay](references/migrations/bitgo.md) - Move the stablecoin-to-fiat leg of a BitGo integration to BlindPay: map wallets, transfers, and settlement webhooks to BlindPay customers, quotes, payouts, and webhook events.
-- [Migrate from Bridge to BlindPay](references/migrations/bridge.md) - Move an existing Bridge integration to the BlindPay API: map customers, external accounts, liquidation addresses, and transfers to their BlindPay equivalents.
-- [Migrate from Cobo to BlindPay](references/migrations/cobo.md) - Move the stablecoin-to-fiat leg of a Cobo Payments integration to BlindPay: keep Cobo for wallet custody if you want, and replace top-up addresses, order mode, and payout destinations with customers, quotes, and payouts.
-- [Migrate from Coinbase CDP to BlindPay](references/migrations/coinbase-cdp.md) - Move the stablecoin-to-fiat offramp leg of a Coinbase Developer Platform integration to BlindPay: add Pix, SPEI, SEPA, and wire payouts while CDP wallets keep custody.
+- [Migrate from Anchorage Digital to BlindPay](references/migrations/anchorage.md) - Keep Anchorage Digital for custody and move the stablecoin-to-fiat leg to BlindPay: map transfers and settlement events to quotes, payouts, and webhooks.
+- [Migrate from BitGo to BlindPay](references/migrations/bitgo.md) - Move the stablecoin-to-fiat leg of a BitGo integration to BlindPay: map wallets, transfers, and settlement webhooks to customers, quotes, and payouts.
+- [Migrate from Bridge to BlindPay](references/migrations/bridge.md) - Move an existing Bridge integration to the BlindPay API: map customers, external accounts, liquidation addresses, and transfers to their equivalents.
+- [Migrate from Cobo to BlindPay](references/migrations/cobo.md) - Move the stablecoin-to-fiat leg of a Cobo Payments integration to BlindPay: swap top-up addresses and payout destinations for quotes and payouts.
+- [Migrate from Coinbase CDP to BlindPay](references/migrations/coinbase-cdp.md) - Move the stablecoin-to-fiat offramp leg of a Coinbase Developer Platform integration to BlindPay: add Pix, SPEI, SEPA, and wire payouts.
 - [Migrate from Conduit to BlindPay](references/migrations/conduit.md) - Move a Conduit cross-border payments integration to BlindPay: counterparties, corridors, and settlement tracking on the quote-and-execute model.
 - [Migrate from Crossmint to BlindPay](references/migrations/crossmint.md) - Move the stablecoin-to-fiat leg of a Crossmint integration to BlindPay while Crossmint keeps handling wallets, checkout, or orchestration.
-- [Migrate from Dfns to BlindPay](references/migrations/dfns.md) - Keep Dfns for MPC wallet custody and move the stablecoin-to-fiat leg to BlindPay: map transfers and exchange withdrawals to quotes, payouts, and registered external wallets.
-- [Migrate from Dynamic to BlindPay](references/migrations/dynamic.md) - Keep Dynamic for embedded and server wallets, move the stablecoin-to-fiat offramp leg to BlindPay: register the Dynamic wallet, quote and execute payouts, and verify webhooks.
+- [Migrate from Dfns to BlindPay](references/migrations/dfns.md) - Keep Dfns for MPC wallet custody and move the stablecoin-to-fiat leg to BlindPay: map transfers and withdrawals to quotes, payouts, and registered wallets.
+- [Migrate from Dynamic to BlindPay](references/migrations/dynamic.md) - Keep Dynamic for embedded and server wallets and move the stablecoin-to-fiat offramp leg to BlindPay: register, quote, pay out, verify webhooks.
 - [Migrate from Fern to BlindPay](references/migrations/fern.md) - Move a Fern stablecoin integration to BlindPay: customers, bank accounts, wallets, quote-then-execute payins and payouts, and Svix-signed webhooks.
-- [Migrate from Fireblocks to BlindPay](references/migrations/fireblocks.md) - Move the stablecoin-to-fiat payout leg of a Fireblocks integration to BlindPay: re-onboard payees, rebuild the quote-then-payout flow, and port webhooks, while Fireblocks stays as custodian.
+- [Migrate from Fireblocks to BlindPay](references/migrations/fireblocks.md) - Move the stablecoin-to-fiat payout leg of a Fireblocks integration to BlindPay: re-onboard payees, rebuild quote-then-payout, and port webhooks.
 - [Migrate from manual payouts to BlindPay](references/migrations/manual-payouts.md) - Turn a spreadsheet-and-bank-portal payout operation into an automated, webhook-driven API flow with an auditable state machine.
-- [Migrate from Privy to BlindPay](references/migrations/privy.md) - Keep Privy for embedded and server wallets, move the stablecoin-to-fiat offramp leg to BlindPay: register the wallet, quote and execute payouts, and verify webhooks.
-- [Migrate from SWIFT wires to BlindPay](references/migrations/swift-wires.md) - Replace multi-day international wires with same-day stablecoin settlement over local rails, keeping SWIFT as a fallback for corridors BlindPay doesn't cover.
-- [Migrate from Turnkey to BlindPay](references/migrations/turnkey.md) - Keep Turnkey for wallets and signing, and move the stablecoin-to-fiat offramp leg of a Turnkey-based product to BlindPay: map payout accounts, quotes, and webhooks.
-- [Migrate from Utila to BlindPay](references/migrations/utila.md) - Keep Utila as custodian and signer, and route the stablecoin-to-fiat leg through BlindPay: map vaults, wallets, transactions, and webhooks to their BlindPay equivalents.
+- [Migrate from Privy to BlindPay](references/migrations/privy.md) - Keep Privy for embedded and server wallets and move the stablecoin-to-fiat offramp leg to BlindPay: register the wallet, run payouts, and verify webhooks.
+- [Migrate from SWIFT wires to BlindPay](references/migrations/swift-wires.md) - Replace multi-day international wires with same-day stablecoin settlement over local rails, with SWIFT as a fallback for corridors BlindPay does not cover.
+- [Migrate from Turnkey to BlindPay](references/migrations/turnkey.md) - Keep Turnkey for wallets and signing and move the stablecoin-to-fiat offramp leg of your product to BlindPay: map payout accounts, quotes, and webhooks.
+- [Migrate from Utila to BlindPay](references/migrations/utila.md) - Keep Utila as custodian and signer and route the stablecoin-to-fiat leg through BlindPay: map vaults, wallets, transactions, and webhooks.
 
 ### AI tooling integrations
 

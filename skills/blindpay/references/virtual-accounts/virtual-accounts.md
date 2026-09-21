@@ -1,6 +1,6 @@
 # Virtual accounts
 
-Issue a virtual account (virtual bank account) that receives USD bank transfers and settles automatically to stablecoins like USDC or USDT in your customer's wallet.
+Issue a virtual bank account that receives USD bank transfers and settles automatically to stablecoins like USDC or USDT in your customer's wallet.
 
 Source: https://blindpay.com/docs/virtual-accounts
 

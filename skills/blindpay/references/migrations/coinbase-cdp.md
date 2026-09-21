@@ -1,6 +1,6 @@
 # Migrate from Coinbase CDP to BlindPay
 
-Move the stablecoin-to-fiat offramp leg of a Coinbase Developer Platform integration to BlindPay: add Pix, SPEI, SEPA, and wire payouts while CDP wallets keep custody.
+Move the stablecoin-to-fiat offramp leg of a Coinbase Developer Platform integration to BlindPay: add Pix, SPEI, SEPA, and wire payouts.
 
 Source: https://blindpay.com/docs/migrations/coinbase-cdp
 

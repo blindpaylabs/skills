@@ -1,6 +1,6 @@
 # Migrate from Anchorage Digital to BlindPay
 
-Keep Anchorage Digital for custody and move the stablecoin-to-fiat leg to BlindPay: map transfers, withdrawals, and settlement events to BlindPay quotes, payouts, and webhooks.
+Keep Anchorage Digital for custody and move the stablecoin-to-fiat leg to BlindPay: map transfers and settlement events to quotes, payouts, and webhooks.
 
 Source: https://blindpay.com/docs/migrations/anchorage
 
