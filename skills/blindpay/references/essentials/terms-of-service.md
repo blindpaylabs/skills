@@ -39,17 +39,20 @@ curl --request POST \
 The response is a URL with the following query parameters:
 
 ```bash [URL example]
-https://app.blindpay.com/e/terms-of-service?session_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...&idempotency_key=5d8b149e-a55d-4b5b-a8f8-7c4fa315f854&redirect_url=
+https://app.blindpay.com/e/terms-of-service?session_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...&idempotency_key=5d8b149e-a55d-4b5b-a8f8-7c4fa315f854&instance_id=in_000000000000&redirect_url=
 ```
 
 | Param | Required | Example |
 | --- | --- | --- |
 | `session_token` | Yes | JWT |
 | `idempotency_key` | Yes | uuid |
+| `instance_id` | Added by BlindPay | `in_000000000000` (used to load your instance logo, name and accent color on the page) |
 | `redirect_url` | No | `https://yourapp.com/` |
 | `customer_id` | No | `re_000000000000` (required when accepting a new terms of service version) |
 
 We strongly recommend adding a `redirect_url` so the customer lands back in your application after accepting.
+
+The page shows your instance logo and name, and paints the accept button with your accent color, when set. Configure both in the dashboard under Settings, Instance.
 
 ## Accept the terms of service
 
