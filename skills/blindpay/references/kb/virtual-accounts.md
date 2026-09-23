@@ -1,4 +1,4 @@
-# Virtual accounts
+# Virtual account documents
 
 Documentation required for the Virtual Account evaluation, including source of funds and source of wealth supporting documents.
 

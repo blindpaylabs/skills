@@ -229,7 +229,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 - [Supported countries](references/kb/supported-countries.md) - Every country BlindPay supports, by tier: standard, high-risk (Enhanced KYC required), and prohibited.
 - [SWIFT deliverability](references/kb/swift-deliverability.md) - Requirements for compliance documents and beneficiary address formatting that maximize the chance a SWIFT transfer is delivered.
 - [SWIFT statuses](references/kb/swift-statuses.md) - How SWIFT payout compliance documents are tracked through on-hold, review, and approval via the tracking_documents field.
-- [Virtual accounts](references/kb/virtual-accounts.md) - Documentation required for the Virtual Account evaluation, including source of funds and source of wealth supporting documents.
+- [Virtual account documents](references/kb/virtual-accounts.md) - Documentation required for the Virtual Account evaluation, including source of funds and source of wealth supporting documents.
 
 ### Migration guides (moving from another provider)
 
