@@ -1,6 +1,6 @@
 # Migrate from Dynamic to BlindPay
 
-Keep Dynamic for embedded and server wallets and move the stablecoin-to-fiat offramp leg to BlindPay: register, quote, pay out, verify webhooks.
+Keep Dynamic for embedded and server wallets and move the stablecoin-to-fiat offramp leg to BlindPay: register the Dynamic wallet, then quote, pay out, and verify webhooks.
 
 Source: https://blindpay.com/docs/migrations/dynamic
 

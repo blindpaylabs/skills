@@ -20,7 +20,7 @@ Integrate stablecoin payments using the BlindPay API (https://api.blindpay.com).
 - Build a UI: enter a USDC amount and destination, show the live quote, send the payout.
 - Keep the secret key server-side only.
 
-Docs: https://blindpay.com/docs/getting-started/overview
+Docs: https://blindpay.com/docs/introduction
 ```
 
 ## Setup

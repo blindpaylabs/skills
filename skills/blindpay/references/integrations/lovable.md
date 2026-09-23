@@ -23,7 +23,7 @@ Requirements:
   (bank account / blockchain wallet), shows the live quote, and submits the payout.
 - Never expose the API key in client code: all BlindPay calls go through the backend.
 
-Docs: https://blindpay.com/docs/getting-started/overview
+Docs: https://blindpay.com/docs/introduction
 ```
 
 ## Setup

@@ -1,6 +1,6 @@
 # Migrate from Fireblocks to BlindPay
 
-Move the stablecoin-to-fiat payout leg of a Fireblocks integration to BlindPay: re-onboard payees, rebuild quote-then-payout, and port webhooks.
+Move the stablecoin-to-fiat payout leg of a Fireblocks integration to BlindPay: re-onboard payees, rebuild quote-then-payout, and port webhooks. Fireblocks stays the custodian.
 
 Source: https://blindpay.com/docs/migrations/fireblocks
 

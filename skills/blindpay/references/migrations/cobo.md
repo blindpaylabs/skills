@@ -1,6 +1,6 @@
 # Migrate from Cobo to BlindPay
 
-Move the stablecoin-to-fiat leg of a Cobo Payments integration to BlindPay: swap top-up addresses and payout destinations for quotes and payouts.
+Move the stablecoin-to-fiat leg of a Cobo Payments integration to BlindPay, keeping Cobo for wallet custody if you want: swap top-up addresses and payout destinations for quotes and payouts.
 
 Source: https://blindpay.com/docs/migrations/cobo
 
