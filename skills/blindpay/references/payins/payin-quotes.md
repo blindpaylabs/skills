@@ -269,7 +269,7 @@ Some `payer_rules` fields are validated against a specific format, not just chec
 | Field | Format |
 | --- | --- |
 | `pix_allowed_tax_ids` | CPF (11 digits) or CNPJ (14 digits), formatted or not. Validated against the Receita Federal check digits, not just digit count, so an invalid tax id is rejected at quote time instead of failing later at the bank |
-| `transfers_allowed_tax_id` | CUIT/CUIL, for example `20-12345678-3` |
+| `transfers_allowed_tax_id` | CUIT/CUIL, for example `20-12345678-6` |
 | `pse_document_type` | `CC` or `NIT` |
 | `pse_phone` | `+573` followed by 9 digits, for example `+573001234567` |
 | `pse_full_name` | Up to 50 characters |

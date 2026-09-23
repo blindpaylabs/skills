@@ -34,7 +34,7 @@ Every payment flows through a customer that has completed KYC. BlindPay handles 
 
 ### Quote
 
-Create a quote for the amount you want to move. The quote locks in the exchange rate and fees for a short window (payout and payin quotes expire in 5 minutes; transfer quotes in 15 seconds).
+Create a quote for the amount you want to move. The quote locks in the exchange rate and fees for a short window (every quote expires in 5 minutes, except an OTC payin quote, which expires in 10 seconds).
 
 ### Authorize
 

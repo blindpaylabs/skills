@@ -247,7 +247,7 @@ To move stablecoins out of a managed wallet to another managed wallet or an exte
 
 **Note:**
 
-USDC transfers can move across Ethereum, Polygon, Base, and Arbitrum using Circle CCTP v2; every other token still requires the same network on both sides. The transfer quote expires in 15 seconds, the shortest of any BlindPay quote.
+USDC transfers can move across Ethereum, Polygon, Base, and Arbitrum using Circle CCTP v2; every other token still requires the same network on both sides. The transfer quote expires in 5 minutes, like every other BlindPay quote.
 
 ## Yield
 
