@@ -1,6 +1,6 @@
 # Overview
 
-Connect to bank rails, stablecoin networks, or both through one REST API. Issue virtual accounts and move fiat payins and payouts, or hold, send, and receive USDC and USDT across chains.
+Connect to bank rails or stablecoin networks (or both) through one REST API. Issue virtual accounts and move fiat payins and payouts, or hold, send, and receive USDC and USDT across chains.
 
 Source: https://blindpay.com/docs/overview
 

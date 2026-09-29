@@ -1,6 +1,6 @@
 # Migrate from SWIFT wires to BlindPay
 
-Replace multi-day international wires with same-day stablecoin settlement over local rails, with SWIFT as a fallback for corridors BlindPay does not cover.
+Replace multi-day international wires with same-day stablecoin settlement over local rails, keeping SWIFT as a fallback for corridors BlindPay doesn't cover.
 
 Source: https://blindpay.com/docs/migrations/swift-wires
 

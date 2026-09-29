@@ -1,6 +1,6 @@
 # Migrate from Turnkey to BlindPay
 
-Keep Turnkey for wallets and signing and move the stablecoin-to-fiat offramp leg of your product to BlindPay: map payout accounts, quotes, and webhooks.
+Keep Turnkey for wallets and signing, and move the stablecoin-to-fiat offramp leg of a Turnkey-based product to BlindPay: map payout accounts, quotes, and webhooks.
 
 Source: https://blindpay.com/docs/migrations/turnkey
 

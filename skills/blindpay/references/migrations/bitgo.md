@@ -1,6 +1,6 @@
 # Migrate from BitGo to BlindPay
 
-Move the stablecoin-to-fiat leg of a BitGo integration to BlindPay: map wallets, transfers, and settlement webhooks to customers, quotes, payouts, and webhook events.
+Move the stablecoin-to-fiat leg of a BitGo integration to BlindPay: map wallets, transfers, and settlement webhooks to BlindPay customers, quotes, payouts, and webhook events.
 
 Source: https://blindpay.com/docs/migrations/bitgo
 

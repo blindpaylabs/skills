@@ -1,6 +1,6 @@
 # Limit increase
 
-Request higher per-transaction, daily, or monthly limits for a customer by submitting a supporting document, then track the compliance review.
+Request higher per-transaction, daily, or monthly transfer limits for a customer by submitting a supporting document, and track the request through compliance review.
 
 Source: https://blindpay.com/docs/learn/limit-increase
 
