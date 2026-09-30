@@ -224,6 +224,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 - [Prohibited activities](references/kb/prohibited-activities.md) - High-risk and prohibited business activities at BlindPay, and the disclosure obligations required during onboarding and ongoing monitoring.
 - [Proof of address](references/kb/proof-of-address.md) - Accepted proof-of-address documents and submission requirements for business and individual verification.
 - [Rejection reasons](references/kb/rejection-reasons.md) - Reason codes and messages returned when an application or document is rejected during verification.
+- [Self-custody wallets (Brazil)](references/kb/self-custody-wallets.md) - Brazilian customers must declare whether each external wallet is self-custodied. What changes, who is affected, and how to do it in the dashboard or the API.
 - [Source of funds](references/kb/source-of-funds.md) - Documentation required to verify the source of funds and source of wealth for your business.
 - [Supported chains](references/kb/supported-chains.md) - Reference for the blockchains, stablecoins, and per-feature chain support across BlindPay payins, payouts, wallets, and transfers.
 - [Supported countries](references/kb/supported-countries.md) - Every country BlindPay supports, by tier: standard, high-risk (Enhanced KYC required), and prohibited.
