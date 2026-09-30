@@ -29,6 +29,7 @@ Every webhook endpoint you register receives events from the catalog below, unle
 | Event | Fires when |
 | --- | --- |
 | `blockchainWallet.new` | A blockchain wallet is added to a customer |
+| `blockchainWallet.update` | The self-custody answer of a blockchain wallet is saved |
 
 ## Terms of service
 

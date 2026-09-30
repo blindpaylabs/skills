@@ -128,11 +128,32 @@ curl --request POST \
     "name": "John personal wallet",
     "network": "polygon",
     "is_account_abstraction": true,
-    "address": "0x..."
+    "address": "0x...",
+    "is_self_custody": true
   }'
 ```
 
 Each network validates the address format server-side (for example Stellar addresses must start with `G`, Solana addresses are base58, Tron addresses start with `T`), but this is a format check, not proof of ownership. It cannot substitute for the signed-message flow's guarantee.
+
+## Self-custody (Brazilian customers)
+
+Brazil's Central Bank Resolution 588 requires BlindPay to report transfers of US$10,000 or more to or from self-custodied wallets. When the customer's `country` is `BR`, every new wallet must say whether the customer holds its private keys:
+
+- Send `is_self_custody: true` or `false` on create. Omitting it for a Brazilian customer returns `400` with `self_custody_required`.
+- For customers in other countries the field is optional.
+- The answer is saved once and cannot be changed.
+
+Wallets added before this rule have `is_self_custody: null`. Set them once with `PATCH`:
+
+```bash [cURL]
+curl --request PATCH \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/blockchain-wallets/bw_000000000000 \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{ "is_self_custody": true }'
+```
+
+A second `PATCH` on the same wallet returns `409` with `self_custody_already_set`. Contact support if an answer was saved by mistake.
 
 ## Response fields
 
@@ -144,6 +165,7 @@ Each network validates the address format server-side (for example Stellar addre
 | `is_account_abstraction` | Whether the wallet was registered by direct address (`true`) or signed message (`false`) |
 | `address` | The wallet address, lower-cased for EVM networks |
 | `signature_tx_hash` | The signature used to derive `address`, present only when the wallet was registered via the signed-message flow (`is_account_abstraction: false`) |
+| `is_self_custody` | Whether the customer holds the wallet's private keys. `null` until it is answered; see [Self-custody](#self-custody-brazilian-customers) |
 
 ## List and retrieve wallets
 
@@ -256,6 +278,7 @@ curl --request POST \
 | Event | Fires when |
 | --- | --- |
 | `blockchainWallet.new` | A blockchain wallet is successfully created |
+| `blockchainWallet.update` | The self-custody answer of a wallet is saved |
 
 See [Webhooks](../essentials/webhooks.md) for delivery and signature verification.
 
