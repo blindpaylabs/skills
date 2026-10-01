@@ -6,9 +6,12 @@ Source: https://blindpay.com/docs/kb/self-custody-wallets
 
 ## Summary
 
-Brazil's Central Bank Resolution 588 requires BlindPay to report to COAF every transfer of **US$10,000 or more** to or from a **self-custodied wallet**. To comply, starting **October 1, 2026**, every external blockchain wallet added for a **Brazilian customer** must say whether the customer holds the wallet's private keys.
+Brazil's Central Bank Resolution 588 requires BlindPay to report to COAF every transfer of **US$10,000 or more** to or from a **self-custodied wallet**. To comply, every external blockchain wallet added for a **Brazilian customer** must say whether the customer holds the wallet's private keys.
 
-- **New wallets:** the answer is required when the wallet is added.
+- **October 1, 2026:** the `is_self_custody` field and the dashboard question are available. Requests without the field still succeed.
+- **October 10, 2026:** the field becomes required. Adding a wallet for a Brazilian customer without it fails with `400 self_custody_required`.
+
+- **New wallets:** the answer is required when the wallet is added (from October 10, 2026).
 - **Existing wallets:** answer once for each wallet that has no answer yet.
 - **The answer is final.** It can be saved once. If it was saved by mistake, contact support.
 
@@ -49,7 +52,7 @@ Wallets answered **Yes** show a **Self-custody** badge.
 
 #### Add a wallet
 
-Send `is_self_custody` when you add a wallet for a Brazilian customer. Without it, the request fails with `400 self_custody_required`.
+Send `is_self_custody` when you add a wallet for a Brazilian customer. From October 10, 2026, the request fails with `400 self_custody_required` without it.
 
 ```bash [cURL]
 curl --request POST \
@@ -128,7 +131,7 @@ The response is the updated wallet. A second `PATCH` on the same wallet fails wi
 
 | Status | Code | When | What to do |
 | --- | --- | --- | --- |
-| `400` | `self_custody_required` | You added a wallet for a Brazilian customer without `is_self_custody` | Send `is_self_custody` as `true` or `false` |
+| `400` | `self_custody_required` | From October 10, 2026: you added a wallet for a Brazilian customer without `is_self_custody` | Send `is_self_custody` as `true` or `false` |
 | `409` | `self_custody_already_set` | You tried to change an answer that was already saved | Contact support to correct it |
 | `404` | `blockchain_wallet_not_found` | The wallet doesn't exist, was removed, or belongs to another customer | Check the wallet and customer IDs |
 

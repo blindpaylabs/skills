@@ -139,7 +139,7 @@ Each network validates the address format server-side (for example Stellar addre
 
 Brazil's Central Bank Resolution 588 requires BlindPay to report transfers of US$10,000 or more to or from self-custodied wallets. When the customer's `country` is `BR`, every new wallet must say whether the customer holds its private keys:
 
-- Send `is_self_custody: true` or `false` on create. Omitting it for a Brazilian customer returns `400` with `self_custody_required`.
+- Send `is_self_custody: true` or `false` on create. From October 10, 2026, omitting it for a Brazilian customer returns `400` with `self_custody_required`.
 - For customers in other countries the field is optional.
 - The answer is saved once and cannot be changed.
 
