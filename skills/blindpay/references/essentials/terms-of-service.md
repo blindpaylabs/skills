@@ -78,11 +78,11 @@ Passthrough Terms of Service is enabled per instance by BlindPay. Contact suppor
 
 #### Add your Terms of Service link and screenshot
 
-In the dashboard, open **Settings**, **Instance**, then the **Passthrough Terms of Service** section. Add the link to the page where your customers see the BlindPay terms, and upload a screenshot of how they are displayed. Through the API, set `partner_tos_screenshot` to a `file_url` returned by [upload](upload.md) with bucket `documents`. Update both whenever the way you present the terms changes.
+In the dashboard, open **Settings**, **Instance**, then the **Passthrough Terms of Service** section. Add the link to the page where your customers see the BlindPay terms, upload a screenshot of how they are displayed, and save. Saving accepts the [Passthrough Terms of Service Partner Agreement](https://blindpay.com/passthrough-tos-partner-agreement) on behalf of your company: it sets out how you present the terms, the acceptance data you submit, how long you keep records, audits, and the remedies if the data is not genuine. BlindPay records the date, IP address, browser and user of each acceptance. Update the link and screenshot whenever the way you present the terms changes.
 
-#### Accept the partner agreement
+#### Wait for activation
 
-Read the [Passthrough Terms of Service Partner Agreement](https://blindpay.com/passthrough-tos-partner-agreement) and accept it in the same section. It sets out how you present the terms, the acceptance data you submit, how long you keep records, audits, and the remedies if the data is not genuine. BlindPay records the date, IP address, browser and user of the acceptance.
+BlindPay reviews your setup and enables passthrough Terms of Service for your instance. Until then, submissions return `TOS_PASSTHROUGH_NOT_ENABLED` and your customers keep using the hosted page.
 
 #### Collect the acceptance data on your page
 
