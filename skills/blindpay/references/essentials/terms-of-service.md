@@ -76,9 +76,17 @@ Passthrough Terms of Service is enabled per instance by BlindPay. Contact suppor
 
 ### Set up your instance
 
+#### Reference BlindPay in your terms
+
+Do not copy the BlindPay terms into your own. Add a clause to your terms of service that names BlindPay as your payment vendor and links to the live BlindPay pages, so every customer accepts the current version:
+
+> **Payment services.** Payment services are provided by Blind Pay, Inc. ("BlindPay"), our payment vendor. By accepting these Terms, you also agree to the [BlindPay Terms of Service](https://blindpay.com/terms-of-service) and the [BlindPay Privacy Policy](https://blindpay.com/privacy-policy), which govern the payment services BlindPay provides to you, and you authorize us to share your information with BlindPay to provide those services and comply with applicable law. If these Terms conflict with the BlindPay terms regarding the payment services, the BlindPay terms apply.
+
+On your sign-up screen, use an unchecked checkbox that links the BlindPay terms next to yours, for example: *I agree to the [Your company] Terms of Service and to the BlindPay [Terms of Service](https://blindpay.com/terms-of-service) and [Privacy Policy](https://blindpay.com/privacy-policy), our payment vendor.* The [partner guide (PDF)](https://app.blindpay.com/guides/passthrough-tos-partner-guide.pdf) has the full checklist.
+
 #### Add your Terms of Service link and screenshot
 
-In the dashboard, open **Settings**, **Instance**, then the **Passthrough Terms of Service** section. Add the link to the page where your customers see the BlindPay terms, upload a screenshot of how they are displayed, and save. Saving accepts the [Passthrough Terms of Service Partner Agreement](https://blindpay.com/passthrough-tos-partner-agreement) on behalf of your company: it sets out how you present the terms, the acceptance data you submit, how long you keep records, audits, and the remedies if the data is not genuine. BlindPay records the date, IP address, browser and user of each acceptance. Update the link and screenshot whenever the way you present the terms changes.
+In the dashboard, open **Settings**, **Instance**, then the **Passthrough Terms of Service** section. Add the link to the page with the payment vendor clause and the checkbox, upload a screenshot of that sign-up screen, and save. Saving accepts the [Passthrough Terms of Service Partner Agreement](https://blindpay.com/passthrough-tos-partner-agreement) on behalf of your company: it sets out how you present the terms, the acceptance data you submit, how long you keep records, audits, and the remedies if the data is not genuine. BlindPay records the date, IP address, browser and user of each acceptance. Update the link and screenshot whenever the way you present the terms changes.
 
 #### Wait for activation
 
