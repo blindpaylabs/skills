@@ -38,7 +38,7 @@ Create a fee configuration for payins, payouts, or both:
 
 | Field | Range | Meaning |
 | --- | --- | --- |
-| `payin_percentage_fee`, `payout_percentage_fee` | 0-1000 | Basis points; `100` means 1%. Capped at 10% of the transaction amount. |
+| `payin_percentage_fee`, `payout_percentage_fee` | 0-9900 | Basis points; `100` means 1%. Capped at 99% of the transaction amount. |
 | `payin_flat_fee`, `payout_flat_fee` | 0-100000 | Minor units (cents); `200` means $2.00. Capped at $1,000.00. |
 
 ```bash [cURL]
