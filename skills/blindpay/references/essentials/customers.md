@@ -138,6 +138,10 @@ On creation the status is `verifying`. The update timeline depends on the KYC ty
 
 When KYC is rejected, BlindPay returns feedback in the `kyc_warnings` or `fraud_warnings` field explaining what to correct. To retry after a rejection, create a brand new customer with corrected information — you cannot update an existing customer's KYC information.
 
+#### Conditional approval for Brazilian businesses
+
+A Brazilian business whose registered activity code (CNAE) does not match its stated activity can be approved on the condition that the CNAE is corrected. In that case the customer object carries a `cnae_condition` with `status: "pending"`, the `expected_cnaes` codes or prefixes, and the `due_at` deadline, and the customer is fully approved in the meantime. Show the deadline to your customer so they can update the CNAE with their accountant. At `due_at` BlindPay rechecks the public CNPJ record. If it now matches, `cnae_condition.status` becomes `passed`. If it still does not, `kyc_status` becomes `rejected`, a `CNAE_MISMATCH` entry is added to `kyc_warnings`, and a `customer.update` webhook is sent.
+
 ### Limits
 
 Transfer limits are calculated on the stablecoin amount transferred. Each customer has separate limits for payouts (sending) and payins (receiving).
