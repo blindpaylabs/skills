@@ -50,10 +50,6 @@ A customer must exist and have `kyc_status` of `approved`, `approved_rfi`, or `c
 
 A customer in `compliance_request` can still create and use a managed wallet, and can still move funds already held in one (transfers, balance checks). Fiat rails stay gated: payin and payout quotes require `approved` or `approved_rfi`, so a `compliance_request` customer can't bring new fiat in or out until the open [RFI](../essentials/rfi.md) is resolved.
 
-**Note:**
-
-Managed wallets are gated by the `wallets_and_transfers` subscription feature on your instance. Every wallet endpoint (create, get, list, balance, delete) returns `400 wallets_and_transfers_not_enabled` if it isn't turned on. Contact BlindPay to enable it.
-
 ## Create a managed wallet
 
 **Abstracted flavor (bank-rails framing, fiat-first API surface)**
