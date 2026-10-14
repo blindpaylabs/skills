@@ -142,6 +142,20 @@ When KYC is rejected, BlindPay returns feedback in the `kyc_warnings` or `fraud_
 
 A Brazilian business whose registered activity code (CNAE) does not match its stated activity can be approved on the condition that the CNAE is corrected. In that case the customer object carries a `cnae_condition` with `status: "pending"`, the `expected_cnaes` codes or prefixes, and the `due_at` deadline, and the customer is fully approved in the meantime. Show the deadline to your customer so they can update the CNAE with their accountant. At `due_at` BlindPay rechecks the public CNPJ record. If it now matches, `cnae_condition.status` becomes `passed`. If it still does not, `kyc_status` becomes `rejected`, a `CNAE_MISMATCH` entry is added to `kyc_warnings`, and a `customer.update` webhook is sent.
 
+#### Virtual account pre-approval
+
+Compliance can clear a customer for virtual accounts before any account exists, so you can show your customer that a virtual account is available and open it later in a single call.
+
+Send the virtual account data when you create or update the customer: `account_purpose`, `source_of_wealth`, the identity and address documents and, for a business, its beneficial owners (see [Create Virtual Account](../virtual-accounts/virtual-accounts-create.md) for what each banking partner needs). Once at least one banking partner's requirements are met, the customer object carries a `virtual_account_preapproval` with `status: "in_review"` and compliance reviews that data together with the KYC/KYB case. No virtual account is created at this stage.
+
+| `virtual_account_preapproval.status` | Meaning |
+| --- | --- |
+| `in_review` | Data is complete for the listed `banking_partners` and compliance is reviewing it. |
+| `approved` | A virtual account created for this customer on one of the listed `banking_partners` skips the compliance stage and goes straight to the bank in `verifying`. |
+| `rejected` | Compliance declined, see `rejection_reason`. Update the customer data to be reviewed again. |
+
+The field is absent while the customer does not carry enough data for any banking partner. Every status change sends a `customer.update` webhook. Updating a reviewed field (identity, address, documents, business details or owners) clears the decision and the customer goes back to `in_review`; edits to other fields keep it. The bank still performs its own verification after creation, so the account becomes `approved` with real routing and account numbers only after that step.
+
 ### Limits
 
 Transfer limits are calculated on the stablecoin amount transferred. Each customer has separate limits for payouts (sending) and payins (receiving).

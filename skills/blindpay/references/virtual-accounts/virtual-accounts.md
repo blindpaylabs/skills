@@ -46,6 +46,8 @@ After a virtual account is created via the API, it goes through a two-stage revi
 1. **Compliance review.** The virtual account starts in `pending_review` status while BlindPay's compliance team reviews the application.
 2. **Bank review.** Once compliance approves, the account moves to `verifying` while BlindPay's banking partner does final approval.
 
+A customer that compliance has already cleared through [virtual account pre-approval](../essentials/customers.md#virtual-account-pre-approval) skips the first stage: the account is created directly in `verifying`.
+
 Issuance SLAs vary by account type, see the table above. Approval is not guaranteed at either stage: both BlindPay's compliance team and the banking partner reserve the right to reject an application. On a development instance, virtual accounts skip both stages and are created directly in `approved` status.
 
 **Note:**
