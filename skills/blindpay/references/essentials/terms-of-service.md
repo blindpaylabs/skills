@@ -164,6 +164,8 @@ BlindPay checks that every submission looks like it came from the customer brows
 | IP addresses of data centers or hosting providers (production instances) | `ip_address belongs to a data center or hosting provider, not to the customer device` |
 | Tor exit nodes and proxies (production instances) | `ip_address is a Tor exit node or a proxy, not the customer device` |
 
+Customers browsing with iCloud Private Relay reach your page through Apple relay addresses hosted by Cloudflare, Akamai and Fastly. BlindPay recognizes these addresses and accepts them, so Safari users are not rejected as coming from a data center or proxy. The acceptance is flagged for review instead.
+
 Other errors you may see:
 
 | Code | When |
