@@ -87,6 +87,10 @@ If your instance has email notifications enabled, BlindPay emails the customer a
 
 An offramp wallet on a `sepa` bank account only supports a subset of deposit networks, since each network needs individual Travel Rule approval. Supported: `ethereum`, `base`, `arbitrum`, `polygon` (and their development testnets), and `solana`/`solana_devnet`. `tron`, `tempo`/`tempo_testnet` and `arc`/`arc_testnet` are not supported for SEPA. Requesting an unsupported network fails with `sepa_offramp_wallet_network_not_supported`.
 
+### Faster Payments bank accounts
+
+An offramp wallet on a `faster_payments` bank account supports the same deposit networks as SEPA: `ethereum`, `base`, `arbitrum`, `polygon` (and their development testnets), and `solana`/`solana_devnet`. `tron`, `tempo`/`tempo_testnet` and `arc`/`arc_testnet` are not supported for Faster Payments. Requesting an unsupported network fails with `faster_payments_offramp_wallet_network_not_supported`.
+
 ## Retrieve an offramp wallet
 
 **Remember:** replace `YOUR_API_KEY` with your API key, `in_000000000000` with your instance ID, `re_000000000000` with your customer ID.

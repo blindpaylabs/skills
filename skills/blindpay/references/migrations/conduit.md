@@ -11,7 +11,7 @@ This guide is for teams moving off Conduit's cross-border payments API. Conduit 
 | Conduit concept | BlindPay concept |
 | --- | --- |
 | Counterparty or recipient | Customer (`re_`) with KYC/KYB |
-| Recipient bank account | Bank account (`ba_`) typed per rail: pix, spei, ach, wire, rtp, sepa, transfers |
+| Recipient bank account | Bank account (`ba_`) typed per rail: pix, spei, ach, wire, rtp, sepa, faster_payments, transfers |
 | Cross-border payment, fiat to stablecoin | Payin quote plus payin (`qu_`, `pi_`) |
 | Cross-border payment, stablecoin to fiat | Payout quote plus payout (`qu_`, `po_`) |
 | Status updates | Svix-verified `customer.*`, `payout.*`, and `payin.*` webhooks |

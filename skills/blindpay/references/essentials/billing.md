@@ -36,7 +36,7 @@ curl --url https://api.blindpay.com/v1/instances/in_000000000000/billing/fees \
 
 Requires the owner or admin role on the instance.
 
-Each payment rail (`ach`, `domestic_wire`, `rtp`, `international_swift`, `pix`, `pix_safe`, `ted`, `ach_colombia`, `transfers_3`, `spei`, `sepa`) and blockchain network (`tron`, `ethereum`, `polygon`, `base`, `arbitrum`, `stellar`, `solana`) has its own fee object:
+Each payment rail (`ach`, `domestic_wire`, `rtp`, `international_swift`, `pix`, `pix_safe`, `ted`, `ach_colombia`, `transfers_3`, `spei`, `sepa`, `faster_payments`) and blockchain network (`tron`, `ethereum`, `polygon`, `base`, `arbitrum`, `stellar`, `solana`) has its own fee object:
 
 | Field | Meaning |
 | --- | --- |

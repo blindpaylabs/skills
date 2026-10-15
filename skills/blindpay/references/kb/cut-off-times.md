@@ -100,7 +100,7 @@ Every quote has a limited lifetime. Read `expires_at` from the response rather t
 | Quote type | Default expiry | Notes |
 | --- | --- | --- |
 | Payin quote | 5 minutes | OTC (BRL-only) payin quotes expire in **10 seconds** instead |
-| Payout quote | 5 minutes | May be **shorter** for SEPA payout quotes, since the underlying rail's own deadline can be tighter than 5 minutes |
+| Payout quote | 5 minutes | May be **shorter** for SEPA and Faster Payments payout quotes, since the underlying rail's own deadline can be tighter than 5 minutes |
 | Transfer quote | 5 minutes | Fixed; transfers execute immediately after creation |
 
 **Warning:**

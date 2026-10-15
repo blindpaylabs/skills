@@ -1,6 +1,6 @@
 # Bank accounts
 
-Add recipient bank accounts BlindPay pays out to, across SWIFT, ACH, wire, RTP, Pix, PIX Safe, TED, SPEI, ACH COP, Transfers, and SEPA rails.
+Add recipient bank accounts BlindPay pays out to, across SWIFT, ACH, wire, RTP, Pix, PIX Safe, TED, SPEI, ACH COP, Transfers, SEPA, and Faster Payments rails.
 
 Source: https://blindpay.com/docs/bank-accounts
 
@@ -35,6 +35,7 @@ All bank account data must be valid, even on development instances. Validation (
 | `ach_cop_bitso` | Colombia | ~1 business day |
 | `transfers_bitso` | Argentina | instant |
 | `sepa` | Europe (SEPA zone) | ~1 business day |
+| `faster_payments` | United Kingdom | ~1 business day |
 
 **Note:**
 
@@ -55,6 +56,7 @@ High transaction volumes may affect estimated payout delivery times.
 | `ach_cop_bitso` | `name`, `ach_cop_beneficiary_first_name`, `ach_cop_beneficiary_last_name`, `ach_cop_document_id`, `ach_cop_document_type`, `ach_cop_email`, `ach_cop_bank_code`, `ach_cop_bank_account`, `account_type` | `ach_cop_document_type` is `CC`, `CE`, `NIT`, `PASS`, or `PEP`. `ach_cop_document_id` must match the type: `CC` 3 to 10 digits, `CE` 6 to 10 digits, `NIT` 9 digits (10 with the verifier), `PASS` 3 to 15 letters or digits. `NIT` is for companies only |
 | `transfers_bitso` | `name`, `transfers_type`, `transfers_account`, `beneficiary_name` | `transfers_type` is `CVU`, `CBU`, or `ALIAS` |
 | `sepa` | `name`, `account_class`, `sepa_iban`, `sepa_beneficiary_bic`, `sepa_beneficiary_legal_name`, `sepa_beneficiary_address_line_1`, `sepa_beneficiary_city`, `sepa_beneficiary_postal_code`, `sepa_beneficiary_country` | The IBAN's country code must match `sepa_beneficiary_country`. Some destinations are individual-only; see [Payment methods](../kb/payment-methods.md#sepa-destinations) |
+| `faster_payments` | `name`, `account_class`, `faster_payments_sort_code`, `faster_payments_account_number`, `faster_payments_beneficiary_legal_name`, `faster_payments_beneficiary_address_line_1`, `faster_payments_beneficiary_city`, `faster_payments_beneficiary_country` | `faster_payments_sort_code` is 6 digits (dashes and spaces are stripped), `faster_payments_account_number` is 8 digits. `faster_payments_beneficiary_address_line_2`, `faster_payments_beneficiary_state_province_region` and `faster_payments_beneficiary_postal_code` are optional |
 
 `account_type` is `checking` or `saving`. `account_class` is `individual` or `business`. `recipient_relationship` accepts `first_party`, `employee`, `independent_contractor`, `vendor_or_supplier`, `subsidiary_or_affiliate`, `merchant_or_partner`, `customer`, `landlord`, `family`, or `other`.
 
@@ -281,6 +283,25 @@ curl --request POST \
 }'
 ```
 
+```bash [🇬🇧 Faster Payments]
+curl --request POST \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/bank-accounts \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "type": "faster_payments",
+  "name": "Display Name",
+  "account_class": "individual",
+  "faster_payments_sort_code": "040004",
+  "faster_payments_account_number": "12345678",
+  "faster_payments_beneficiary_legal_name": "<Replace this>",
+  "faster_payments_beneficiary_address_line_1": "<Replace this>",
+  "faster_payments_beneficiary_city": "<Replace this>",
+  "faster_payments_beneficiary_postal_code": "<Replace this>",
+  "faster_payments_beneficiary_country": "GB"
+}'
+```
+
 Save the bank account ID (`ba_...`) for use in payout quotes.
 
 ## Connect with Plaid
@@ -343,7 +364,7 @@ BlindPay never returns or stores the Plaid access token in plaintext anywhere re
 
 ## Compliance fields for ACH, wire, RTP, and SWIFT
 
-`ach`, `wire`, `rtp`, and `international_swift` bank accounts all pick up the same three country-conditional compliance fields. `pix`, `pix_safe`, `ted`, `spei_bitso`, `ach_cop_bitso`, `transfers_bitso`, and `sepa` never require them.
+`ach`, `wire`, `rtp`, and `international_swift` bank accounts all pick up the same three country-conditional compliance fields. `pix`, `pix_safe`, `ted`, `spei_bitso`, `ach_cop_bitso`, `transfers_bitso`, `sepa`, and `faster_payments` never require them.
 
 **Business accounts**
 

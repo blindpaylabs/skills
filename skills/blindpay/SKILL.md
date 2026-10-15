@@ -169,7 +169,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 ### Payouts (money out to a bank account)
 
 - [Payouts](references/payouts/payouts.md) - Execute a payout to a recipient's bank account and track it from processing to completed, failed, or refunded.
-- [Bank accounts](references/payouts/bank-accounts.md) - Add recipient bank accounts BlindPay pays out to, across SWIFT, ACH, wire, RTP, Pix, PIX Safe, TED, SPEI, ACH COP, Transfers, and SEPA rails.
+- [Bank accounts](references/payouts/bank-accounts.md) - Add recipient bank accounts BlindPay pays out to, across SWIFT, ACH, wire, RTP, Pix, PIX Safe, TED, SPEI, ACH COP, Transfers, SEPA, and Faster Payments rails.
 - [Payout quotes](references/payouts/payout-quotes.md) - Lock the exchange rate and fee split before executing a payout, and see the exact fee breakdown and recipient amount in the response.
 - [Payout with managed wallet](references/payouts/payout-managed-wallet.md) - Fund a payout from a BlindPay-managed wallet with a single REST call, no on-chain approval or signing involved.
 - [Payout with EVM](references/payouts/payout-evm.md) - Fund a payout from an external EVM wallet, approve the ERC-20 token transfer, then execute the payout.
@@ -218,7 +218,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 - [NAICS codes](references/kb/naics-codes.md) - Find the NAICS industry code for your business during BlindPay onboarding.
 - [Nested payments](references/kb/nested-payments.md) - Nesting is moving money on behalf of a party BlindPay cannot see; this guide explains how to recognize it and stay compliant.
 - [On-hold transactions](references/kb/on-hold-transactions.md) - Transactions flagged as suspicious by BlindPay's monitoring system, held pending compliance review or a Request for Information.
-- [Payment methods](references/kb/payment-methods.md) - Every bank transfer rail BlindPay supports, by country and currency: ACH, wire, RTP, SWIFT, Pix, PIX Safe, TED, SPEI, PSE, Transfers, and SEPA.
+- [Payment methods](references/kb/payment-methods.md) - Every bank transfer rail BlindPay supports, by country and currency: ACH, wire, RTP, SWIFT, Pix, PIX Safe, TED, SPEI, PSE, Transfers, SEPA, and Faster Payments.
 - [Payout descriptor](references/kb/payout-descriptor.md) - How the sender's name appears on a recipient's bank statement varies by payment method and whether Named Account is enabled.
 - [POBO and COBO](references/kb/pobo-cobo.md) - How payment on behalf of and collection on behalf of work at BlindPay, what puts your customer's name on a Wire, and where the compliance line sits.
 - [Prohibited activities](references/kb/prohibited-activities.md) - High-risk and prohibited business activities at BlindPay, and the disclosure obligations required during onboarding and ongoing monitoring.

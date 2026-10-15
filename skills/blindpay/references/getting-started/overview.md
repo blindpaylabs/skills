@@ -20,7 +20,7 @@ BlindPay is non-custodial under the hood: funds always move through a customer t
 | --- | --- |
 | Virtual accounts | A dedicated US bank account issued in each customer's name, with its own routing and account number |
 | Receive (payins) | Accept ACH, wire, RTP, SWIFT, Pix, SPEI, Transfers, or PSE deposits; every incoming payment is tracked as a payin |
-| Send (payouts) | Pay out to any bank account: ACH, wire, SWIFT, RTP, Pix, SPEI, ACH COP, Transfers, or SEPA |
+| Send (payouts) | Pay out to any bank account: ACH, wire, SWIFT, RTP, Pix, SPEI, ACH COP, Transfers, SEPA, or Faster Payments |
 | Webhooks | Real-time events for every deposit and payout state change |
 
 ## Supported corridors
@@ -41,6 +41,7 @@ BlindPay is non-custodial under the hood: funds always move through a customer t
 | PSE | COP | Receive | Up to 10 min (payment link) |
 | ACH COP | COP | Send | ~1 business day |
 | SEPA | EUR | Send | ~1 business day |
+| Faster Payments | GBP | Send | ~1 business day |
 
 Receive-side timing applies to production instances. On development instances, every payin auto-completes about 30 seconds after initiation, regardless of method.
 

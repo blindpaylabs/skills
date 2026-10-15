@@ -1,10 +1,10 @@
 # Payment methods
 
-Every bank transfer rail BlindPay supports, by country and currency: ACH, wire, RTP, SWIFT, Pix, PIX Safe, TED, SPEI, PSE, Transfers, and SEPA.
+Every bank transfer rail BlindPay supports, by country and currency: ACH, wire, RTP, SWIFT, Pix, PIX Safe, TED, SPEI, PSE, Transfers, SEPA, and Faster Payments.
 
 Source: https://blindpay.com/docs/kb/payment-methods
 
-BlindPay supports bank transfers over local rails in the US, Brazil, Mexico, Colombia, Argentina, and Europe, plus international SWIFT globally. Each payment method moves money in one or both directions: **receive** (a payin, money coming into BlindPay) and **send** (a payout, money going out to a bank account).
+BlindPay supports bank transfers over local rails in the US, Brazil, Mexico, Colombia, Argentina, Europe, and the United Kingdom, plus international SWIFT globally. Each payment method moves money in one or both directions: **receive** (a payin, money coming into BlindPay) and **send** (a payout, money going out to a bank account).
 
 | Payment method | Country/Region | Currency | Direction |
 | --- | --- | --- | --- |
@@ -21,6 +21,7 @@ BlindPay supports bank transfers over local rails in the US, Brazil, Mexico, Col
 | ACH Colombia | 🇨🇴 Colombia | COP | Send |
 | Transfers 3.0 | 🇦🇷 Argentina | ARS | Receive + send |
 | SEPA | 🇪🇺 Europe (SEPA zone) | EUR | Send |
+| Faster Payments | 🇬🇧 United Kingdom | GBP | Send |
 
 **Note:**
 
@@ -48,9 +49,17 @@ SEPA payouts to Austria, Estonia, Finland, France, Lithuania, Norway, and Portug
 
 SEPA payouts settle through BlindPay's banking partner network. The crypto leg always runs on Polygon, regardless of which network you funded the payout from; this doesn't change what you send to the API, but can affect the on-chain timing you observe.
 
+## Faster Payments destinations
+
+Faster Payments payouts in GBP go to UK bank accounts, identified by a 6-digit sort code and an 8-digit account number. Both individual and business beneficiaries are supported.
+
+**Note:**
+
+Like SEPA, Faster Payments payouts settle through BlindPay's banking partner network and the crypto leg always runs on Polygon, regardless of which network you funded the payout from.
+
 ## Settlement and cut-offs
 
-How fast each rail settles, and the daily cut-offs for ACH, wire, and SWIFT, are covered in [Cut-off times](cut-off-times.md). As a rule of thumb: Pix, PIX Safe, SPEI, and Transfers settle in minutes; RTP is instant; ACH, wire, TED, ACH Colombia, and SEPA take about 1-2 business days; SWIFT can take up to 5 business days.
+How fast each rail settles, and the daily cut-offs for ACH, wire, and SWIFT, are covered in [Cut-off times](cut-off-times.md). As a rule of thumb: Pix, PIX Safe, SPEI, and Transfers settle in minutes; RTP is instant; ACH, wire, TED, ACH Colombia, SEPA, and Faster Payments take about 1-2 business days; SWIFT can take up to 5 business days.
 
 ## Related
 

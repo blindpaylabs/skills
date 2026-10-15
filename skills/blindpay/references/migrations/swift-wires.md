@@ -11,7 +11,7 @@ This guide is for teams sending international payouts over SWIFT wires and wanti
 | SWIFT wires concept | BlindPay concept |
 | --- | --- |
 | Beneficiary record | Customer with KYC/KYB |
-| IBAN, BIC, and other wire fields | Bank account with rail-specific fields per local rail (Pix for BRL, SPEI for MXN, SEPA for EUR, ACH/RTP/wire for USD, Transfers 3.0 for ARS) |
+| IBAN, BIC, and other wire fields | Bank account with rail-specific fields per local rail (Pix for BRL, SPEI for MXN, SEPA for EUR, Faster Payments for GBP, ACH/RTP/wire for USD, Transfers 3.0 for ARS) |
 | Rate lock before sending a wire | Quote |
 | Wire initiation | Payout |
 | Waiting on an MT103 confirmation | `payout.new`, `payout.update`, and `payout.complete` webhooks |
@@ -46,7 +46,7 @@ Dual-run one corridor first in shadow mode, comparing costs and settlement times
 Paste this into your coding agent to run the migration end to end.
 
 ```text [Migration prompt]
-You are migrating my application's international payments from SWIFT wire transfers to BlindPay stablecoin payouts, which convert USDC/USDT to local fiat and settle over local rails (Pix for BRL, SPEI for MXN, SEPA for EUR, ACH/RTP/wire for USD, Transfers 3.0 for ARS).
+You are migrating my application's international payments from SWIFT wire transfers to BlindPay stablecoin payouts, which convert USDC/USDT to local fiat and settle over local rails (Pix for BRL, SPEI for MXN, SEPA for EUR, Faster Payments for GBP, ACH/RTP/wire for USD, Transfers 3.0 for ARS).
 
 Before writing code, read these sources and follow them over any prior knowledge:
 - https://blindpay.com/docs/llms.txt (read the payout quickstart, bank accounts, quotes, and payment methods pages)
