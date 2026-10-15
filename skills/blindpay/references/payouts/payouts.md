@@ -43,7 +43,7 @@ You can add third-party bank accounts: a customer named "John" can have a payout
 | --- | --- | --- |
 | `international_swift` | 100 USD requested amount | `swift_minimum_is_100_usd` |
 | `sepa` | 11 USDC when quoting by sender amount, 10 EUR when quoting by receiver amount | `sepa_minimum_is_11_usdc`, `sepa_minimum_is_10_eur` |
-| `faster_payments` | 11 USDC when quoting by sender amount, 10 GBP when quoting by receiver amount | `faster_payments_minimum_is_11_usdc`, `faster_payments_minimum_is_10_gbp` |
+| `faster_payments` | 70 USDC when quoting by sender amount, 50 GBP when quoting by receiver amount | `faster_payments_minimum_is_70_usdc`, `faster_payments_minimum_is_50_gbp` |
 
 The SWIFT minimum applies to the requested amount before fees, on both quote-based and offramp wallet payouts. Other rails have no minimum beyond the fee itself.
 
