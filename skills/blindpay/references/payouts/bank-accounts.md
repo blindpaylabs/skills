@@ -24,7 +24,7 @@ All bank account data must be valid, even on development instances. Validation (
 
 | `type` | Country | Estimated time of arrival |
 | --- | --- | --- |
-| `international_swift` | Global | ~5 business days (minimum 100 USD per payout) |
+| `international_swift` | Global | ~2 business days (minimum 100 USD per payout) |
 | `ach` | United States | ~2 business days |
 | `wire` | United States | ~1 business day |
 | `rtp` | United States | instant |
@@ -35,7 +35,7 @@ All bank account data must be valid, even on development instances. Validation (
 | `ach_cop_bitso` | Colombia | ~1 business day |
 | `transfers_bitso` | Argentina | instant |
 | `sepa` | Europe (SEPA zone) | ~1 business day |
-| `faster_payments` | United Kingdom | ~1 business day |
+| `faster_payments` | United Kingdom | instant |
 
 **Note:**
 
