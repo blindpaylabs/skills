@@ -46,7 +46,7 @@ BlindPay does not provide services to businesses engaged in the following activi
 | **Legal, Notarial and Professional Services** | Lawyers (including IOLTA accounts), notaries, trustees, and accountants. |
 | **Banking and Correspondent Entities** | Foreign banks, offshore banks, private banking, correspondent accounts, payable-through accounts, and concentration accounts. |
 | **Retail, Hospitality and Consumer Goods** | Liquor stores, convenience stores, restaurants, and jewelry or precious metals dealers. |
-| **Investment and Asset Management** | Non-deposit investment products, trust and asset management services, and trade finance activities. |
+| **Investment and Asset Management** | Non-deposit investment products, trust and asset management services, and trade finance activities. This includes family offices and companies set up to hold or manage their owners’ own assets through a corporate vehicle (e.g., personal holding companies for investments, real estate, art, or collectibles). |
 | **Construction** | Construction companies, general contractors, and related service providers. |
 
 ## Consequences of Violation
