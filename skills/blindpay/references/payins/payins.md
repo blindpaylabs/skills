@@ -37,6 +37,7 @@ On development instances every payin completes automatically about 30 seconds af
 | `spei` | MXN | CLABE number |
 | `transfers` | ARS | CBU number |
 | `pse` | COP | payment link |
+| `bre_b` | COP | none: created automatically when a deposit lands on a [Bre-B virtual account](../virtual-accounts/virtual-accounts.md#colombia-bre-b-accounts), never from a quote |
 
 For `ach`/`wire`, the memo code is shown only when the customer has no enabled virtual account; with one, BlindPay displays dedicated account details instead and ignores the memo code. See [virtual accounts](../virtual-accounts/virtual-accounts.md).
 
@@ -281,6 +282,7 @@ On development instances every payin auto-completes about 30 seconds after creat
 | `spei` | MXN | typically settles within minutes; BlindPay waits up to 30 minutes before marking the payin `failed` |
 | `transfers` | ARS | typically settles within minutes; BlindPay waits up to 30 minutes before marking the payin `failed` |
 | `pse` | COP | typically settles within minutes; BlindPay waits up to 30 minutes before marking the payin `failed`, since PSE's bank redirect and 2FA step can lag |
+| `bre_b` | COP | the deposit is final in seconds; the payin is created when it arrives, at the live COP rate |
 
 See [cut-off times](../kb/cut-off-times.md) for the full settlement-window reference.
 

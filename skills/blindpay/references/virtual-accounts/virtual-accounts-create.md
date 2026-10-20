@@ -106,16 +106,31 @@ curl --request POST \
 }'
 ```
 
+```bash [Colombia (Bre-B)]
+curl --request POST \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/virtual-accounts \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "banking_partner": "bre_b",
+  "token": "USDC",
+  "blockchain_wallet_id": "bw_000000000000"
+}'
+```
+
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `banking_partner` | `jpmorgan`, `citi`, `hsbc`, `cfsb`, `portage` | Yes | Which value is available depends on your instance and the customer's eligibility, see [Banking partner eligibility](#banking-partner-eligibility) below. |
+| `banking_partner` | `jpmorgan`, `citi`, `hsbc`, `cfsb`, `portage`, `bre_b` | Yes | Which value is available depends on your instance and the customer's eligibility, see [Banking partner eligibility](#banking-partner-eligibility) below. |
 | `token` | `USDC`, `USDT`, `USDB` | Yes | Settlement stablecoin. `USDT` requires the linked wallet's network to be Polygon, Ethereum, or Solana. `USDB` is development-only. |
 | `blockchain_wallet_id` | string (`bw_...`) | Yes | Must belong to the same customer. |
 | `sole_proprietor_doc_type` | `master_service_agreement`, `salary_slip`, `bank_statement` | Conditional | Required for individual customers on this banking partner. |
 | `sole_proprietor_doc_file` | URL string | Conditional | Required alongside `sole_proprietor_doc_type`. |
+| `bre_b.gender` | `male`, `female` | No | Only for `bre_b`. Omit it to use the gender on the customer's KYC ID document. Send it when the verification has none, or the request fails with `bre_b_gender_required`. Not stored on the customer. |
 | `partner_fee_id` | string (`pf_...`) | No | Pins a [partner fee](../essentials/partner-fees.md) to this account's automated deposits, overriding the instance-wide virtual accounts default fee. Omit to use the default. |
 
 The response includes `id` (`va_...`), `banking_partner`, `kyc_status`, `token`, `blockchain_wallet_id`, `partner_fee_id`, and a `us` object with `ach`, `wire`, and `rtp` sub-objects (each `{routing_number, account_number}`), plus SWIFT and receiving-bank details once the account is `approved`. Before approval, rail numbers are empty.
+
+A `bre_b` account returns `kyc_status: approved` right away, with `us: null` and a `co` object holding `co.bre_b.key`, the Bre-B key payers send COP to.
 
 You can update `token`, `blockchain_wallet_id`, and `partner_fee_id` on an existing virtual account (`partner_fee_id: null` clears the pin back to the instance default); `banking_partner` cannot be changed after creation.
 
@@ -123,6 +138,7 @@ You can update `token`, `blockchain_wallet_id`, and `partner_fee_id` on an exist
 
 - `cfsb` requires the customer's `country` to be `US`. If the customer is an individual, `business_type` must also be `sole_proprietorship`.
 - `citi` requires the customer to be a business, and its `country` to not be `US`.
+- `bre_b` requires a Colombian document: individuals need a Colombian ID card (`id_doc_country: CO`), businesses need `country: CO` and a NIT in `tax_id`. Anyone else gets `bre_b_requires_colombian_document`. If the document already has a Bre-B key elsewhere, the request fails with `bre_b_document_already_linked`.
 - A business customer requesting `cfsb` or `citi` must also have a `country` on BlindPay's supported list for that banking partner; contact BlindPay if you're unsure whether a given country qualifies.
 
 ## Webhooks

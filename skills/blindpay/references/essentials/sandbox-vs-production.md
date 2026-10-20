@@ -60,6 +60,7 @@ On production, BlindPay waits for the real payment to arrive before completing t
 | `spei` | MXN | Up to 10 minutes |
 | `transfers` | ARS | Up to 10 minutes |
 | `pse` | COP | Up to 10 minutes |
+| `bre_b` | COP | Simulate a deposit with `POST .../virtual-accounts/{id}/simulate-breb-deposit` |
 
 ## Payables
 

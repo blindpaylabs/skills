@@ -21,10 +21,23 @@ Each virtual account belongs to one customer and settles to one blockchain walle
 | US (individuals and businesses) | ACH, Wire, SWIFT | US and foreign | 24 hours | $1.50/mo per account |
 | US (businesses, foreign senders) | ACH, RTP, Wire, SWIFT | Foreign only | 3-5 business days | $1.50/mo per account |
 | US (businesses, US senders) | ACH, Wire, SWIFT | US only | 3-5 business days | $1.50/mo per account |
+| Colombia (Bre-B) | Bre-B | Colombia only | Instant | Contact BlindPay |
 
 **Note:**
 
 Named payouts: when a virtual account is issued to an end user, all payouts originating from that account are sent under the end user's name rather than a pooled or omnibus account name. This ensures the recipient sees the actual payer on incoming transfers and aligns with originator-information requirements for payment-rail compliance. These accounts can also send and collect third-party payments.
+
+### Colombia (Bre-B) accounts
+
+A Bre-B account gives your customer a permanent Bre-B key (for example `@BP000000000000`). Anyone with a Colombian bank account can send COP to it from their bank app, and the money lands in seconds. Each deposit creates a payin at the live COP rate and settles to the linked wallet like any other virtual account deposit.
+
+- Only customers with a Colombian document qualify: individuals with a Colombian ID card and Colombian businesses with a NIT. One key per document.
+- Each deposit is limited to about COP 12,000,000, depending on the payer's bank. For larger amounts, use a [PSE payin](../payins/payins.md).
+- The account is active as soon as it is created: there is no compliance or bank review step.
+- The response returns a `co` object with `co.bre_b.key` instead of `us`.
+- Payers see our payment provider's registered name as the recipient in their bank app, not your customer's name. That name is returned in `co.beneficiary.name`, so you can tell payers what to expect.
+- Bre-B deposits cannot be reversed. Returning funds needs the sender's own Bre-B key or bank account details.
+- A deposit to the key is always a new payin. It never pays an open PSE payin quote.
 
 ### Fees on deposits
 
