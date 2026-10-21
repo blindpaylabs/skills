@@ -62,11 +62,13 @@ curl --request PUT \
 }'
 ```
 
-### For individuals (sole proprietors)
+### For individuals
 
-Individual customers need `account_purpose` and `source_of_wealth` filled in on the customer, subject to the same `missing_required_fields` rejection as businesses.
+Individual customers are only supported on the `jpmorgan` and `portage` banking partners. They need `account_purpose` and `source_of_wealth` filled in on the customer, subject to the same `missing_required_fields` rejection as businesses.
 
-Sole proprietors must also include a supporting document in the virtual account creation request itself:
+### For sole proprietors
+
+A sole proprietor is an individual customer with `business_type` set to `sole_proprietorship`. On `cfsb`, this is the only kind of individual customer accepted. On top of the individual fields above, sole proprietors must include a supporting document in the virtual account creation request itself:
 
 - `sole_proprietor_doc_type`: type of supporting document, one of `master_service_agreement`, `salary_slip`, `bank_statement`
 - `sole_proprietor_doc_file`: a URL pointing to the uploaded document
@@ -89,6 +91,18 @@ curl --request POST \
   "token": "USDC",
   "blockchain_wallet_id": "bw_000000000000",
   "partner_fee_id": "pf_000000000000"
+}'
+```
+
+```bash [Individual]
+curl --request POST \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/virtual-accounts \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "banking_partner": "jpmorgan",
+  "token": "USDC",
+  "blockchain_wallet_id": "bw_000000000000"
 }'
 ```
 
@@ -135,7 +149,7 @@ curl --request POST \
 | `banking_partner` | `jpmorgan`, `citi`, `hsbc`, `cfsb`, `portage`, `bre_b`, `spei` | Yes | Which value is available depends on your instance and the customer's eligibility, see [Banking partner eligibility](#banking-partner-eligibility) below. |
 | `token` | `USDC`, `USDT`, `USDB` | Yes | Settlement stablecoin. `USDT` requires the linked wallet's network to be Polygon, Ethereum, or Solana. `USDB` is development-only. |
 | `blockchain_wallet_id` | string (`bw_...`) | Yes | Must belong to the same customer. |
-| `sole_proprietor_doc_type` | `master_service_agreement`, `salary_slip`, `bank_statement` | Conditional | Required for individual customers on this banking partner. |
+| `sole_proprietor_doc_type` | `master_service_agreement`, `salary_slip`, `bank_statement` | Conditional | Required for sole proprietors on `cfsb`. |
 | `sole_proprietor_doc_file` | URL string | Conditional | Required alongside `sole_proprietor_doc_type`. |
 | `bre_b.gender` | `male`, `female` | No | Only for `bre_b`. Omit it to use the gender on the customer's KYC ID document. Send it when the verification has none, or the request fails with `bre_b_gender_required`. Not stored on the customer. |
 | `partner_fee_id` | string (`pf_...`) | No | Pins a [partner fee](../essentials/partner-fees.md) to this account's automated deposits, overriding the instance-wide virtual accounts default fee. Omit to use the default. |
@@ -151,6 +165,7 @@ You can update `token`, `blockchain_wallet_id`, and `partner_fee_id` on an exist
 ## Banking partner eligibility
 
 - `cfsb` requires the customer's `country` to be `US`. If the customer is an individual, `business_type` must also be `sole_proprietorship`.
+- Individual customers are only supported on `jpmorgan` and `portage`. The one exception is sole proprietors, which can also use `cfsb`.
 - `citi` requires the customer to be a business, and its `country` to not be `US`.
 - `bre_b` requires a Colombian document: individuals need a Colombian ID card (`id_doc_country: CO`), businesses need `country: CO` and a NIT in `tax_id`. Anyone else gets `bre_b_requires_colombian_document`. If the document already has a Bre-B key elsewhere, the request fails with `bre_b_document_already_linked`.
 - A business customer requesting `cfsb` or `citi` must also have a `country` on BlindPay's supported list for that banking partner; contact BlindPay if you're unsure whether a given country qualifies.
