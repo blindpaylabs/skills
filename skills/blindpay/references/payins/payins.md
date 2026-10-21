@@ -34,7 +34,7 @@ On development instances every payin completes automatically about 30 seconds af
 | `international_swift` | USD | `blindpay_bank_details` (requires an approved virtual account, see below) |
 | `pix` | BRL | `pix_code` (copyable text or QR code) |
 | `ted` | BRL | `memo_code` + `blindpay_bank_details` (requires the `ted_payin` subscription feature, see below) |
-| `spei` | MXN | CLABE number |
+| `spei` | MXN | CLABE number. Deposits to a [SPEI CLABE virtual account](../virtual-accounts/virtual-accounts.md#mexico-spei-clabe-accounts) also create `spei` payins, with no quote |
 | `transfers` | ARS | CBU number |
 | `pse` | COP | payment link |
 | `bre_b` | COP | none: created automatically when a deposit lands on a [Bre-B virtual account](../virtual-accounts/virtual-accounts.md#colombia-bre-b-accounts), never from a quote |

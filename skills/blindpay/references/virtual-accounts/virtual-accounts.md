@@ -22,10 +22,13 @@ Each virtual account belongs to one customer and settles to one blockchain walle
 | US (businesses, foreign senders) | ACH, RTP, Wire, SWIFT | Foreign only | 3-5 business days | $1.50/mo per account |
 | US (businesses, US senders) | ACH, Wire, SWIFT | US only | 3-5 business days | $1.50/mo per account |
 | Colombia (Bre-B) | Bre-B | Colombia only | Instant | Contact BlindPay |
+| Mexico (SPEI CLABE) | SPEI | Mexico only | Instant | Contact BlindPay |
 
 **Note:**
 
 Named payouts: when a virtual account is issued to an end user, all payouts originating from that account are sent under the end user's name rather than a pooled or omnibus account name. This ensures the recipient sees the actual payer on incoming transfers and aligns with originator-information requirements for payment-rail compliance. These accounts can also send and collect third-party payments.
+
+Colombia (Bre-B) and Mexico (SPEI CLABE) accounts are not named virtual accounts. Payers see a pooled recipient name instead of your customer's name, but each key or CLABE is unique to one customer, so every deposit is still credited to the right customer.
 
 ### Colombia (Bre-B) accounts
 
@@ -35,9 +38,19 @@ A Bre-B account gives your customer a permanent Bre-B key (for example `@BP00000
 - Each deposit is limited to about COP 12,000,000, depending on the payer's bank. For larger amounts, use a [PSE payin](../payins/payins.md).
 - The account is active as soon as it is created: there is no compliance or bank review step.
 - The response returns a `co` object with `co.bre_b.key` instead of `us`.
-- Payers see our payment provider's registered name as the recipient in their bank app, not your customer's name. That name is returned in `co.beneficiary.name`, so you can tell payers what to expect.
+- This is not a named virtual account. Payers see our payment provider's registered name as the recipient in their bank app, not your customer's name, but the key is unique to this customer. That name is returned in `co.beneficiary.name`, so you can tell payers what to expect.
 - Bre-B deposits cannot be reversed. Returning funds needs the sender's own Bre-B key or bank account details.
 - A deposit to the key is always a new payin. It never pays an open PSE payin quote.
+
+### Mexico (SPEI CLABE) accounts
+
+A SPEI CLABE account gives your customer a permanent 18-digit CLABE. Anyone with a Mexican bank account can send MXN to it by SPEI, any time and any amount, without creating a payin quote first. Each deposit creates a `spei` payin at the live MXN rate and settles to the linked wallet like any other virtual account deposit.
+
+- Available for customers of any country, individuals and businesses. One CLABE per customer, and a CLABE is never reassigned to someone else.
+- The account is active as soon as it is created: there is no compliance or bank review step.
+- The response returns an `mx` object with `mx.spei.clabe` instead of `us`.
+- This is not a named virtual account. Payers see `BLINDPAY LLC` as the recipient in their bank app, not your customer's name, but the CLABE is unique to this customer. That name is returned in `mx.beneficiary.name`.
+- A deposit to the CLABE is always a new payin. It never pays an open SPEI payin quote, and one-time SPEI payins from quotes keep working as before.
 
 ### Fees on deposits
 

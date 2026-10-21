@@ -118,9 +118,21 @@ curl --request POST \
 }'
 ```
 
+```bash [Mexico (SPEI CLABE)]
+curl --request POST \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/virtual-accounts \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "banking_partner": "spei",
+  "token": "USDC",
+  "blockchain_wallet_id": "bw_000000000000"
+}'
+```
+
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `banking_partner` | `jpmorgan`, `citi`, `hsbc`, `cfsb`, `portage`, `bre_b` | Yes | Which value is available depends on your instance and the customer's eligibility, see [Banking partner eligibility](#banking-partner-eligibility) below. |
+| `banking_partner` | `jpmorgan`, `citi`, `hsbc`, `cfsb`, `portage`, `bre_b`, `spei` | Yes | Which value is available depends on your instance and the customer's eligibility, see [Banking partner eligibility](#banking-partner-eligibility) below. |
 | `token` | `USDC`, `USDT`, `USDB` | Yes | Settlement stablecoin. `USDT` requires the linked wallet's network to be Polygon, Ethereum, or Solana. `USDB` is development-only. |
 | `blockchain_wallet_id` | string (`bw_...`) | Yes | Must belong to the same customer. |
 | `sole_proprietor_doc_type` | `master_service_agreement`, `salary_slip`, `bank_statement` | Conditional | Required for individual customers on this banking partner. |
@@ -131,6 +143,8 @@ curl --request POST \
 The response includes `id` (`va_...`), `banking_partner`, `kyc_status`, `token`, `blockchain_wallet_id`, `partner_fee_id`, and a `us` object with `ach`, `wire`, and `rtp` sub-objects (each `{routing_number, account_number}`), plus SWIFT and receiving-bank details once the account is `approved`. Before approval, rail numbers are empty.
 
 A `bre_b` account returns `kyc_status: approved` right away, with `us: null` and a `co` object holding `co.bre_b.key`, the Bre-B key payers send COP to.
+
+A `spei` account also returns `kyc_status: approved` right away, with `us: null` and an `mx` object holding `mx.spei.clabe`, the CLABE payers send MXN to.
 
 You can update `token`, `blockchain_wallet_id`, and `partner_fee_id` on an existing virtual account (`partner_fee_id: null` clears the pin back to the instance default); `banking_partner` cannot be changed after creation.
 
