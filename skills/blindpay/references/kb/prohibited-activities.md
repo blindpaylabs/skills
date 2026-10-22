@@ -43,7 +43,7 @@ BlindPay does not provide services to businesses engaged in the following activi
 | **Intellectual Property Infringement and Counterfeit Goods** | Entities selling, distributing, or enabling IP-infringing or counterfeit products. |
 | **Tobacco and Tobacco-Related Products** | Manufacture, distribution, or sale of tobacco products and related services. |
 | **Charities and NGOs** | Non-governmental organizations, charitable foundations, and nonprofit entities. |
-| **Legal, Notarial and Professional Services** | Lawyers (including IOLTA accounts), notaries, trustees, and accountants. |
+| **Legal, Notarial and Professional Services** | Lawyers, notaries, trustees, accountants and accounting firms that receive, hold or move funds on behalf of third parties, including through IOLTA, client trust, escrow or pooled client accounts. |
 | **Banking and Correspondent Entities** | Foreign banks, offshore banks, private banking, correspondent accounts, payable-through accounts, and concentration accounts. |
 | **Retail, Hospitality and Consumer Goods** | Liquor stores, convenience stores, restaurants, and jewelry or precious metals dealers. |
 | **Investment and Asset Management** | Non-deposit investment products, trust and asset management services, and trade finance activities. This includes family offices and companies set up to hold or manage their owners’ own assets through a corporate vehicle (e.g., personal holding companies for investments, real estate, art, or collectibles). |
