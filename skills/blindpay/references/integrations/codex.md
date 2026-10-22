@@ -9,6 +9,14 @@ Source: https://blindpay.com/docs/integrations/codex
 ## Add the MCP server
 
 ```bash [Terminal]
+codex mcp add blindpay --url https://mcp.blindpay.com/mcp
+```
+
+Then run `codex mcp login blindpay` to sign in with your BlindPay account and pick the instance the agent may use. To let the agent read without changing anything, use `https://mcp.blindpay.com/mcp/readonly` instead.
+
+To run the server locally with an API key instead:
+
+```bash [Terminal]
 codex mcp add blindpay \
   --env BLINDPAY_API_KEY=your-api-key \
   --env BLINDPAY_INSTANCE_ID=your-instance-id \
@@ -27,9 +35,9 @@ Skills teach Codex BlindPay's rails, corridors, fees, KYC/KYB flows, and API pat
 
 ## Use it
 
-### Get your credentials
+### Connect your account
 
-Copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
+With the hosted server, sign in when Codex asks. With the local server, copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
 
 ### Ask Codex
 

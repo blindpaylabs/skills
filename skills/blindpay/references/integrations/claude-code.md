@@ -9,6 +9,15 @@ Source: https://blindpay.com/docs/integrations/claude-code
 ## Add the MCP server
 
 ```bash [Terminal]
+claude mcp add --transport http blindpay \
+  https://mcp.blindpay.com/mcp
+```
+
+Run `/mcp` in Claude Code to sign in with your BlindPay account and pick the instance the agent may use. To let the agent read without changing anything, use `https://mcp.blindpay.com/mcp/readonly` instead.
+
+To run the server locally with an API key instead, use the npm package:
+
+```bash [Terminal]
 claude mcp add blindpay \
   --env BLINDPAY_API_KEY=your-api-key \
   --env BLINDPAY_INSTANCE_ID=your-instance-id \
@@ -40,9 +49,9 @@ npx skills add blindpaylabs/skills
 
 ## Use it
 
-### Get your credentials
+### Connect your account
 
-Copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
+With the hosted server, sign in when Claude Code asks. With the local server, copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
 
 ### Ask Claude Code
 
@@ -57,7 +66,7 @@ With Skills loaded, Claude Code can scaffold full BlindPay integrations in your 
 
 **Note:**
 
-The MCP server reads your key from the env you pass to `claude mcp add`. Money-movement tools should require explicit confirmation before executing.
+The hosted server tells Claude Code the call order, amount units and which steps need a person when it connects. Money-movement tools should require explicit confirmation before executing; start on a development instance.
 
 ## Next steps
 

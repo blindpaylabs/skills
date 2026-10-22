@@ -14,6 +14,20 @@ Create `.cursor/mcp.json` in your project (or add to the global config):
 {
   "mcpServers": {
     "blindpay": {
+      "url": "https://mcp.blindpay.com/mcp"
+    }
+  }
+}
+```
+
+Restart Cursor, enable the `blindpay` server in **Settings → MCP**, and sign in with your BlindPay account. To let the agent read without changing anything, use `https://mcp.blindpay.com/mcp/readonly` instead.
+
+To run the server locally with an API key instead:
+
+```json [.cursor/mcp.json]
+{
+  "mcpServers": {
+    "blindpay": {
       "command": "npx",
       "args": ["-y", "@blindpay/mcp"],
       "env": {
@@ -25,8 +39,6 @@ Create `.cursor/mcp.json` in your project (or add to the global config):
 }
 ```
 
-Restart Cursor, then enable the `blindpay` server in **Settings → MCP**.
-
 ## Add Agent Skills
 
 ```bash [Terminal]
@@ -37,9 +49,9 @@ Skills teach the agent BlindPay's rails, corridors, fees, KYC/KYB flows, and API
 
 ## Use it
 
-### Get your credentials
+### Connect your account
 
-Copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
+With the hosted server, sign in when Cursor asks. With the local server, copy your API key and instance ID from the [BlindPay dashboard](https://app.blindpay.com/sign-up/).
 
 ### Ask the agent
 

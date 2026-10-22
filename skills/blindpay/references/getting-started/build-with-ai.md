@@ -18,7 +18,49 @@ Curated prompts that walk an AI coding agent through a full quickstart, with the
 
 ### MCP server
 
-The Model Context Protocol server exposes the BlindPay API as callable tools. Any MCP-compatible agent (Codex, Claude Code, Cursor, Windsurf, and others) can call these tools to move money in response to natural-language prompts.
+The Model Context Protocol server exposes the BlindPay API as callable tools. Any MCP-compatible agent (Claude, ChatGPT, Codex, Claude Code, Cursor, VS Code, Windsurf, and others) can call these tools in response to natural-language prompts.
+
+The hosted server at `https://mcp.blindpay.com/mcp` is the recommended way to connect. You sign in with your BlindPay account and pick the instance the agent may use; no API key is pasted into the client.
+
+```bash [Claude Code]
+claude mcp add --transport http blindpay \
+  https://mcp.blindpay.com/mcp
+```
+
+```bash [Codex]
+codex mcp add blindpay --url https://mcp.blindpay.com/mcp
+```
+
+```json [.cursor/mcp.json]
+{
+  "mcpServers": {
+    "blindpay": {
+      "url": "https://mcp.blindpay.com/mcp"
+    }
+  }
+}
+```
+
+```json [.vscode/mcp.json]
+{
+  "servers": {
+    "blindpay": {
+      "type": "http",
+      "url": "https://mcp.blindpay.com/mcp"
+    }
+  }
+}
+```
+
+In Claude or ChatGPT, add a custom connector with `https://mcp.blindpay.com/mcp` (ChatGPT needs Developer mode and OAuth authentication), then sign in.
+
+To let an agent explore without being able to change anything, connect to `https://mcp.blindpay.com/mcp/readonly` instead. It serves only the read tools.
+
+When it connects, the server sends the agent instructions covering the call order, amount units (cents for quotes and payouts, whole tokens for wallet balances), the steps a person must do in the dashboard, and how to test on a development instance. It also exposes every webhook event and its payload schema as resources under `blindpay://webhooks/events`.
+
+#### Local server (API key)
+
+For hosts that only run local MCP servers, or for CI, run the npm package with an API key instead:
 
 ```bash [Codex]
 codex mcp add blindpay \
@@ -88,16 +130,16 @@ bank account. Show me the fees and rate, then execute after I confirm.
 
 **Warning:**
 
-Money-movement tools should require explicit confirmation before executing. The MCP server does not gate confirmation on its own: build a confirmation step into your agent prompt or app flow before any payout, payin, or transfer is executed.
+Money-movement tools should require explicit confirmation before executing. Every tool carries MCP annotations (read-only, destructive), so clients that support them can ask before running anything that is not a read, and the server instructions tell the agent to confirm amounts and recipients on production instances. The server does not block a call on its own: keep a confirmation step in your agent prompt or app flow, start on a development instance, or connect to `/mcp/readonly` until you are ready.
 
 ## Per-platform setup
 
 | Platform | Method | Notes |
 | --- | --- | --- |
 | Codex | `codex mcp add` | Run `codex mcp add` from the terminal, then load Agent Skills for full scaffolding. The CLI, IDE extension, and desktop app share the configuration. |
-| Claude Code | `claude mcp add` or `.mcp.json` | Run `claude mcp add` from the terminal, or add the server to `.mcp.json` and load Agent Skills for full scaffolding. |
-| Cursor | `.cursor/mcp.json` | Create the file, restart Cursor, then enable the `blindpay` server in Settings -> MCP. |
-| Windsurf | MCP settings | Add the same server config in Windsurf's MCP configuration. |
+| Claude Code | `claude mcp add` or `.mcp.json` | Run `claude mcp add --transport http blindpay https://mcp.blindpay.com/mcp`, or add the server to `.mcp.json`, and load Agent Skills for full scaffolding. |
+| Cursor | `.cursor/mcp.json` | Add `{ "url": "https://mcp.blindpay.com/mcp" }` as the `blindpay` server, restart Cursor, then enable it in Settings -> MCP and sign in. |
+| Windsurf | MCP settings | Add `https://mcp.blindpay.com/mcp` as a remote server in Windsurf's MCP configuration. |
 | Lovable | Copy-paste prompt + REST API | No MCP host. Paste a prompt describing the backend function and add `BLINDPAY_API_KEY` / `BLINDPAY_INSTANCE_ID` as secrets. |
 | v0 | Copy-paste prompt + REST API | Paste a prompt describing a Next.js route handler; add credentials as Vercel environment variables. |
 | Bolt | Copy-paste prompt + REST API | Paste a prompt describing a server route; add credentials as environment variables in the Bolt project. |
@@ -133,8 +175,15 @@ const res = await fetch(
       Authorization: `Bearer ${process.env.BLINDPAY_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    // request_amount is in minor units; 10000000 = 10 USDC at 6 decimals
-    body: JSON.stringify({ currency_type: 'sender', request_amount: 10000000 }),
+    // request_amount is in cents: 1000 = 10.00
+    body: JSON.stringify({
+      bank_account_id: 'ba_000000000000',
+      currency_type: 'sender',
+      cover_fees: true,
+      request_amount: 1000,
+      network: 'base',
+      token: 'USDC',
+    }),
   },
 )
 const quote = await res.json()
