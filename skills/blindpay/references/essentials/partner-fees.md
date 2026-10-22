@@ -10,7 +10,7 @@ A partner fee is a markup you add on top of transactions processed through Blind
 
 ## Fee types
 
-You can configure two types of fees, set independently for payins and payouts:
+You can configure two types of fees, set independently for payins and payouts. Transfers take both types per request instead, see [Transfers](#transfers):
 
 | Type | Description |
 | --- | --- |
@@ -28,7 +28,7 @@ Partner fees follow a monthly collection and withdrawal cycle:
 
 **Note:**
 
-`payin.partnerFee` and `payout.partnerFee` are declared in the webhook catalog but do not currently fire, and there is no `tracking_partner_fee` object on quote or transaction responses. The amount collected on a given transaction is `partner_fee_amount` on that quote (see [Quote response fields](#quote-response-fields) below); there is no separate real-time event or status object for partner fee collection today.
+`payin.partnerFee` and `payout.partnerFee` are declared in the webhook catalog but do not currently fire, and payins and payouts have no `tracking_partner_fee` object. The amount collected on a given transaction is `partner_fee_amount` on that quote (see [Quote response fields](#quote-response-fields) below). Transfers are the exception: each transfer reports its fee collection on [`tracking_partner_fee`](../wallets/transfers.md#partner-fee-collection).
 
 ## Configure a partner fee
 
@@ -165,6 +165,10 @@ curl --request DELETE \
 
 `GET /partner-fees/{id}` on an `id` that doesn't exist, belongs to another instance, or was already deleted returns `500 INTERNAL_ERROR`, not `404`. Don't use the status code to detect a missing fee; only look up an `id` you got back from a prior create or list call.
 
+## Transfers
+
+Transfer quotes do not use a fee configuration. Set `partner_percentage_fee` and `partner_flat_fee` on each [transfer quote](../wallets/transfer-quotes.md#partner-fees) instead.
+
 ## Quote response fields
 
 Each payin quote, payout quote, and transfer quote response includes:
@@ -196,5 +200,5 @@ Monthly settlement example:
 - [Billing](billing.md): how BlindPay invoices your account
 - [Fiat receive](../payins/payins.md): payin quotes that accept `partner_fee_id`
 - [Fiat send](../payouts/payouts.md): payout quotes that accept `partner_fee_id`
-- [Stablecoin send](../wallets/send.md): transfer quotes that accept `partner_fee_id`
+- [Transfer quotes](../wallets/transfer-quotes.md#partner-fees): per-transfer `partner_percentage_fee` and `partner_flat_fee`
 - [Virtual accounts](../virtual-accounts/virtual-accounts.md): automated deposits with default or per-account partner fees

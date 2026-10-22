@@ -59,6 +59,8 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/transfers \
 
 `tracking_bridge_swap` opens at `processing` instead of `on_hold` when the transfer is cross-chain, and `tracking_complete` opens at `processing` with `transaction_hash` already set when the source wallet is on a Tempo-managed network. See [Tracking objects](#tracking-objects) below.
 
+`tracking_partner_fee` is also present: `null` when the quote has no partner fee, otherwise an object that opens at `on_hold`. See [Partner fee collection](#partner-fee-collection).
+
 ## Status lifecycle
 
 | `status` | Meaning | Terminal? |
@@ -96,6 +98,24 @@ Every transfer carries 4 tracking objects, each moving through the same `step` v
 | `tracking_complete` | The send (same-network) or mint (cross-chain) leg | `step`, `transaction_hash`, `gas_fee`, `completed_at`, `error_message` |
 
 `transaction_hash`, `gas_fee`, `completed_at`, and `error_message` are all `null` until that step produces a value; `error_message` is set only when the step fails. `blockchain_screening` and `risk_score` are BlindPay's own compliance scoring for the transfer, not something you set.
+
+## Partner fee collection
+
+When the [transfer quote](transfer-quotes.md#partner-fees) carries a partner fee, the transfer moves funds in two legs out of the source wallet:
+
+1. `receiver_amount` goes to `customer_wallet_address`, tracked on `tracking_complete` (and `tracking_bridge_swap` for a cross-chain transfer). `status` follows this leg: the transfer is `completed` and `transfer.complete` fires once it confirms.
+2. After that, `partner_fee_amount` goes to BlindPay, tracked on `tracking_partner_fee`, on the source wallet's network.
+
+`tracking_partner_fee` has the same fields as the other blockchain tracking objects (`step`, `transaction_hash`, `gas_fee`, `completed_at`, `error_message`) and moves from `on_hold` to `processing` to `completed`, usually a few seconds after the transfer completes. No separate webhook fires for this leg: [retrieve the transfer](#retrieve-a-transfer) to read it. A fee is only counted towards your monthly [partner fee](../essentials/partner-fees.md) payout once `tracking_partner_fee.step` is `completed`.
+
+### Balance check
+
+The source wallet must hold the full `sender_amount` (transfer plus fee) before anything moves, so a transfer never reaches its destination without its fee:
+
+- For a wallet without [yield](https://blindpay.com/docs/yield), executing the transfer fails with `400` `not_enough_balance` and no transfer is created.
+- For a wallet with yield enabled, the check runs after BlindPay pulls the needed funds back from the yield position. If the balance is still short, the transfer is created and then moves to `failed` with `tracking_complete.error_message` set to `not_enough_balance`, before any funds are sent. `transfer.update` fires.
+
+Transfers without a partner fee are not affected.
 
 ## Testing
 

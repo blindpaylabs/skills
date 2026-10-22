@@ -26,7 +26,7 @@ When both `sender_token` and `customer_token` are `USDC`, `customer_network` can
 
 Supported networks are Ethereum, Polygon, Base, Arbitrum, and Arc on a production instance; on a development instance, the matching testnets (Ethereum Sepolia, Polygon Amoy, Base Sepolia, Arbitrum Sepolia, Arc Testnet), using real testnet USDC rather than USDB, since CCTP can only move native USDC. Both the source and destination network must be on the same side of that mainnet/testnet boundary. Requesting a token other than USDC across networks returns `cross_chain_transfers_only_support_usdc`; requesting a network pair CCTP v2 does not support returns `cctp_route_not_supported`.
 
-The quote itself is unaffected by the bridge: amounts stay 1:1 and BlindPay adds no fee on top, exactly like a same-network transfer. Circle's protocol deducts its own small fee (typically a fraction of a cent up to a few cents, a few basis points of the amount) from the amount minted on the destination chain; this is not reflected in `receiver_amount` or any other quote field. Cross-chain transfers typically settle in 8 to 20 seconds; transfers sourced from Polygon settle in around 8 seconds either way.
+The quote itself is unaffected by the bridge: amounts stay 1:1 and BlindPay adds no fee on top, exactly like a same-network transfer. Any [partner fee](#partner-fees) you set applies the same way on both. Circle's protocol deducts its own small fee (typically a fraction of a cent up to a few cents, a few basis points of the amount) from the amount minted on the destination chain; this is not reflected in `receiver_amount` or any other quote field. Cross-chain transfers typically settle in 8 to 20 seconds; transfers sourced from Polygon settle in around 8 seconds either way.
 
 Solana, Stellar, Tron, and Tempo are not part of cross-chain transfers yet; same-network moves on those chains are unaffected.
 
@@ -47,14 +47,16 @@ Creating a transfer quote also requires the caller to hold the transaction-creat
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
 | `wallet_id` | string (`bl_...`) | yes | The managed wallet the funds move out of. Must belong to your instance and not be deleted. |
-| `amount_reference` | enum | yes | `sender` or `receiver`. Since sender and receiver amounts are always equal for transfers today, this only affects which field you read the amount from in your own bookkeeping. |
+| `amount_reference` | enum | yes | `sender` or `receiver`. Which side `request_amount` refers to. Only changes the result when a [partner fee](#partner-fees) is set; without one, `sender_amount` and `receiver_amount` both equal `request_amount`. |
 | `request_amount` | integer | yes | Amount in minor units, no floats. `$100.00` sends as `10000`. Minimum is `1`. |
 | `sender_token` | enum | yes | `USDC`, `USDT`, or `USDB`. Must be a token allowed on the source wallet's network. |
 | `customer_token` | enum | yes | Must equal `sender_token`. |
 | `customer_network` | enum | yes | Must equal the source wallet's own network, unless `sender_token` and `customer_token` are both `USDC` and the pair is a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2). |
 | `customer_wallet_address` | string | yes | The destination blockchain address, 32 to 64 characters, validated for the target network (see table below). Can be another wallet you created or any external address. |
-| `cover_fees` | boolean | yes | Accepted for API consistency with payin and payout quotes, but fee math is not yet active for transfers: `sender_amount` and `receiver_amount` are always equal to `request_amount`. |
-| `partner_fee_id` | string (`pf_...`) | no | Accepted, but partner fee amounts are not yet computed for transfers. |
+| `cover_fees` | boolean | yes | Who pays the [partner fee](#partner-fees). `true`: the fee is added on top and the destination receives the full amount. `false`: the fee is deducted from the amount the destination receives. Has no effect without a partner fee. |
+| `partner_percentage_fee` | integer | no | Partner percentage fee for this transfer, in hundredths of a percent: `150` is 1.50%, `1000` is 10.00%. `0` to `9900`. Defaults to `0`. |
+| `partner_flat_fee` | integer | no | Partner flat fee for this transfer, in minor units of `sender_token`: `50` is 0.50, `1000` is 10.00. `0` to `100000`. Defaults to `0`. |
+| `partner_fee_id` | string (`pf_...`) | no | Stored on the quote but not used for the fee amount. Transfers take the fee per request through `partner_percentage_fee` and `partner_flat_fee` instead. |
 
 Address format by network family:
 
@@ -70,6 +72,27 @@ An address that doesn't match the format for `customer_network` fails with `VALI
 **Note:**
 
 USDT transfers are currently restricted to the Polygon network only, a tighter limit than payins and payouts allow for USDT.
+
+## Partner fees
+
+Set `partner_percentage_fee` and `partner_flat_fee` on the quote to charge your customer a fee on this transfer. The fee is set per request: transfers do not read the payin or payout rates of a [partner fee configuration](../essentials/partner-fees.md).
+
+The total partner fee is the percentage fee plus the flat fee. The percentage is applied to the amount it is based on and rounded to the nearest minor unit. Amounts always add up: `sender_amount = receiver_amount + partner_fee_amount`.
+
+| `amount_reference` | `cover_fees` | `sender_amount` (leaves the wallet) | `receiver_amount` (reaches the destination) |
+| --- | --- | --- | --- |
+| `sender` | `false` | `request_amount` | `request_amount` minus the fee |
+| `sender` | `true` | `request_amount` plus the fee | `request_amount` |
+| `receiver` | `false` | `request_amount` | `request_amount` minus the fee |
+| `receiver` | `true` | Grossed up so that, after the percentage fee on `sender_amount` and the flat fee, exactly `request_amount` is left | `request_amount` |
+
+Examples with `partner_percentage_fee: 1000` (10%) and `partner_flat_fee: 1000` (10.00) on a `request_amount` of `5000` (50.00):
+
+| `amount_reference` | `cover_fees` | `sender_amount` | `receiver_amount` | `partner_fee_amount` |
+| --- | --- | --- | --- | --- |
+| `sender` | `false` | `5000` | `3500` | `1500` (5.00 + 10.00) |
+| `sender` | `true` | `6500` | `5000` | `1500` |
+| `receiver` | `true` | `6667` | `5000` | `1667` (10% of 66.67, plus 10.00) |
 
 ## Create a transfer quote
 
@@ -89,7 +112,8 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/transfer-quotes \
   "customer_wallet_address": "0xDD6a3aD0949396e57C7738ba8FC1A46A5a1C372",
   "customer_token": "USDC",
   "customer_network": "polygon",
-  "partner_fee_id": "pf_000000000000"
+  "partner_percentage_fee": 150,
+  "partner_flat_fee": 50
 }'
 ```
 
@@ -111,7 +135,8 @@ const response = await fetch(
       customer_wallet_address: '0xDD6a3aD0949396e57C7738ba8FC1A46A5a1C372',
       customer_token: 'USDC',
       customer_network: 'polygon',
-      partner_fee_id: 'pf_000000000000',
+      partner_percentage_fee: 150,
+      partner_flat_fee: 50,
     }),
   },
 )
@@ -128,9 +153,11 @@ const quote = await response.json()
   "commercial_quotation": 100,
   "blindpay_quotation": 100,
   "receiver_amount": 1000,
-  "sender_amount": 1000,
-  "partner_fee_amount": 0,
-  "flat_fee": 0
+  "sender_amount": 1065,
+  "partner_fee_amount": 65,
+  "partner_percentage_fee": 150,
+  "partner_flat_fee": 50,
+  "flat_fee": 50
 }
 ```
 
@@ -140,10 +167,12 @@ const quote = await response.json()
 | `expires_at` | number | Epoch milliseconds. Execute the transfer before this passes. |
 | `commercial_quotation` | number | Rate preview. Currently fixed at `100` for transfers since there is no FX conversion, even for a cross-chain USDC move. |
 | `blindpay_quotation` | number | Same as `commercial_quotation` for transfers today. |
-| `receiver_amount` | number | Equal to `request_amount`. |
-| `sender_amount` | number | Equal to `request_amount`. |
-| `partner_fee_amount` | number | Always `0` for transfers today, even if `partner_fee_id` was set. |
-| `flat_fee` | number | Always `0` for transfers today. |
+| `receiver_amount` | number | Amount the destination receives, in minor units. See [partner fees](#partner-fees). |
+| `sender_amount` | number | Amount that leaves the source wallet, in minor units: `receiver_amount` plus `partner_fee_amount`. |
+| `partner_fee_amount` | number | Total partner fee for this transfer, percentage plus flat. `0` without a partner fee. |
+| `partner_percentage_fee` | number | The percentage fee you requested, echoed back. |
+| `partner_flat_fee` | number | The flat fee you requested, echoed back. |
+| `flat_fee` | number | The flat part of the fee, same as `partner_flat_fee`. |
 
 **Note:**
 
@@ -151,7 +180,7 @@ The `qu_` prefix is shared across payin quotes, payout quotes, and transfer quot
 
 ## Validation order
 
-The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. If `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon, and that `sender_token` matches `customer_token`. Either path finishes with a check that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`. The first failing check is the one returned.
+The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. If `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon, and that `sender_token` matches `customer_token`. Either path then checks that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`, and finally computes the [partner fee](#partner-fees) (`partner_fee_exceeds_transfer_amount` or `partner_fee_not_supported_on_network`). The first failing check is the one returned.
 
 ## Testing
 
