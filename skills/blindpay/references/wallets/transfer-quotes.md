@@ -8,7 +8,7 @@ A transfer quote locks in the details of a stablecoin move before you execute it
 
 **Warning:**
 
-`customer_token` must always match `sender_token`, there is no token conversion. `customer_network` must match the source wallet's own network, except when both tokens are `USDC`: a USDC transfer can additionally cross chains using [Circle CCTP v2](#cross-chain-usdc-transfers-circle-cctp-v2).
+`customer_token` must match `sender_token`, except for `USDC` and `EURC` on Base, which [convert into each other](#usdc-and-eurc-conversion-on-base). `customer_network` must match the source wallet's own network, except when both tokens are `USDC`: a USDC transfer can additionally cross chains using [Circle CCTP v2](#cross-chain-usdc-transfers-circle-cctp-v2).
 
 ## How it works
 
@@ -30,6 +30,16 @@ The quote itself is unaffected by the bridge: amounts stay 1:1 and BlindPay adds
 
 Solana, Stellar, Tron, and Tempo are not part of cross-chain transfers yet; same-network moves on those chains are unaffected.
 
+## USDC and EURC conversion on Base
+
+A transfer can convert between `USDC` and `EURC` when the source wallet and `customer_network` are both `base`: set `sender_token` to one and `customer_token` to the other. On a development instance the same conversion runs between `USDB` and `EURB`, BlindPay's test tokens, on `base_sepolia`. No other network or token pair converts.
+
+The quote is priced live by BlindPay's liquidity provider. `commercial_quotation` and `blindpay_quotation` carry the rate as units of `customer_token` per `sender_token`, times 100: `89.1` means 1 USDC = 0.891 EURC. `sender_amount` is in `sender_token` and `receiver_amount` in `customer_token`; any [partner fee](#partner-fees) is charged in `sender_token` before converting.
+
+The smallest conversion is 10 USDC, measured on the USDC side whichever direction you convert, so selling about 9 EURC is enough. A smaller request fails with `400` `fx_amount_below_minimum`.
+
+Prices move fast, so [executing the transfer](transfers.md#usdc-and-eurc-conversion) re-prices it: if the rate moved more than 0.5% against the customer since the quote, the transfer is refused with `409` `fx_rate_moved` and nothing moves. Create a new quote and try again. Otherwise the destination receives exactly `receiver_amount`.
+
 ## Prerequisites
 
 **Before you start:**
@@ -49,8 +59,8 @@ Creating a transfer quote also requires the caller to hold the transaction-creat
 | `wallet_id` | string (`bl_...`) | yes | The managed wallet the funds move out of. Must belong to your instance and not be deleted. |
 | `amount_reference` | enum | yes | `sender` or `receiver`. Which side `request_amount` refers to. Only changes the result when a [partner fee](#partner-fees) is set; without one, `sender_amount` and `receiver_amount` both equal `request_amount`. |
 | `request_amount` | integer | yes | Amount in minor units, no floats. `$100.00` sends as `10000`. Minimum is `1`. |
-| `sender_token` | enum | yes | `USDC`, `USDT`, or `USDB`. Must be a token allowed on the source wallet's network. |
-| `customer_token` | enum | yes | Must equal `sender_token`. |
+| `sender_token` | enum | yes | `USDC`, `USDT`, `USDB`, `EURC`, or `EURB`. Must be a token allowed on the source wallet's network. `EURC` and `EURB` are only available on `base` and `base_sepolia`. |
+| `customer_token` | enum | yes | Must equal `sender_token`, except for a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base). |
 | `customer_network` | enum | yes | Must equal the source wallet's own network, unless `sender_token` and `customer_token` are both `USDC` and the pair is a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2). |
 | `customer_wallet_address` | string | yes | The destination blockchain address, 32 to 64 characters, validated for the target network (see table below). Can be another wallet you created or any external address. |
 | `cover_fees` | boolean | yes | Who pays the [partner fee](#partner-fees). `true`: the fee is added on top and the destination receives the full amount. `false`: the fee is deducted from the amount the destination receives. Has no effect without a partner fee. |
@@ -144,6 +154,84 @@ const response = await fetch(
 const quote = await response.json()
 ```
 
+### Examples by transfer type
+
+The quote body is what decides the kind of transfer; [executing it](transfers.md#execute-a-transfer) is the same call for all three.
+
+**Same network, same stablecoin.** USDC from a Base wallet to another Base address:
+
+```bash [cURL]
+curl https://api.blindpay.com/v1/instances/in_000000000000/transfer-quotes \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --data '{
+  "wallet_id": "bl_000000000000",
+  "amount_reference": "sender",
+  "cover_fees": false,
+  "request_amount": 10000,
+  "sender_token": "USDC",
+  "customer_token": "USDC",
+  "customer_network": "base",
+  "customer_wallet_address": "0xDD6a3aD0949396e57C7738ba8FC1A46A5a1C372C"
+}'
+```
+
+**Different networks, same stablecoin.** USDC from a Base wallet to a Polygon address, bridged with [Circle CCTP v2](#cross-chain-usdc-transfers-circle-cctp-v2):
+
+```bash [cURL]
+curl https://api.blindpay.com/v1/instances/in_000000000000/transfer-quotes \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --data '{
+  "wallet_id": "bl_000000000000",
+  "amount_reference": "sender",
+  "cover_fees": false,
+  "request_amount": 10000,
+  "sender_token": "USDC",
+  "customer_token": "USDC",
+  "customer_network": "polygon",
+  "customer_wallet_address": "0xDD6a3aD0949396e57C7738ba8FC1A46A5a1C372C"
+}'
+```
+
+**Same network, different stablecoins.** USDC from a Base wallet, delivered as EURC to a Base address. See [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base):
+
+```bash [cURL]
+curl https://api.blindpay.com/v1/instances/in_000000000000/transfer-quotes \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --data '{
+  "wallet_id": "bl_000000000000",
+  "amount_reference": "sender",
+  "cover_fees": false,
+  "request_amount": 10000,
+  "sender_token": "USDC",
+  "customer_token": "EURC",
+  "customer_network": "base",
+  "customer_wallet_address": "0xDD6a3aD0949396e57C7738ba8FC1A46A5a1C372C"
+}'
+```
+
+```json
+{
+  "id": "qu_000000000000",
+  "expires_at": 1712958191000,
+  "commercial_quotation": 86.5,
+  "blindpay_quotation": 86.5,
+  "receiver_amount": 8650,
+  "sender_amount": 10000,
+  "partner_fee_amount": 0,
+  "partner_percentage_fee": 0,
+  "partner_flat_fee": 0,
+  "flat_fee": 0
+}
+```
+
+100.00 USDC leaves the wallet and 86.50 EURC reaches the destination. Swap the two tokens to convert EURC into USDC.
+
 ## Response
 
 ```json
@@ -165,8 +253,8 @@ const quote = await response.json()
 | --- | --- | --- |
 | `id` | string (`qu_...`) | Pass this as `transfer_quote_id` when you create the transfer. |
 | `expires_at` | number | Epoch milliseconds. Execute the transfer before this passes. |
-| `commercial_quotation` | number | Rate preview. Currently fixed at `100` for transfers since there is no FX conversion, even for a cross-chain USDC move. |
-| `blindpay_quotation` | number | Same as `commercial_quotation` for transfers today. |
+| `commercial_quotation` | number | Rate as units of `customer_token` per `sender_token`, times 100. `100` for every transfer that keeps the same token, including a cross-chain USDC move; the live rate for a [USDC and EURC conversion](#usdc-and-eurc-conversion-on-base). |
+| `blindpay_quotation` | number | The rate applied to the transfer. Same as `commercial_quotation` for transfers today. |
 | `receiver_amount` | number | Amount the destination receives, in minor units. See [partner fees](#partner-fees). |
 | `sender_amount` | number | Amount that leaves the source wallet, in minor units: `receiver_amount` plus `partner_fee_amount`. |
 | `partner_fee_amount` | number | Total partner fee for this transfer, percentage plus flat. `0` without a partner fee. |
@@ -180,11 +268,11 @@ The `qu_` prefix is shared across payin quotes, payout quotes, and transfer quot
 
 ## Validation order
 
-The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. If `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon, and that `sender_token` matches `customer_token`. Either path then checks that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`, and finally computes the [partner fee](#partner-fees) (`partner_fee_exceeds_transfer_amount` or `partner_fee_not_supported_on_network`). The first failing check is the one returned.
+The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. If `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon, and that `sender_token` matches `customer_token` unless the pair is a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base) (`sender_and_customer_tokens_must_be_the_same` otherwise). Either path then checks that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`, and finally computes the [partner fee](#partner-fees) (`partner_fee_exceeds_transfer_amount` or `partner_fee_not_supported_on_network`) and, for a conversion, the live rate (`fx_amount_below_minimum` under the 10 USDC minimum, `fx_quote_unavailable` if no price can be obtained). The first failing check is the one returned.
 
 ## Testing
 
-There is no dedicated test-amount sentinel for transfer quotes or transfers (unlike payins and payouts, which force outcomes at `$666.00` and `$777.00`). On development instances, transfer quotes go through the same token and network rules as production, restricted to the development tokens and testnets described in [supported chains](../kb/supported-chains.md). Cross-chain USDC quotes are the exception: on a development instance they use real testnet USDC, not USDB, on the CCTP v2 testnets (Ethereum Sepolia, Polygon Amoy, Base Sepolia, Arbitrum Sepolia), since Circle's protocol can only move native USDC.
+There is no dedicated test-amount sentinel for transfer quotes or transfers (unlike payins and payouts, which force outcomes at `$666.00` and `$777.00`). On development instances, transfer quotes go through the same token and network rules as production, restricted to the development tokens and testnets described in [supported chains](../kb/supported-chains.md). Cross-chain USDC quotes are the exception: on a development instance they use real testnet USDC, not USDB, on the CCTP v2 testnets (Ethereum Sepolia, Polygon Amoy, Base Sepolia, Arbitrum Sepolia), since Circle's protocol can only move native USDC. A USDC and EURC conversion runs between `USDB` and `EURB` on `base_sepolia`, priced by the liquidity provider's sandbox.
 
 ## Related
 

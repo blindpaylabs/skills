@@ -30,7 +30,7 @@ You also need a [managed wallet](wallets.md) (`bl_...`) and a [transfer quote](t
 
 **Remember:** replace `YOUR_API_KEY` with your API key, `in_000000000000` with your instance ID.
 
-Replace `qu_000000000000` with the transfer quote ID you created previously.
+Replace `qu_000000000000` with the transfer quote ID you created previously. The call is the same whether the quote is a same-network transfer, a cross-chain USDC transfer, or a USDC and EURC conversion; see [examples by transfer type](transfer-quotes.md#examples-by-transfer-type) for the quote that sets each one up.
 
 Pass an `Idempotency-Key` header (any string, up to 255 characters) to safely retry this call: replaying the same key with an identical body returns the original transfer instead of starting a second one. The same key with a different body is rejected. Keys are retained for 24 hours.
 
@@ -93,11 +93,29 @@ Every transfer carries 4 tracking objects, each moving through the same `step` v
 | Object | Tracks | Fields |
 | --- | --- | --- |
 | `tracking_transaction_monitoring` | BlindPay's compliance screening of the transfer | `step`, `blockchain_screening` (`0`-`100` or `null`), `risk_score` (`0`-`100` or `null`), `completed_at` |
-| `tracking_paymaster` | Reserved for the paymaster leg; stays `on_hold` for every transfer today | `step`, `transaction_hash`, `gas_fee`, `completed_at`, `error_message` |
-| `tracking_bridge_swap` | The burn leg of a cross-chain USDC transfer; stays `on_hold` on a same-network transfer | `step`, `transaction_hash`, `gas_fee`, `completed_at`, `error_message` |
+| `tracking_paymaster` | The collection of `sender_token` from the source wallet in a [USDC and EURC conversion](#usdc-and-eurc-conversion); stays `on_hold` for every other transfer | `step`, `transaction_hash`, `gas_fee`, `completed_at`, `error_message` |
+| `tracking_bridge_swap` | The burn leg of a cross-chain USDC transfer, or the conversion leg of a [USDC and EURC conversion](#usdc-and-eurc-conversion); stays `on_hold` on any other same-network transfer | `step`, `transaction_hash`, `gas_fee`, `completed_at`, `error_message` |
 | `tracking_complete` | The send (same-network) or mint (cross-chain) leg | `step`, `transaction_hash`, `gas_fee`, `completed_at`, `error_message` |
 
 `transaction_hash`, `gas_fee`, `completed_at`, and `error_message` are all `null` until that step produces a value; `error_message` is set only when the step fails. `blockchain_screening` and `risk_score` are BlindPay's own compliance scoring for the transfer, not something you set.
+
+## USDC and EURC conversion
+
+When the quote converts between `USDC` and `EURC` on Base (`USDB` and `EURB` on a development instance), executing the transfer first books the conversion at the current rate, then creates the transfer:
+
+- If the rate moved more than 0.5% against the customer since the quote, the call fails with `409` `fx_rate_moved` and no transfer is created. Create a new quote.
+- The source wallet must hold `sender_amount` before the conversion is booked, otherwise the call fails with `400` `not_enough_balance`.
+- If the provider refuses the conversion, the call fails with `400` (`fx_trade_rejected`, or `fx_amount_below_minimum` under the 10 USDC minimum) and no transfer is created.
+- If the provider does not confirm in time, the call fails with `502` `fx_trade_unconfirmed` and no funds move; BlindPay reconciles the conversion on its side.
+- A quote can only be executed once: a second attempt fails with `400` `fx_quote_already_used`.
+
+Once created, the transfer moves through three legs:
+
+1. `tracking_paymaster`: `sender_amount` minus any partner fee leaves the source wallet in `sender_token`. `transfer.update` fires.
+2. `tracking_bridge_swap`: the funds are converted into `customer_token`. `transfer.update` fires once the conversion settles; its `transaction_hash` is the collection transaction from step 1.
+3. `tracking_complete`: exactly `receiver_amount` in `customer_token` is sent to `customer_wallet_address`. `status` becomes `completed` and `transfer.complete` fires.
+
+If a leg after the conversion is booked cannot finish, the transfer stays `processing` while BlindPay resolves it; it only moves to `failed` when collecting from the source wallet fails, in which case nothing reaches the destination.
 
 ## Partner fee collection
 
@@ -119,7 +137,7 @@ Transfers without a partner fee are not affected.
 
 ## Testing
 
-Transfers do not use the `66600`/`77700` sentinel amounts that payins and payouts support. On a development instance, a same-network transfer executes against the sandbox `USDB` token on the corresponding testnet and confirms once the network finalizes the send. A cross-chain USDC transfer is the exception: it uses real testnet USDC, not USDB, since [Circle CCTP v2](transfer-quotes.md#cross-chain-usdc-transfers-circle-cctp-v2) can only move native USDC.
+Transfers do not use the `66600`/`77700` sentinel amounts that payins and payouts support. On a development instance, a same-network transfer executes against the sandbox `USDB` token on the corresponding testnet and confirms once the network finalizes the send. A cross-chain USDC transfer is the exception: it uses real testnet USDC, not USDB, since [Circle CCTP v2](transfer-quotes.md#cross-chain-usdc-transfers-circle-cctp-v2) can only move native USDC. A [USDC and EURC conversion](#usdc-and-eurc-conversion) runs between USDB and EURB on Base Sepolia and goes through the same three legs and webhooks as on production, so you can build against it end to end.
 
 ## Retrieve a transfer
 
