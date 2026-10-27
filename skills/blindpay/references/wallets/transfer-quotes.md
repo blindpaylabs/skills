@@ -81,7 +81,7 @@ An address that doesn't match the format for `customer_network` fails with `VALI
 
 **Note:**
 
-USDT transfers are currently restricted to the Polygon network only, a tighter limit than payins and payouts allow for USDT.
+USDT transfers are currently restricted to Polygon and Solana, a tighter limit than payins and payouts allow for USDT.
 
 ## Partner fees
 
@@ -268,7 +268,7 @@ The `qu_` prefix is shared across payin quotes, payout quotes, and transfer quot
 
 ## Validation order
 
-The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. If `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon, and that `sender_token` matches `customer_token` unless the pair is a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base) (`sender_and_customer_tokens_must_be_the_same` otherwise). Either path then checks that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`, and finally computes the [partner fee](#partner-fees) (`partner_fee_exceeds_transfer_amount` or `partner_fee_not_supported_on_network`) and, for a conversion, the live rate (`fx_amount_below_minimum` under the 10 USDC minimum, `fx_quote_unavailable` if no price can be obtained). The first failing check is the one returned.
+The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. If `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon or Solana, and that `sender_token` matches `customer_token` unless the pair is a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base) (`sender_and_customer_tokens_must_be_the_same` otherwise). Either path then checks that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`, and finally computes the [partner fee](#partner-fees) (`partner_fee_exceeds_transfer_amount` or `partner_fee_not_supported_on_network`) and, for a conversion, the live rate (`fx_amount_below_minimum` under the 10 USDC minimum, `fx_quote_unavailable` if no price can be obtained). The first failing check is the one returned.
 
 ## Testing
 
