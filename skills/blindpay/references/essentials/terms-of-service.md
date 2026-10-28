@@ -62,6 +62,10 @@ Open the generated URL for the customer to accept on `https://app.blindpay.com`.
 
 You also receive a `tos.accept` webhook event when the terms of service is accepted.
 
+### Embedding hosted pages
+
+The terms of service page can be rendered in an iframe on any site. The other hosted pages (customer onboarding links, RFI pages) can only be framed from the website in your instance's business profile and its subdomains; every other origin is blocked by the browser. If you embed from a different domain, update the website in your business profile first.
+
 ## Accepting a new version
 
 Each `tos_id` is tied to the terms of service version active when it was generated, and can only ever be linked to one customer. If BlindPay updates the terms, calls to the payout quote and payin quote endpoints return an error with message `please_accept_terms_of_service` for customers whose acceptance predates the new version. Generate a new URL, set `customer_id` on it, and have the customer accept again. Once accepted, the quote endpoints stop returning the error.
