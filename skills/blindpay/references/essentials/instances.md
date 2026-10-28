@@ -52,6 +52,24 @@ When creating a development instance, you can turn on **Seed sample data** to po
 
 New production instances may take up to 3 business days to set up. See [Cut-off times](../kb/cut-off-times.md) for full SLAs.
 
+## Sub-instances for your customers' businesses
+
+If your customers are businesses that move money for their own clients, onboard each one as its own instance instead of as a customer of yours. This keeps every party visible and screened. See [Nested payments](../kb/nested-payments.md) for why.
+
+There is no separate sub-instance type. A sub-instance is a regular production instance that you create and that the business completes onboarding for.
+
+### Create the instance
+
+In the [BlindPay dashboard](https://app.blindpay.com), open the instance switcher and click **Create instance**. Create one production instance per business.
+
+### Send the onboarding link
+
+While the new instance is still in onboarding, click **Invite team** in the side menu. Under **Invite someone outside BlindPay**, enter the email of a person at the business and click **Send invite**. They get a private link to fill in the business details and upload the KYB documents. They don't need a BlindPay account. The link expires in 30 days, and you can also copy it from the dialog.
+
+### Compliance review
+
+Once the business submits, our compliance team reviews the instance like any other production instance. After it is approved, that business's customers are onboarded inside the instance, which has its own API keys.
+
 ## API keys are per-instance
 
 An API key authenticates requests to one instance only. A key created for instance A will not work against instance B, even within the same organization. See [API keys](api-keys.md) to create and manage keys.
