@@ -257,6 +257,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 - [Claude Code + BlindPay](references/integrations/claude-code.md) - Connect Claude Code to BlindPay via the MCP server and Agent Skills: run payouts, quotes, and virtual accounts from the terminal in natural language.
 - [Codex + BlindPay](references/integrations/codex.md) - Connect OpenAI Codex to BlindPay via the MCP server and Agent Skills: run payouts, quotes, and virtual accounts from the terminal or IDE.
 - [Cursor + BlindPay](references/integrations/cursor.md) - Connect Cursor to BlindPay via the MCP server and Agent Skills: move money, run payouts, and query corridors in natural language.
+- [Grok + BlindPay](references/integrations/grok.md) - Connect Grok and Grok Build to BlindPay with the MCP server: run payouts, quotes, and virtual accounts in natural language from grok.com or the terminal.
 - [Hermes Agent + BlindPay](references/integrations/hermes.md) - Connect Hermes Agent to BlindPay with the MCP server and Agent Skills. The Nous Research agent runs stablecoin payouts and quotes via natural language.
 - [Lovable + BlindPay](references/integrations/lovable.md) - Add stablecoin payments to your Lovable app: payouts, USDC/USDT on-ramp to fiat, and virtual accounts via the BlindPay API and a copy-paste prompt.
 - [OpenClaw + BlindPay](references/integrations/openclaw.md) - Connect OpenClaw to BlindPay with the MCP server and Agent Skills. The autonomous agent runs stablecoin payouts and quotes via natural language.

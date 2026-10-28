@@ -52,7 +52,7 @@ codex mcp add blindpay --url https://mcp.blindpay.com/mcp
 }
 ```
 
-In Claude or ChatGPT, add a custom connector with `https://mcp.blindpay.com/mcp` (ChatGPT needs Developer mode and OAuth authentication), then sign in.
+In Claude or ChatGPT, add a custom connector with `https://mcp.blindpay.com/mcp` (ChatGPT needs Developer mode and OAuth authentication), then sign in. In Grok, open grok.com/connectors, choose **New connector**, then **Custom**, and paste the same URL.
 
 To let an agent explore without being able to change anything, connect to `https://mcp.blindpay.com/mcp/readonly` instead. It serves only the read tools.
 
@@ -74,6 +74,14 @@ claude mcp add blindpay \
   --env BLINDPAY_API_KEY=YOUR_API_KEY \
   --env BLINDPAY_INSTANCE_ID=in_000000000000 \
   -- npx -y @blindpay/mcp
+```
+
+```toml [Grok Build]
+# ~/.grok/config.toml
+[mcp_servers.blindpay]
+command = "npx"
+args = ["-y", "@blindpay/mcp"]
+env = { BLINDPAY_API_KEY = "YOUR_API_KEY", BLINDPAY_INSTANCE_ID = "in_000000000000" }
 ```
 
 For Claude Code or another JSON-configured MCP host, add it directly to `.mcp.json` in your project:
@@ -139,6 +147,7 @@ Money-movement tools should require explicit confirmation before executing. Ever
 | Codex | `codex mcp add` | Run `codex mcp add` from the terminal, then load Agent Skills for full scaffolding. The CLI, IDE extension, and desktop app share the configuration. |
 | Claude Code | `claude mcp add` or `.mcp.json` | Run `claude mcp add --transport http blindpay https://mcp.blindpay.com/mcp`, or add the server to `.mcp.json`, and load Agent Skills for full scaffolding. |
 | Cursor | `.cursor/mcp.json` | Add `{ "url": "https://mcp.blindpay.com/mcp" }` as the `blindpay` server, restart Cursor, then enable it in Settings -> MCP and sign in. |
+| Grok | grok.com/connectors or `~/.grok/config.toml` | In Grok, add a custom connector with `https://mcp.blindpay.com/mcp` and sign in with your BlindPay account. In Grok Build, declare the server in `~/.grok/config.toml`. See [Grok + BlindPay](../integrations/grok.md). |
 | Windsurf | MCP settings | Add `https://mcp.blindpay.com/mcp` as a remote server in Windsurf's MCP configuration. |
 | Lovable | Copy-paste prompt + REST API | No MCP host. Paste a prompt describing the backend function and add `BLINDPAY_API_KEY` / `BLINDPAY_INSTANCE_ID` as secrets. |
 | v0 | Copy-paste prompt + REST API | Paste a prompt describing a Next.js route handler; add credentials as Vercel environment variables. |
