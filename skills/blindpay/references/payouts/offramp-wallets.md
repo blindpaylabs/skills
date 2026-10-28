@@ -44,6 +44,8 @@ Sending 100 USDT to an offramp wallet on Tron that settles over ACH. USDT deposi
 
 Final: $100.00 - $15.00 - $0.10 - $0.40 = **$84.50** delivered to the recipient's bank account. The additional fee is fixed per chain (see the table above); the percentage fee and bank transfer fee depend on your pricing and the payout rail.
 
+If the wallet has a [partner fee](#partner-fee), it is deducted as well. With a 1% + $0.50 partner fee, the same deposit delivers $84.50 - $1.00 - $0.50 = **$83.00**.
+
 ## Create an offramp wallet
 
 An offramp wallet is created on an existing bank account, which becomes its payout destination. Once created, it has a deposit address on the network you chose; anything sent to that address is converted and paid out automatically.
@@ -78,10 +80,29 @@ curl --request POST \
 | --- | --- | --- | --- |
 | `network` | enum | Yes | Production: `tron`, `solana`, `ethereum`, `polygon`, `arbitrum`, `base`, `tempo`, `arc`. Development instances use the matching testnets: `solana_devnet`, `sepolia`, `polygon_amoy`, `arbitrum_sepolia`, `base_sepolia`, `tempo_testnet`, `arc_testnet`. |
 | `external_id` | string | No | Your own reference for the wallet, echoed back on the response. |
+| `partner_fee_id` | string | No | A [partner fee](#partner-fee) (`pf_...`) of your instance, charged on every payout this wallet creates. |
 
 The response includes `id` (`ow_...`), `network`, `address`, `circle_wallet_id` (null for Tempo-network wallets, which use a different custody provider), and your `external_id`. Share `address` with whoever is paying your customer: any USDC or USDT sent to it on the chosen network is converted and paid out to the linked bank account automatically.
 
 If your instance has email notifications enabled, BlindPay emails the customer as soon as the deposit triggers a payout, with the subject `Payout Initiated - <Network> Deposit Received`.
+
+### Partner fee
+
+Deposits create payouts automatically, so there is no quote request where you could pass a `partner_fee_id`. Instead, pin a [partner fee](../essentials/partner-fees.md) to the wallet: pass `partner_fee_id` on creation, or set it later on an existing wallet.
+
+```bash [cURL]
+curl --request PUT \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/bank-accounts/ba_000000000000/offramp-wallets/ow_000000000000 \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "partner_fee_id": "pf_000000000000"
+}'
+```
+
+Send `"partner_fee_id": null` to remove the fee, or omit the field to leave it unchanged. The fee must belong to the same instance and not be deleted, otherwise the request fails with `partner_fee_not_found`.
+
+Every payout created from a deposit to the wallet then charges the fee's `payout_percentage_fee` and `payout_flat_fee`, reported as `partner_fee` on the payout webhooks. The partner fee counts toward the fees a deposit must cover, so it raises the minimum deposit on networks without a fixed minimum. Wallets without a pinned fee charge no partner fee; there is no instance-wide default for offramp wallets. Deleting a fee configuration removes it from every wallet it is pinned to.
 
 ### SEPA bank accounts
 
@@ -108,6 +129,7 @@ curl --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_00
 | `circle_wallet_id` | string or null | Set for Circle-backed networks, null for `tempo`/`tempo_testnet`. |
 | `network` | enum | See supported networks above. |
 | `address` | string | The deposit address. |
+| `partner_fee_id` | string or null | The [partner fee](#partner-fee) charged on this wallet's payouts, if any. |
 | `created_at`, `updated_at` | date-time | |
 
 There is currently no way to list all of a bank account's offramp wallets through the API. Save the `id` you get back when you create one, and use [Retrieve an offramp wallet](#retrieve-an-offramp-wallet) to look it up later.
@@ -117,4 +139,5 @@ There is currently no way to list all of a bank account's offramp wallets throug
 - [Payouts](payouts.md): the payout created automatically on each deposit
 - [Bank accounts](bank-accounts.md): the settlement destination
 - [Payables](../payables/payables.md): a bank account owned by a payable can't be used for an offramp wallet
+- [Partner fees](../essentials/partner-fees.md#offramp-wallets): earn a fee on every offramp wallet payout
 - [Virtual accounts](../virtual-accounts/virtual-accounts.md): the fiat-side mirror

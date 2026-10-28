@@ -139,6 +139,24 @@ Every virtual account deposit always delivers at least $0.01 on-chain. The partn
 
 A partner fee (pinned or the instance-wide `virtual_account_set` default) is never applied to a virtual account deposit that settles on Solana or Tron. Deposits on those two networks skip partner fee collection entirely, whatever fee is configured.
 
+## Offramp wallets
+
+Deposits into an [offramp wallet](../payouts/offramp-wallets.md) create payouts automatically, so the fee is pinned to the wallet ahead of time. Pass a `partner_fee_id` when [creating the offramp wallet](../payouts/offramp-wallets.md#create-an-offramp-wallet), or set it later with the update endpoint. Every payout the wallet creates then charges the fee's `payout_percentage_fee` and `payout_flat_fee`.
+
+```bash [cURL]
+curl --request PUT \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_000000000000/bank-accounts/ba_000000000000/offramp-wallets/ow_000000000000 \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "partner_fee_id": "pf_000000000000"
+  }'
+```
+
+Unlike virtual accounts, offramp wallets have no instance-wide default: a wallet without a pinned fee charges no partner fee. Update with `partner_fee_id: null` to remove it. Deleting a fee configuration automatically unpins it from every offramp wallet referencing it.
+
+The partner fee counts toward the fees a deposit must cover. A deposit too small to cover the BlindPay fees plus the partner fee is not converted, see [offramp wallet minimums](../payouts/offramp-wallets.md#supported-chains-and-stablecoins).
+
 ## Manage fee configurations
 
 ```bash [cURL]
@@ -202,3 +220,4 @@ Monthly settlement example:
 - [Fiat send](../payouts/payouts.md): payout quotes that accept `partner_fee_id`
 - [Transfer quotes](../wallets/transfer-quotes.md#partner-fees): per-transfer `partner_percentage_fee` and `partner_flat_fee`
 - [Virtual accounts](../virtual-accounts/virtual-accounts.md): automated deposits with default or per-account partner fees
+- [Offramp wallets](../payouts/offramp-wallets.md#partner-fee): automated stablecoin deposits with a per-wallet partner fee
