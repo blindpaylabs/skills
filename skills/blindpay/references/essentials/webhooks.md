@@ -87,6 +87,20 @@ See [Events](webhooks-events.md) for the full catalog.
 
 Every webhook call is signed. Verify the `svix-id`, `svix-timestamp`, and `svix-signature` headers before trusting a payload; see Verification for the full process.
 
+## Allowlist the source IPs
+
+If your firewall only accepts traffic from known addresses, allow these. Webhooks come from the same addresses in sandbox and production.
+
+```text [Source IPs]
+44.228.126.217
+50.112.21.217
+52.24.126.164
+54.148.139.208
+2600:1f24:64:8000::/56
+```
+
+These addresses are shared with other senders, so an allowlist alone does not prove a call came from BlindPay. Keep verifying the signature on every call.
+
 ## Idempotent requests
 
 Pass an `Idempotency-Key` header on `POST` or `DELETE` calls to this API to make retries safe:
