@@ -17,7 +17,7 @@ This guide is for teams using Cobo Payments (top-up addresses, payment orders, b
 | Refund links | No direct equivalent; flag in your migration report rather than assuming a mapping |
 | Subscriptions | No direct equivalent; flag in your migration report rather than assuming a mapping |
 | Wallet ID (MPC or custodial) | External wallet (`bw_`), registered via a sign-message challenge, if Cobo keeps custody |
-| Signed webhook callbacks | Svix-signed webhook events, verified with the instance's `whsec_` secret |
+| Signed webhook callbacks | Svix-signed webhook events, verified with the webhook endpoint's `whsec_` secret |
 
 Refund links and subscriptions have no BlindPay equivalent: flag them in your migration report rather than assuming a mapping, and rebuild that logic in your own application.
 
@@ -39,7 +39,7 @@ Replace Cobo's order and payout flow with BlindPay's explicit two-step model: re
 
 ### Port webhooks
 
-Move from Cobo's signed callbacks to BlindPay's Svix-signed events: verify `svix-id`, `svix-timestamp`, and `svix-signature` against the raw request body with the instance's `whsec_` secret, and dedup on `svix-id`. Confirm a real delivery arrives and verifies for each event type you rely on, payout completed, payin received, customer KYC status, before depending on it in production. See [webhooks](../essentials/webhooks.md) and [webhook verification](../essentials/webhooks-verification.md).
+Move from Cobo's signed callbacks to BlindPay's Svix-signed events: verify `svix-id`, `svix-timestamp`, and `svix-signature` against the raw request body with the webhook endpoint's `whsec_` secret, and dedup on `svix-id`. Confirm a real delivery arrives and verifies for each event type you rely on, payout completed, payin received, customer KYC status, before depending on it in production. See [webhooks](../essentials/webhooks.md) and [webhook verification](../essentials/webhooks-verification.md).
 
 ### Cut over per flow
 
@@ -61,7 +61,7 @@ Do the migration in this order:
 2. Re-onboard my counterparties on BlindPay: create a BlindPay customer (re_) with KYC or KYB per payer or payee, and register their payout destination as a BlindPay bank account (ba_) for the correct rail (Pix, SPEI, SEPA, ACH, or wire). KYC does not transfer between providers, so every counterparty needs a fresh BlindPay KYC/KYB pass. Store the resulting re_ and ba_ IDs alongside the existing Cobo IDs so both systems can be queried during cutover.
 3. If wallets stay in Cobo custody, register each Cobo wallet address as a BlindPay external wallet using the sign-message challenge flow, and store the resulting bw_ ID. This lets funds keep living in Cobo-controlled wallets while BlindPay handles the fiat leg: Cobo continues to hold and move the stablecoin, and BlindPay converts it to fiat on payout.
 4. Rebuild money movement on BlindPay's explicit two-step model in place of Cobo's order/payout flow: request a quote (qu_), then execute the payout (po_) via POST /v1/instances/{instance_id}/payouts/evm before the quote's expires_at (about 5 minutes). Do the same for inbound flows using payins (pi_), virtual accounts (va_), or offramp wallets (auto-converting deposit addresses) in place of Cobo's top-up addresses and order mode. Confirm each transfer settles end to end against a BlindPay development instance before moving to the next flow.
-5. Port webhooks from Cobo's signed callbacks to BlindPay's Svix-signed events: verify svix-id, svix-timestamp, and svix-signature against the raw request body using the instance's whsec_ secret, and dedup on svix-id. Confirm a real webhook delivery is received and verified for each event type you rely on (payout completed, payin received, customer KYC status) before relying on it in production.
+5. Port webhooks from Cobo's signed callbacks to BlindPay's Svix-signed events: verify svix-id, svix-timestamp, and svix-signature against the raw request body using the webhook endpoint's whsec_ secret, and dedup on svix-id. Confirm a real webhook delivery is received and verified for each event type you rely on (payout completed, payin received, customer KYC status) before relying on it in production.
 6. Cut over per flow behind a feature flag: dual-run Cobo and BlindPay for the same flow, compare outcomes on a sample of live transfers, and only retire the Cobo payment path once a full dual-run cycle settles cleanly on both sides with matching amounts and statuses.
 
 Constraints:

@@ -38,13 +38,14 @@ curl --request POST \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "idempotency_key": "<your_uuid>"
+    "idempotency_key": "<your_uuid>",
+    "redirect_url": "https://example.com/tos-accepted"
   }'
 ```
 
-Open the URL from the response in your browser, accept the terms, and copy the `tos_id` shown on the confirmation screen. You will pass this `tos_id` when you create the customer in the next step.
+Open the URL from the response in your browser and accept the terms. The page itself does not display the `tos_id` (`to_...`): after you accept, the browser lands on your `redirect_url` with `?tos_id=to_...` in the address bar. It is also in the response of the `tos` request in your browser's DevTools Network tab, as shown below, and in the `tos.accept` webhook. You will pass this `tos_id` when you create the customer in the next step.
 
-![Copying the tos_id after accepting the BlindPay terms of service](https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/blindpay_tos_acceptance-min.jpg)
+![Copying the tos_id from the tos request in DevTools after accepting the BlindPay terms of service](https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/blindpay_tos_acceptance-min.jpg)
 
 ### Create a customer
 
@@ -126,11 +127,11 @@ If your customer wants stablecoins delivered to a wallet they control instead, r
 
 **Abstracted flavor (bank-rails framing, fiat-first API surface)**
 
-A payin quote locks in how much fiat the sender sends and how much the customer receives before you create the payin. Pass `wallet_id` to target the managed wallet; BlindPay detects the delivery network from the wallet. This example quotes an ACH payin with the sender covering the fee, so `request_amount` is the amount the sender sends.
+A payin quote locks in how much fiat the sender sends and how much the customer receives before you create the payin. Pass `wallet_id` to target the managed wallet; BlindPay detects the delivery network from the wallet. This example quotes an ACH payin with the sender covering the fee, so the sender pays the fee on top of `request_amount` and the wallet receives the full `request_amount`.
 
 **Advanced flavor (stablecoin and blockchain mechanics)**
 
-A payin quote locks in how much fiat the sender sends and how much the wallet receives before you create the payin. Pass `wallet_id` to target the managed wallet; BlindPay detects the delivery network from the wallet, so you never pass a network on a payin quote. This example quotes an ACH payin with the sender covering the fee, so `request_amount` is the amount the sender sends.
+A payin quote locks in how much fiat the sender sends and how much the wallet receives before you create the payin. Pass `wallet_id` to target the managed wallet; BlindPay detects the delivery network from the wallet, so you never pass a network on a payin quote. This example quotes an ACH payin with the sender covering the fee, so the sender pays the fee on top of `request_amount` and the wallet receives the full `request_amount`.
 
 **Remember:** replace `YOUR_API_KEY` with your API key, `in_000000000000` with your instance ID.
 
@@ -155,7 +156,7 @@ curl --request POST \
 
 In production use `USDC` or `USDT`.
 
-Save the `id` from the response: this is your payin quote ID (`pq_...`). You have 5 minutes to create the payin before the quote expires.
+Save the `id` from the response: this is your payin quote ID (`qu_...`). You have 5 minutes to create the payin before the quote expires.
 
 **Note:**
 
@@ -171,7 +172,7 @@ curl --request POST \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "payin_quote_id": "pq_000000000000"
+    "payin_quote_id": "qu_000000000000"
   }'
 ```
 

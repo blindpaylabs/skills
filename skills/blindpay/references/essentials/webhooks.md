@@ -103,7 +103,7 @@ These addresses are shared with other senders, so an allowlist alone does not pr
 
 ## Idempotent requests
 
-Pass an `Idempotency-Key` header on `POST` or `DELETE` calls to this API to make retries safe:
+Pass an `Idempotency-Key` header on `POST`, `PUT`, `PATCH`, or `DELETE` calls to this API to make retries safe:
 
 | Situation | What happens |
 | --- | --- |

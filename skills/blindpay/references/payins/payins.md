@@ -65,7 +65,7 @@ A payin is the object that actually moves money: it consumes a payin quote and t
 ## How it works
 
 ```
-payin quote (pq_...) -> create the payin -> display instructions to the payer -> BlindPay detects the deposit -> settles
+payin quote (qu_...) -> create the payin -> display instructions to the payer -> BlindPay detects the deposit -> settles
 ```
 
 A payin quote expires 5 minutes after creation, so create the payin before then. Once created, a payin cannot be canceled: if the payer never sends the money, the payin simply stays `processing` until it is cleaned up on BlindPay's side.
@@ -76,7 +76,7 @@ A payin quote expires 5 minutes after creation, so create the payin before then.
 2. Create a development instance (see essentials/instances.md)
 3. Create your API key (see essentials/api-keys.md)
 
-You also need a customer with a blockchain wallet or a managed wallet, and a payin quote (`pq_...`).
+You also need a customer with a blockchain wallet or a managed wallet, and a payin quote (`qu_...`).
 
 **Advanced flavor (stablecoin and blockchain mechanics)**
 
@@ -106,13 +106,13 @@ A payin quote never targets a bank account (`ba_...`); that identifier belongs t
 2. Create a development instance (see essentials/instances.md)
 3. Create your API key (see essentials/api-keys.md)
 
-You also need a customer with a [managed wallet](../wallets/wallets.md) (`bl_...`) or a [blockchain wallet](blockchain-wallets.md) (`bw_...`), and a [payin quote](payin-quotes.md) (`pq_...`).
+You also need a customer with a [managed wallet](../wallets/wallets.md) (`bl_...`) or a [blockchain wallet](blockchain-wallets.md) (`bw_...`), and a [payin quote](payin-quotes.md) (`qu_...`).
 
 ## Create a payin
 
 **Remember:** replace `YOUR_API_KEY` with your API key, `in_000000000000` with your instance ID.
 
-Replace `pq_000000000000` with the payin quote you generated previously.
+Replace `qu_000000000000` with the payin quote you generated previously.
 
 ```bash [cURL]
 curl https://api.blindpay.com/v1/instances/in_000000000000/payins/evm \
@@ -120,7 +120,7 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/payins/evm \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --data '{
-  "payin_quote_id": "pq_000000000000"
+  "payin_quote_id": "qu_000000000000"
 }'
 ```
 
@@ -173,8 +173,7 @@ The response carries the payment instructions for whichever `payment_method` was
   },
   "tracking_transaction": { "step": "processing" },
   "tracking_payment": { "step": "on_hold" },
-  "tracking_complete": { "step": "on_hold" },
-  "tracking_partner_fee": { "step": "on_hold" }
+  "tracking_complete": { "step": "on_hold" }
 }
 ```
 
@@ -237,7 +236,7 @@ Stellar mainnet deliveries originate from BlindPay's treasury wallet: `GCOSSQDM2
 
 ## Pull funding from a Plaid-connected account
 
-With `payment_method: "ach_pull"`, instead of the payer sending a manual bank transfer, BlindPay pulls the funds directly from a bank account the customer connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid). Set `funding_bank_account_id` (a `ba_...` id) on the payin quote to a Plaid-connected account belonging to the same customer; it is required for `ach_pull`, and the quote rejects any other bank account with 400 `funding_account_not_plaid_connected`.
+With `payment_method: "ach_pull"`, instead of the payer sending a manual bank transfer, BlindPay pulls the funds directly from a bank account the customer connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid). Set `funding_bank_account_id` (a `ba_...` id) on the payin quote to a Plaid-connected account belonging to the same customer; it is required for `ach_pull`, a bank account that is not Plaid-connected is rejected with 400 `funding_account_not_plaid_connected`, and one that is deleted or belongs to another customer with 400 `funding_account_invalid`.
 
 ```bash [cURL]
 curl https://api.blindpay.com/v1/instances/in_000000000000/payin-quotes \
@@ -304,7 +303,7 @@ If the funding for a `transfers` payin arrives after it was already marked `fail
 | `failed` | The payin did not go through | yes |
 | `refunded` | The deposit was returned to the sender | yes |
 
-Each `tracking_*` object on the payin (`tracking_transaction`, `tracking_payment`, `tracking_complete`, `tracking_partner_fee`) exposes a finer-grained `step` for the corresponding stage, useful for building a detailed status view:
+Each `tracking_*` object on the payin (`tracking_transaction`, `tracking_payment`, `tracking_complete`) exposes a finer-grained `step` for the corresponding stage, useful for building a detailed status view:
 
 | `step` | Meaning |
 | --- | --- |
@@ -371,7 +370,7 @@ curl --url 'https://api.blindpay.com/v1/instances/in_000000000000/payins?status=
 | `customer_id` | Filter to one customer |
 | `status` | One of the [status](#status-lifecycle) values |
 | `customer_name` | Matches the customer's first + last name or legal name (partial match) |
-| `bank_account_id` | Filter to payins whose funding pull used this bank account |
+| `bank_account_id` | Filter to payins of the customer who owns this bank account |
 | `country` | ISO country code |
 | `payment_method` | One of the [payment methods](#payment-methods) |
 | `network` | Destination blockchain network |

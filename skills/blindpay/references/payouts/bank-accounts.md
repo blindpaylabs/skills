@@ -18,7 +18,7 @@ You can add **third-party bank accounts**: a customer named "John" can have a pa
 
 ## How it works
 
-All bank account data must be valid, even on development instances. Validation (regex, length, country rules) runs the same way regardless of instance type; only the downstream provider submission is skipped in development.
+All bank account data must be valid, even on development instances. Validation (regex, length, country rules) runs the same way regardless of instance type, except the ABA routing number checksum on `ach` and `wire`, which runs only on production; the downstream provider submission is also skipped in development.
 
 ### Supported payout rails
 
@@ -35,7 +35,7 @@ All bank account data must be valid, even on development instances. Validation (
 | `ach_cop_bitso` | Colombia | ~1 business day |
 | `transfers_bitso` | Argentina | instant |
 | `sepa` | Europe (SEPA zone) | ~1 business day |
-| `faster_payments` | United Kingdom | instant |
+| `faster_payments` | United Kingdom | 5 to 30 minutes |
 
 **Note:**
 
@@ -47,7 +47,7 @@ High transaction volumes may affect estimated payout delivery times.
 | --- | --- | --- |
 | `international_swift` | `name`, `account_class`, `recipient_relationship`, `swift_code_bic`, `swift_account_holder_name`, `swift_account_number_iban`, full beneficiary address, full bank address | See International SWIFT rules below. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
 | `ach` | `name`, `recipient_relationship`, `beneficiary_name`, `routing_number`, `account_number`, `account_type`, `account_class`, `address_line_1`, `city`, `state_province_region`, `country`, `postal_code` | Blocked for `light` KYC customers. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
-| `wire` | Same as `ach` | Blocked for `light` KYC customers. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
+| `wire` | Same as `ach`, without `account_type` | Blocked for `light` KYC customers. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
 | `rtp` | Same as `wire` | `routing_number` must be RTP-eligible. Blocked for `light` KYC customers. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
 | `pix` | `name`, `pix_key` | `pix_key` can be a CPF, CNPJ, phone, email, or random key |
 | `pix_safe` | `name`, `beneficiary_name`, `pix_safe_cpf_cnpj`, `pix_safe_bank_code`, `pix_safe_branch_code`, `account_number`, `account_type` | Use this instead of `pix` when you have the recipient's bank routing rather than a PIX key. `pix_safe_cpf_cnpj` is an 11-digit CPF or 14-digit CNPJ, `pix_safe_bank_code` is the bank's ISPB code, and `account_number` needs a check-digit suffix (for example `12345-6`) |
@@ -55,7 +55,7 @@ High transaction volumes may affect estimated payout delivery times.
 | `spei_bitso` | `name`, `spei_protocol`, `spei_clabe`, `beneficiary_name` | `spei_institution_code` required for `debitcard`/`phonenum` protocols |
 | `ach_cop_bitso` | `name`, `ach_cop_beneficiary_first_name`, `ach_cop_beneficiary_last_name`, `ach_cop_document_id`, `ach_cop_document_type`, `ach_cop_email`, `ach_cop_bank_code`, `ach_cop_bank_account`, `account_type` | `ach_cop_document_type` is `CC`, `CE`, `NIT`, `PASS`, or `PEP`. `ach_cop_document_id` must match the type: `CC` 3 to 10 digits, `CE` 6 to 10 digits, `NIT` 9 digits (10 with the verifier), `PASS` 3 to 15 letters or digits. `NIT` is for companies only |
 | `transfers_bitso` | `name`, `transfers_type`, `transfers_account`, `beneficiary_name` | `transfers_type` is `CVU`, `CBU`, or `ALIAS` |
-| `sepa` | `name`, `account_class`, `sepa_iban`, `sepa_beneficiary_bic`, `sepa_beneficiary_legal_name`, `sepa_beneficiary_address_line_1`, `sepa_beneficiary_city`, `sepa_beneficiary_postal_code`, `sepa_beneficiary_country` | The IBAN's country code must match `sepa_beneficiary_country`. Some destinations are individual-only; see [Payment methods](../kb/payment-methods.md#sepa-destinations) |
+| `sepa` | `name`, `account_class`, `sepa_iban`, `sepa_beneficiary_legal_name`, `sepa_beneficiary_address_line_1`, `sepa_beneficiary_city`, `sepa_beneficiary_postal_code`, `sepa_beneficiary_country` | The IBAN's country code must match `sepa_beneficiary_country`. `sepa_beneficiary_bic` is optional: when omitted it is derived from the IBAN, and the request fails if it cannot be derived. Some destinations are individual-only; see [Payment methods](../kb/payment-methods.md#sepa-destinations) |
 | `faster_payments` | `name`, `account_class`, `faster_payments_sort_code`, `faster_payments_account_number`, `faster_payments_beneficiary_legal_name`, `faster_payments_beneficiary_address_line_1`, `faster_payments_beneficiary_city`, `faster_payments_beneficiary_country` | `faster_payments_sort_code` is 6 digits (dashes and spaces are stripped), `faster_payments_account_number` is 8 digits. `faster_payments_beneficiary_address_line_2`, `faster_payments_beneficiary_state_province_region` and `faster_payments_beneficiary_postal_code` are optional |
 
 `account_type` is `checking` or `saving`. `account_class` is `individual` or `business`. `recipient_relationship` accepts `first_party`, `employee`, `independent_contractor`, `vendor_or_supplier`, `subsidiary_or_affiliate`, `merchant_or_partner`, `customer`, `landlord`, `family`, or `other`.
@@ -308,7 +308,7 @@ Save the bank account ID (`ba_...`) for use in payout quotes.
 
 **Note:**
 
-This feature is gated by `subscription_features.plaid` on the instance. Contact BlindPay to enable it. Calling the endpoint below without it enabled returns a 400 `plaid_not_supported` error.
+This feature is gated by `subscription_features.plaid` on the instance. Contact BlindPay to enable it. Calling the endpoint below on a production instance without it enabled returns a 400 `plaid_not_supported` error. Development instances always have it enabled.
 
 Instead of entering ACH details manually, a customer can connect their bank account through Plaid. BlindPay reads the verified routing and account numbers directly from Plaid, so there's no manual entry and no micro-deposit wait. The resulting bank account is `type: "ach"`, carries the timestamp `plaid_connected_at`, and can fund an `ach_pull` payin instead of a manual bank transfer; see [Payins](../payins/payins.md#pull-funding-from-a-plaid-connected-account).
 
@@ -471,7 +471,7 @@ A code with no match returns `200` with an empty array `[]`, not a `404`. If the
 
 ## Response fields
 
-The response includes the bank account `id` (`ba_...`), `type`, and the fields you submitted. `account_number` is masked in responses, showing only the last 4 digits.
+The response includes the bank account `id` (`ba_...`), `type`, and the fields you submitted. `account_number` is masked in list and retrieve responses, showing only the last 4 digits; the create response returns it in full.
 
 ## Related
 

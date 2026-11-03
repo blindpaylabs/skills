@@ -8,7 +8,7 @@ A transfer is the object that actually moves stablecoins: it consumes a [transfe
 
 **Warning:**
 
-USDC moves can now cross chains between Ethereum, Polygon, Base, and Arbitrum using [Circle CCTP v2](transfer-quotes.md#cross-chain-usdc-transfers-circle-cctp-v2); every other token still requires the destination network to match the source wallet's exactly.
+USDC moves can now cross chains between Ethereum, Polygon, Base, Arbitrum, and Arc using [Circle CCTP v2](transfer-quotes.md#cross-chain-usdc-transfers-circle-cctp-v2); every other token still requires the destination network to match the source wallet's exactly.
 
 ## How it works
 

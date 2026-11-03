@@ -11,7 +11,7 @@ This guide is for teams moving off Conduit's cross-border payments API. Conduit 
 | Conduit concept | BlindPay concept |
 | --- | --- |
 | Counterparty or recipient | Customer (`re_`) with KYC/KYB |
-| Recipient bank account | Bank account (`ba_`) typed per rail: pix, spei, ach, wire, rtp, sepa, faster_payments, transfers |
+| Recipient bank account | Bank account (`ba_`) typed per rail: pix, spei_bitso, ach, wire, rtp, sepa, faster_payments, transfers_bitso |
 | Cross-border payment, fiat to stablecoin | Payin quote plus payin (`qu_`, `pi_`) |
 | Cross-border payment, stablecoin to fiat | Payout quote plus payout (`qu_`, `po_`) |
 | Status updates | Svix-verified `customer.*`, `payout.*`, and `payin.*` webhooks |
@@ -52,7 +52,7 @@ Before writing code, read these sources and follow them over any prior knowledge
 - The OpenAPI spec: curl https://api.blindpay.com/doc
 
 Do the migration in this order:
-1. Inventory my Conduit usage from the codebase: every endpoint, webhook, stored ID, and the corridors we move money on. Derive the concept mapping from actual usage, roughly: Conduit counterparties or recipients map to BlindPay customers (re_) with KYC/KYB plus bank accounts (ba_) typed per rail (pix, spei, ach, wire, rtp, sepa, transfers); cross-border payment or conversion calls map to BlindPay's explicit quote then execute steps (payin quotes plus payins for fiat-to-stablecoin, payout quotes plus payouts for stablecoin-to-fiat). Flag anything with no direct BlindPay equivalent instead of guessing.
+1. Inventory my Conduit usage from the codebase: every endpoint, webhook, stored ID, and the corridors we move money on. Derive the concept mapping from actual usage, roughly: Conduit counterparties or recipients map to BlindPay customers (re_) with KYC/KYB plus bank accounts (ba_) typed per rail (pix, spei_bitso, ach, wire, rtp, sepa, transfers_bitso); cross-border payment or conversion calls map to BlindPay's explicit quote then execute steps (payin quotes plus payins for fiat-to-stablecoin, payout quotes plus payouts for stablecoin-to-fiat). Flag anything with no direct BlindPay equivalent instead of guessing.
 2. Verify corridor coverage: list every source and destination currency we use and check it against BlindPay's supported rails and limits; call out gaps before any code changes.
 3. Re-onboard counterparties on BlindPay: compliance does not transfer between providers, so sequence KYC/KYB re-verification before cutover, driven by customer.* webhooks.
 4. Rebuild money movement: quote, execute before expires_at, persist qu_/po_/pi_ IDs alongside legacy Conduit IDs during the transition, and drive all status from Svix-verified payout.* and payin.* webhooks.

@@ -12,7 +12,7 @@ Source: https://blindpay.com/docs/integrations/bolt
 Add stablecoin payments to this app using the BlindPay API (https://api.blindpay.com).
 
 - Create a server route that calls BlindPay to create a payout quote and execute
-  a payout: POST /v1/instances/${BLINDPAY_INSTANCE_ID}/payouts/evm/quote and
+  a payout: POST /v1/instances/${BLINDPAY_INSTANCE_ID}/quotes and
   POST /v1/instances/${BLINDPAY_INSTANCE_ID}/payouts/evm.
 - Authenticate with Authorization: Bearer ${BLINDPAY_API_KEY}.
 - Read BLINDPAY_API_KEY and BLINDPAY_INSTANCE_ID from environment variables.
@@ -43,14 +43,21 @@ Paste the prompt into Bolt.new and run. Check the generated requests against the
 
 ```ts [server route]
 const res = await fetch(
-  `https://api.blindpay.com/v1/instances/${process.env.BLINDPAY_INSTANCE_ID}/payouts/evm/quote`,
+  `https://api.blindpay.com/v1/instances/${process.env.BLINDPAY_INSTANCE_ID}/quotes`,
   {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.BLINDPAY_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ currency_type: 'sender', request_amount: 1000 }),
+    body: JSON.stringify({
+      bank_account_id: 'ba_000000000000',
+      currency_type: 'sender',
+      cover_fees: false,
+      request_amount: 1000,
+      network: 'base_sepolia',
+      token: 'USDB',
+    }),
   },
 )
 const quote = await res.json()

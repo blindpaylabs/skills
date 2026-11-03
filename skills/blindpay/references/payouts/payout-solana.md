@@ -33,10 +33,11 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '{
     "owner_address": "YOUR_SOLANA_WALLET_ADDRESS",
-    "token_address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-    "amount": "50000000"
+    "quote_id": "qu_000000000000"
   }'
 ```
+
+With `quote_id`, BlindPay takes the token mint and the quoted `sender_amount` from the quote. Without it, send `token_address` (the SPL mint) and `amount` as a decimal token amount (`"10.5"` for 10.5 USDC), not base units.
 
 This returns a serialized transaction to sign:
 
@@ -90,16 +91,17 @@ node solana-delegate.js
 
 ### Create the payout
 
-Once the delegation transaction confirms, create the payout the same way as EVM, at `/payouts/evm`.
+Once the delegation transaction confirms, create the payout at `/payouts/solana`. Pass the delegation signature from the previous step as `signed_transaction`: it is required on production instances, where BlindPay screens it before pulling the funds.
 
 ```bash [cURL]
 curl --request POST \
-  --url https://api.blindpay.com/v1/instances/in_000000000000/payouts/evm \
+  --url https://api.blindpay.com/v1/instances/in_000000000000/payouts/solana \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
   "quote_id": "qu_000000000000",
-  "sender_wallet_address": "YOUR_SOLANA_WALLET_ADDRESS"
+  "sender_wallet_address": "YOUR_SOLANA_WALLET_ADDRESS",
+  "signed_transaction": "DELEGATION_SIGNATURE"
 }'
 ```
 

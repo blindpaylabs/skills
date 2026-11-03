@@ -33,17 +33,17 @@ A payout quote is created against a specific [bank account](bank-accounts.md) an
 | Instance | Networks | Tokens |
 | --- | --- | --- |
 | Development | `sepolia`, `base_sepolia`, `arbitrum_sepolia`, `polygon_amoy`, `stellar_testnet`, `solana_devnet` | `USDB` only |
-| Production | `ethereum`, `base`, `polygon`, `arbitrum`, `stellar`, `solana`, `tron` (beta) | `USDC` or `USDT` |
+| Production | `ethereum`, `base`, `polygon`, `arbitrum`, `stellar`, `solana` | `USDC` or `USDT` |
 
 Token and chain support also differ by token:
 
 | Token | Supported networks |
 | --- | --- |
 | `USDC` | `polygon`, `base`, `arbitrum`, `ethereum`, `stellar`, `solana` (and their dev equivalents) |
-| `USDT` | `polygon`, `ethereum`, `solana`, `tron` (and the dev equivalents, except `tron`) |
+| `USDT` | `polygon`, `ethereum`, `solana` (and their dev equivalents) |
 | `USDB` | development testnets only: `polygon_amoy`, `base_sepolia`, `arbitrum_sepolia`, `sepolia`, `stellar_testnet`, `solana_devnet` |
 
-`tron` is a production-only network in beta: it has no development testnet, so it can't be exercised on a development instance. See [Supported chains](../kb/supported-chains.md) for details.
+`tron` is not accepted on payout quotes (`network_not_available`); to pay out USDT received on Tron, use an [offramp wallet](offramp-wallets.md). See [Supported chains](../kb/supported-chains.md) for details.
 
 Passing a network and token that are not compatible returns a 400 with a message naming the unsupported pair. See [Supported chains](../kb/supported-chains.md) for the full matrix.
 

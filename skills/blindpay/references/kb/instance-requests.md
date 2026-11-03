@@ -81,7 +81,7 @@ curl --request POST \
   }'
 ```
 
-The body is a flat object keyed by each field's `key`, the same shape as a [customer RFI response](../essentials/rfi.md#submit-a-response). Each field is validated against the open RFI's own request definition: a required field must be 1-4096 characters, a field with a `regex` must match it, and a field with `multiple: true` must be an array of up to 20 URLs. Keys not listed in the request are rejected.
+The body is a flat object keyed by each field's `key`, the same shape as a [customer RFI response](../essentials/rfi.md#submit-a-response). Each field is validated against the open RFI's own request definition: a required field must be 1-20000 characters, a field with a `regex` must match it, and a field with `multiple: true` must be an array of up to 20 URLs. Keys not listed in the request are rejected.
 
 If a section asks for an ID document with a type dropdown and a matching `..._back_file` upload field, the back file becomes required unless the selected document type is `PASSPORT`.
 

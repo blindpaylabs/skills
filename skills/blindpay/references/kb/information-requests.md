@@ -22,7 +22,7 @@ Each RFI is built as a list of sections. Each section has a title, a description
 
 ## What happens to the customer
 
-When an RFI is created, the customer's `kyc_status` flips from its prior value to `compliance_request`. See [customer statuses](kyc.md#statuses) for the full status list. While in this status:
+When an RFI is created, the customer's `kyc_status` flips from its prior value to `compliance_request`. See [customer statuses](kyc.md#customer-statuses) for the full status list. While in this status:
 
 - The customer cannot send or receive funds
 - The customer sees a banner in their dashboard prompting them to submit the requested information
@@ -94,5 +94,5 @@ If 27 days pass without a submission, BlindPay automatically rejects the custome
 
 ## Related
 
-- [RFI API documentation](../essentials/rfi.md) · [Customer statuses](kyc.md#statuses)
+- [RFI API documentation](../essentials/rfi.md) · [Customer statuses](kyc.md#customer-statuses)
 - [Basic Customer Information (KYC)](kyc-basics.md) · [Basic Business Information (KYB)](kyb-documents.md)

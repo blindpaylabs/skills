@@ -34,7 +34,7 @@ A production instance can only use `USDC` or `USDT` on a mainnet network. A deve
 
 | Feature | Chains | Stablecoins | Notes |
 | --- | --- | --- | --- |
-| Payins (on-ramp delivery) | Ethereum, Polygon, Base, Arbitrum, Tempo, Arc, Stellar, Solana, Tron | USDC, USDT (network-dependent; USDC not on Tron) | |
+| Payins (on-ramp delivery) | Ethereum, Polygon, Base, Arbitrum, Tempo, Arc, Stellar, Solana, Tron | USDC, USDT (network-dependent; USDC not on Tron; USDT only on Ethereum, Polygon, Solana, and Tron) | |
 | Payouts (off-ramp source) | Ethereum, Polygon, Base, Arbitrum, Tempo, Arc, Stellar, Solana, Tron | USDC, USDT (network-dependent; USDC not on Tron; USDT not on Base/Arbitrum/Stellar) | |
 | Managed wallets (beta) | Ethereum, Polygon, Base, Arbitrum, Tempo, Arc, Solana | USDC, USDT (USDB on testnet) | |
 | Yield on managed wallets | Base, Polygon | USDC | See [Yield](https://blindpay.com/docs/yield) |

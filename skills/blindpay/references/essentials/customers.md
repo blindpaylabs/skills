@@ -32,8 +32,8 @@ Existing customers can also carry `kyc_type: light`, a legacy tier BlindPay no l
 | Email                                                    | Email                                                                                    |
 | Country                                                  | Country                                                                                  |
 | Tax ID (government id number)                            | Doing business as\*                                                                      |
-| Phone number                                             | Website\*                                                                                |
-| IP Address                                               | IP Address                                                                               |
+| Phone number\*                                           | Website                                                                                  |
+| IP Address\*                                             | IP Address\*                                                                             |
 | Country                                                  | Country                                                                                  |
 | Address 1                                                | Address 1                                                                                |
 | Address 2\*                                              | Address 2\*                                                                              |
@@ -43,8 +43,8 @@ Existing customers can also carry `kyc_type: light`, a legacy tier BlindPay no l
 | ID Document - Country                                    | UBOS + Shareholders above 25% (everything from Standard KYC but no Phone and IP Address) |
 | ID Document - Type (passport, id card, drivers license)  | Company Formation Document                                                               |
 | ID Document - Front                                      | Proof of Ownership Document                                                              |
-| ID Document - Back\*                                     | Proof of Address - Type\*                                                                |
-| Proof of Address - Type (utility bill, bank statement)\* | Proof of Address - Document\*                                                            |
+| ID Document - Back\*                                     | Proof of Address - Type                                                                  |
+| Proof of Address - Type (utility bill, bank statement)\* | Proof of Address - Document                                                              |
 | Proof of Address - Document\*                            |                                                                                          |
 | Selfie File                                              |                                                                                          |
 
@@ -55,7 +55,8 @@ Existing customers can also carry `kyc_type: light`, a legacy tier BlindPay no l
 | Source of Funds Document Type       |
 | Source of Funds Document File       |
 | Purpose of Transactions             |
-| Purpose of Transactions Explanation |
+| Purpose of Transactions Explanation (only when the purpose is `other`) |
+| Proof of Address - Type and Document (required on Enhanced) |
 
 **Note:**
 

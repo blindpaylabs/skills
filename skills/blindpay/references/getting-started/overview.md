@@ -104,7 +104,7 @@ BlindPay does not provide wallet services. We operate as a non-custodial payment
 
 | Capability | Description |
 | --- | --- |
-| Managed wallets | BlindPay-custodied wallets that hold USDC/USDT per customer (beta, Arbitrum + Polygon) |
+| Managed wallets | BlindPay-custodied wallets that hold USDC/USDT per customer (beta, Ethereum, Base, Polygon, Arbitrum, Solana) |
 | External blockchain wallets | Customer-controlled wallets you register to receive or authorize stablecoin movement |
 | Payins (on-ramp) | Accept a fiat deposit and deliver stablecoins to any wallet |
 | Payouts (off-ramp) | Pull stablecoins from a wallet and pay out fiat to a bank account |
@@ -119,7 +119,7 @@ BlindPay supports two ways to hold the stablecoin side of a customer's funds. Pi
 | --- | --- | --- |
 | Custody | BlindPay-custodied | Customer-controlled (EOA or account abstraction) |
 | Created via | `POST /customers/{re}/wallets` | `POST /customers/{re}/blockchain-wallets` |
-| Networks | Arbitrum, Polygon (beta) | Any supported chain |
+| Networks | Ethereum, Base, Polygon, Arbitrum, Solana (beta) | Any supported chain |
 | Signing required | None, BlindPay moves funds on your behalf | ERC-20 `approve`, Stellar signed XDR, or Solana token delegation depending on chain |
 | Typical use | Hold a balance inside BlindPay between on-ramp and off-ramp | Receive funds into a wallet you already control, or fund a payout from your own wallet |
 | Add securely | n/a | Sign a message (no manual address entry) |
@@ -135,7 +135,7 @@ A customer must exist and complete KYC before you can create either kind of wall
 | Base | `base` | `base_sepolia` | USDC, USDT |
 | Polygon | `polygon` | `polygon_amoy` | USDC, USDT |
 | Arbitrum | `arbitrum` | `arbitrum_sepolia` | USDC, USDT |
-| Stellar | `stellar` | `stellar` (testnet) | USDC |
+| Stellar | `stellar` | `stellar_testnet` | USDC |
 | Solana | `solana` | `solana_devnet` | USDC, USDT |
 | Tron (beta) | `tron` | n/a | USDT only |
 

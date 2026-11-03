@@ -14,7 +14,7 @@ The request is one API call. The work is in the setup. The customer needs approv
 2. Create a development instance (see essentials/instances.md)
 3. Create your API key (see essentials/api-keys.md)
 
-You must also [create a customer](../getting-started/quickstart-payin.md) and add a [blockchain wallet](../payins/blockchain-wallets.md) before generating a virtual account. The customer's `kyc_status` must already be `approved`: you cannot create a virtual account for a customer still in KYC review. The wallet is where stablecoin settlement lands behind the scenes; see [Blockchain wallets](../payins/blockchain-wallets.md) for the full mechanics.
+You must also [create a customer](../getting-started/quickstart-payin.md) and add a [blockchain wallet](../payins/blockchain-wallets.md) before generating a virtual account. The customer's `kyc_status` must already be `approved` (or `approved_rfi`): you cannot create a virtual account for a customer still in KYC review. The wallet is where stablecoin settlement lands behind the scenes; see [Blockchain wallets](../payins/blockchain-wallets.md) for the full mechanics.
 
 ## Required fields
 
@@ -64,7 +64,7 @@ curl --request PUT \
 
 ### For individuals
 
-Individual customers are only supported on the `jpmorgan` and `portage` banking partners. They need `account_purpose` and `source_of_wealth` filled in on the customer, subject to the same `missing_required_fields` rejection as businesses.
+Individual customers are supported on the `jpmorgan`, `portage`, `bre_b` (Colombian ID card required) and `spei` banking partners. They need `account_purpose` and `source_of_wealth` filled in on the customer, subject to the same `missing_required_fields` rejection as businesses.
 
 ### For sole proprietors
 
@@ -165,7 +165,7 @@ You can update `token`, `blockchain_wallet_id`, and `partner_fee_id` on an exist
 ## Banking partner eligibility
 
 - `cfsb` requires the customer's `country` to be `US`. If the customer is an individual, `business_type` must also be `sole_proprietorship`.
-- Individual customers are only supported on `jpmorgan` and `portage`. The one exception is sole proprietors, which can also use `cfsb`.
+- Individual customers are supported on `jpmorgan`, `portage`, `bre_b` and `spei`. Sole proprietors can also use `cfsb`.
 - `citi` requires the customer to be a business, and its `country` to not be `US`.
 - `bre_b` requires a Colombian document: individuals need a Colombian ID card (`id_doc_country: CO`), businesses need `country: CO` and a NIT in `tax_id`. Anyone else gets `bre_b_requires_colombian_document`. If the document already has a Bre-B key elsewhere, the request fails with `bre_b_document_already_linked`.
 - A business customer requesting `cfsb` or `citi` must also have a `country` on BlindPay's supported list for that banking partner; contact BlindPay if you're unsure whether a given country qualifies.

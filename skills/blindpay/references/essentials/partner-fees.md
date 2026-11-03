@@ -179,9 +179,9 @@ curl --request DELETE \
 - `GET /partner-fees/{id}` and `POST /partner-fees` return only `id`, `instance_id`, `name`, and the four fee fields. Only the list endpoint also returns `virtual_account_set`, `created_at`, and `updated_at` for each item. List the fees rather than reading the create or single-get response if you need those.
 - `DELETE /partner-fees/{id}` always returns `{"success": true}`, even when `id` doesn't exist, belongs to another instance, or was already deleted. The response doesn't tell you whether a row was actually removed.
 
-**Warning:**
+**Note:**
 
-`GET /partner-fees/{id}` on an `id` that doesn't exist, belongs to another instance, or was already deleted returns `500 INTERNAL_ERROR`, not `404`. Don't use the status code to detect a missing fee; only look up an `id` you got back from a prior create or list call.
+`GET /partner-fees/{id}` on an `id` that doesn't exist, belongs to another instance, or was already deleted returns `404` with `partner_fee_not_found`.
 
 ## Transfers
 

@@ -56,7 +56,7 @@ const payable = await response.json()
   "note": null,
   "discount": 0,
   "taxes": 0,
-  "bank_account_id": null,
+  "bank_account": null,
   "boleto_barcode": "34191790010104351004791020150008191070026000",
   "pix_qrcode": null,
   "due_date": "2026-08-25",

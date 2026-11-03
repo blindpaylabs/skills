@@ -31,7 +31,7 @@ Create a customer, run KYC or KYB through document upload, and add rail-specific
 
 ### Register the Turnkey wallet as an external wallet
 
-Connect the Turnkey wallet to BlindPay without moving funds: register its address through BlindPay's [external wallet](../payouts/offramp-wallets.md) flow using a sign-message challenge signed by the Turnkey wallet, which returns a `bw_` ID. Store that `bw_` ID alongside the Turnkey wallet account it maps to.
+Connect the Turnkey wallet to BlindPay without moving funds: register its address through BlindPay's [external wallet](../payins/blockchain-wallets.md) flow using a sign-message challenge signed by the Turnkey wallet, which returns a `bw_` ID. Store that `bw_` ID alongside the Turnkey wallet account it maps to.
 
 ### Rebuild payouts on the quote-then-execute model
 
@@ -85,5 +85,5 @@ Deliverables: the migration report, the onboarding script, the Turnkey external-
 - [Customers](../essentials/customers.md)
 - [Bank accounts](../payouts/bank-accounts.md)
 - [Payout quotes](../payouts/payout-quotes.md)
-- [External wallets](../payouts/offramp-wallets.md)
+- [External wallets](../payins/blockchain-wallets.md)
 - [Webhooks verification](../essentials/webhooks-verification.md)

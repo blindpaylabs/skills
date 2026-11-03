@@ -183,11 +183,13 @@ Every time stablecoins land in the wallet, a `wallet.inbound` webhook fires with
   "address": "0x1234567890abcdef1234567890abcdef12345678",
   "network": "base",
   "token": {
-    "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-    "id": "usdc",
+    "address": "0x1234567890abcdef1234567890abcdef12345678",
+    "id": "00000000-0000-0000-0000-000000000000",
     "symbol": "USDC",
     "amount": 100
-  }
+  },
+  "deposit_id": "wd_000000000000",
+  "transaction_hash": "0x8f3e1b..."
 }
 ```
 
@@ -195,7 +197,7 @@ Every time stablecoins land in the wallet, a `wallet.inbound` webhook fires with
 
 `wallet.inbound` reports `amount` scaled by 100 (so `100` means $1.00), while the wallet balance endpoint reports the raw amount. Don't assume the two use the same unit.
 
-`wallet.inbound` only fires for USDC and USDT deposits. See [webhooks](../essentials/webhooks.md) for signature verification.
+`wallet.inbound` fires for USDC, USDT, and EURC deposits, plus the test tokens USDB and EURB on development instances. `deposit_id` matches the `id` in the wallet deposits list. `token.id` is the custody provider's token id and `token.address` repeats the wallet address, not the token contract. See [webhooks](../essentials/webhooks.md) for signature verification.
 
 ## Collect fiat
 
@@ -243,7 +245,7 @@ To move stablecoins out of a managed wallet to another managed wallet or an exte
 
 **Note:**
 
-USDC transfers can move across Ethereum, Polygon, Base, and Arbitrum using Circle CCTP v2; every other token still requires the same network on both sides. The transfer quote expires in 5 minutes, like every other BlindPay quote.
+USDC transfers can move across Ethereum, Polygon, Base, Arbitrum, and Arc using Circle CCTP v2; every other token still requires the same network on both sides. The transfer quote expires in 5 minutes, like every other BlindPay quote.
 
 ## Yield
 

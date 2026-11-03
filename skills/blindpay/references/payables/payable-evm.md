@@ -12,7 +12,7 @@ If the funds live in a BlindPay-custodied wallet instead, skip the approval enti
 
 The examples below use `base_sepolia` and `USDB` since they're the development network and test token. Swap in the matching production network and token (`USDC` or `USDT`) when you go live.
 
-Payables are **EVM only** today, and only boleto and PIX payables can be paid; a non-EVM network is refused at quote time with `payable_network_not_supported`.
+Payables are **EVM only** today; a non-EVM network is refused at quote time with `payable_network_not_supported`.
 
 ## Prerequisites
 
@@ -130,7 +130,7 @@ const response = await fetch(
 const payout = await response.json()
 ```
 
-The payout starts `processing`, and the payable's own `status` now mirrors it. If the wallet has not approved enough, this call fails immediately with `erc20_allowance_insufficient` rather than returning a payout that dies minutes later. Approve at least `contract.amount` and retry.
+The payout starts `processing`, and the payable's own `status` now mirrors it. The allowance is not checked when the payout is created: if the wallet has not approved enough, the payout is still returned and then fails during collection with `erc20_allowance_insufficient`. Approve at least `contract.amount` before you execute.
 
 ### Track it to settlement
 

@@ -56,7 +56,7 @@ Everything from KYC Standard, plus mandatory:
 | Field | Required |
 | --- | --- |
 | Legal name, tax ID, formation date | Yes |
-| Email, country, address line 1 | Yes |
+| Email, country, address line 1, city, state/province/region, postal code | Yes |
 | Website | Yes |
 | Alternate name (doing business as), phone number, IP address, address line 2 | Optional |
 | Incorporation document | Yes |
@@ -362,7 +362,7 @@ You can optionally pre-screen a document before submitting it: the [document ana
 
 ## Gotchas
 
-- **Duplicate tax ID is blocked on production.** On production instances, creating a customer with a `tax_id` that matches an existing, already-`approved` customer in the same instance is rejected. This check does not run on development instances. Use a different tax ID or update the existing approved customer's other attachments (bank accounts, wallets) instead of creating a duplicate.
+- **Duplicate tax ID is blocked on production.** On production instances, creating a customer with a `tax_id` that matches an existing active customer (`approved` or `approved_rfi`) in the same instance is rejected. This check does not run on development instances. Use a different tax ID or update the existing approved customer's other attachments (bank accounts, wallets) instead of creating a duplicate.
 - **Recommended: create a new customer instead of editing a rejected one.** For a `rejected` customer, we recommend creating a new customer with the corrected fields rather than retrying in place.
 - **On development instances, customers auto-approve.** Set the first name (individuals) or legal name (businesses) to `Fail` to force a rejection for testing. You can use placeholder URLs for document fields on development.
 

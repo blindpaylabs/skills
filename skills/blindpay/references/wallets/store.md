@@ -36,7 +36,7 @@ Managed wallets are in beta: only the chains listed on the managed wallet page h
 2. The balance sits there until you move it; check it any time with the balance endpoint.
 3. A [payout](../payouts/payouts.md) pulls from the wallet and delivers to a bank account, one API call, no extra approval step.
 
-You only ever reference the wallet by its ID (`bl_...`) on payin quotes, or by its address when funding a payout. Everything else is handled by BlindPay.
+You only ever reference the wallet by its ID (`bl_...`) on payin quotes, or by its ID or address when funding a payout. Everything else is handled by BlindPay.
 
 ## In this section
 

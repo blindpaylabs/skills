@@ -24,7 +24,7 @@ Transfer limits are calculated on the stablecoin amount transferred. Each custom
 2. Create a development instance (see essentials/instances.md)
 3. Create your API key (see essentials/api-keys.md)
 
-The customer must exist and have `kyc_status` of `approved`; you cannot request a limit increase for a customer still in KYC review. You also need the supporting documents already hosted at URLs, for example via the [Upload](upload.md) endpoint.
+The customer must exist and have `kyc_status` of `approved` (or `approved_rfi`); you cannot request a limit increase for a customer still in KYC review. You also need the supporting documents already hosted at URLs, for example via the [Upload](upload.md) endpoint.
 
 Only one request can be in flight per customer at a time. If the customer already has a request with `status: "in_review"`, a new request returns `400 customer_already_has_limit_increase_in_review`. Wait for the existing request to be approved or rejected before submitting another.
 
@@ -69,7 +69,7 @@ The response returns the request's ID:
 
 ```json
 {
-  "id": "rl_000000000000"
+  "id": "ri_000000000000"
 }
 ```
 

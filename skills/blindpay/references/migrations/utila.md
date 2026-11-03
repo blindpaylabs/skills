@@ -28,7 +28,7 @@ List every Utila endpoint your codebase calls (vaults, wallets, `transactions_in
 
 ### Register your Utila wallets as external wallets
 
-For each Utila wallet address that keeps custody, register it with BlindPay as an [external wallet](../payouts/offramp-wallets.md) using the sign-message challenge flow, and store the resulting `bw_` ID next to the Utila wallet resource name. Funds keep living in Utila wallets. BlindPay only needs proof of ownership to route payouts against them, so this registration is the connection point between the two systems.
+For each Utila wallet address that keeps custody, register it with BlindPay as an [external wallet](../payins/blockchain-wallets.md) using the sign-message challenge flow, and store the resulting `bw_` ID next to the Utila wallet resource name. Funds keep living in Utila wallets. BlindPay only needs proof of ownership to route payouts against them, so this registration is the connection point between the two systems.
 
 ### Onboard recipients as BlindPay customers
 
@@ -36,7 +36,7 @@ Create a [customer](../essentials/customers.md) (`re_`) for each recipient and r
 
 ### Rebuild the payout leg on quotes and payouts
 
-Replace the fiat side of `transactions_initiatetransaction` with BlindPay's two-step model: request a [quote](../payouts/payout-quotes.md) (`qu_`), then execute the [payout](../payouts/payouts.md) (`po_`) against the registered external wallet before `expires_at` expires, about five minutes. The actual on-chain transfer still goes through Utila's transaction initiation and policy engine vote. Store the `qu_` and `po_` IDs alongside the originating Utila transaction resource name so both sides of one payout stay traceable.
+Replace the fiat side of `transactions_initiatetransaction` with BlindPay's two-step model: request a [quote](../payouts/payout-quotes.md) (`qu_`), then execute the [payout](../payouts/payouts.md) (`po_`) against the registered external wallet before `expires_at` expires, about five minutes. The on-chain ERC-20 `approve` from the quote's `contract` payload, which BlindPay needs before it pulls the funds, still goes through Utila's transaction initiation and policy engine vote. Store the `qu_` and `po_` IDs alongside the originating Utila transaction resource name so both sides of one payout stay traceable.
 
 ### Port your event handling to BlindPay webhooks
 
@@ -61,7 +61,7 @@ Do the migration in this order:
 1. Inventory my Utila usage from the codebase: every Utila endpoint called (vaults, wallets, transactions_initiatetransaction, transactions_voteontransactionrequest, addressbook entries) and every stored Utila resource name (vault, wallet, transaction). Separate transactions that are actually fiat payouts (transfers to OTC desks, exchange addresses, or address book entries tagged for offramp) from internal treasury moves. Confirm the exact policy engine vote-threshold and co-signer behavior in the Utila docs rather than assuming, since these are account-configurable. Produce a written report listing what stays on Utila (custody, signing, policy engine) and what moves to BlindPay (the fiat leg), before touching code.
 2. Register each Utila wallet address that will keep custody with BlindPay as an external wallet, using the sign-message challenge flow, and store the resulting bw_ ID next to the Utila wallet resource name. This is the connection point: funds keep living in Utila wallets, BlindPay only needs proof of ownership to route payouts against them.
 3. Onboard recipients as BlindPay customers (re_) with KYC/KYB and add their rail-specific bank accounts (ba_) for Pix, SPEI, SEPA, ACH, or wire. Utila KYC and policy approvals do not transfer, so sequence re-verification ahead of cutover.
-4. Rebuild the payout leg on BlindPay's two-step model: request a quote (qu_), then execute the payout (po_) referencing the registered external wallet before expires_at (about 5 minutes). The actual on-chain transfer still goes through Utila's transaction initiation and policy engine vote. Store qu_ and po_ IDs alongside the originating Utila transaction resource name so both sides of one payout are traceable.
+4. Rebuild the payout leg on BlindPay's two-step model: request a quote (qu_), then execute the payout (po_) referencing the registered external wallet before expires_at (about 5 minutes). The on-chain ERC-20 approve from the quote's contract payload, which BlindPay needs before it pulls the funds, still goes through Utila's transaction initiation and policy engine vote. Store qu_ and po_ IDs alongside the originating Utila transaction resource name so both sides of one payout are traceable.
 5. Port event handling to BlindPay's Svix-signed webhooks (customer.*, payout.*, wallet.inbound) with signature verification and svix-id dedup, and run these handlers alongside the existing Utila webhook handler (x-utila-signature, TRANSACTION_STATE_UPDATED) so custody-side and fiat-side state both stay current.
 6. Cut over per flow behind a feature flag: dual-run with new payouts going through the BlindPay quote and payout path while Utila continues to sign and enforce policy on every transfer, keep both webhook handlers live during the window, and retire the old direct-to-OTC or direct-to-exchange transaction path only once a full dual-run settlement cycle completes with no discrepancies.
 

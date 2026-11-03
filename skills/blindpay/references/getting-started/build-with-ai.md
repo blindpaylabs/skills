@@ -35,7 +35,11 @@ codex mcp add blindpay --url https://mcp.blindpay.com/mcp
 {
   "mcpServers": {
     "blindpay": {
-      "url": "https://mcp.blindpay.com/mcp"
+      "url": "https://mcp.blindpay.com/mcp",
+      "auth": {
+        "CLIENT_ID": "4c2rAa08DqbVvnon",
+        "scopes": ["profile", "email", "offline_access"]
+      }
     }
   }
 }
@@ -146,7 +150,7 @@ Money-movement tools should require explicit confirmation before executing. Ever
 | --- | --- | --- |
 | Codex | `codex mcp add` | Run `codex mcp add` from the terminal, then load Agent Skills for full scaffolding. The CLI, IDE extension, and desktop app share the configuration. |
 | Claude Code | `claude mcp add` or `.mcp.json` | Run `claude mcp add --transport http blindpay https://mcp.blindpay.com/mcp`, or add the server to `.mcp.json`, and load Agent Skills for full scaffolding. |
-| Cursor | `.cursor/mcp.json` | Add `{ "url": "https://mcp.blindpay.com/mcp" }` as the `blindpay` server, restart Cursor, then enable it in Settings -> MCP and sign in. |
+| Cursor | `.cursor/mcp.json` | Add `{ "url": "https://mcp.blindpay.com/mcp", "auth": { "CLIENT_ID": "4c2rAa08DqbVvnon", "scopes": ["profile", "email", "offline_access"] } }` as the `blindpay` server, restart Cursor, then enable it in Settings -> MCP and sign in. |
 | Grok | grok.com/connectors or `~/.grok/config.toml` | In Grok, add a custom connector with `https://mcp.blindpay.com/mcp` and sign in with your BlindPay account. In Grok Build, declare the server in `~/.grok/config.toml`. See [Grok + BlindPay](../integrations/grok.md). |
 | Windsurf | MCP settings | Add `https://mcp.blindpay.com/mcp` as a remote server in Windsurf's MCP configuration. |
 | Lovable | Copy-paste prompt + REST API | No MCP host. Paste a prompt describing the backend function and add `BLINDPAY_API_KEY` / `BLINDPAY_INSTANCE_ID` as secrets. |

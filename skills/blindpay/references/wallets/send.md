@@ -10,7 +10,7 @@ If you want the funds to leave as fiat in a bank account instead, that's a [payo
 
 **Warning:**
 
-USDC transfers can move across chains (Ethereum, Polygon, Base, Arbitrum) using [Circle CCTP v2](transfer-quotes.md#cross-chain-usdc-transfers-circle-cctp-v2); every other token still requires the destination network to match the source wallet's. There is no token conversion.
+USDC transfers can move across chains (Ethereum, Polygon, Base, Arbitrum, Arc) using [Circle CCTP v2](transfer-quotes.md#cross-chain-usdc-transfers-circle-cctp-v2); every other token still requires the destination network to match the source wallet's. The only token conversion is between USDC and EURC on Base, see [USDC and EURC conversion](transfers.md#usdc-and-eurc-conversion).
 
 ## How it works
 

@@ -34,13 +34,14 @@ curl --request POST \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "idempotency_key": "<your_uuid>"
+    "idempotency_key": "<your_uuid>",
+    "redirect_url": "https://example.com/tos-accepted"
   }'
 ```
 
-Open the URL from the response in your browser, accept the terms, and copy the `tos_id` shown on the confirmation screen. You will pass this `tos_id` when you create the customer in the next step.
+Open the URL from the response in your browser and accept the terms. The page itself does not display the `tos_id` (`to_...`): after you accept, the browser lands on your `redirect_url` with `?tos_id=to_...` in the address bar. It is also in the response of the `tos` request in your browser's DevTools Network tab, as shown below, and in the `tos.accept` webhook. You will pass this `tos_id` when you create the customer in the next step.
 
-![Copying the tos_id after accepting the BlindPay terms of service](https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/blindpay_tos_acceptance-min.jpg)
+![Copying the tos_id from the tos request in DevTools after accepting the BlindPay terms of service](https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/blindpay_tos_acceptance-min.jpg)
 
 ### Create a customer
 
@@ -123,7 +124,7 @@ curl --request POST \
   }'
 ```
 
-`request_amount` is an integer in minor units, so `10000` is $100.00. Save the quote ID (`pq_...`) and create the payin from it within 5 minutes:
+`request_amount` is an integer in minor units, so `10000` is $100.00. Save the quote ID (`qu_...`) and create the payin from it within 5 minutes:
 
 ```bash [cURL]
 curl --request POST \
@@ -131,7 +132,7 @@ curl --request POST \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "payin_quote_id": "pq_000000000000"
+    "payin_quote_id": "qu_000000000000"
   }'
 ```
 
@@ -155,7 +156,13 @@ curl --request POST \
     "routing_number": "<Replace this>",
     "account_number": "<Replace this>",
     "account_type": "checking",
-    "account_class": "individual"
+    "account_class": "individual",
+    "recipient_relationship": "other",
+    "address_line_1": "123 Main St",
+    "city": "New York",
+    "state_province_region": "NY",
+    "country": "US",
+    "postal_code": "10001"
   }'
 ```
 
@@ -252,13 +259,14 @@ curl --request POST \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "idempotency_key": "<your_uuid>"
+    "idempotency_key": "<your_uuid>",
+    "redirect_url": "https://example.com/tos-accepted"
   }'
 ```
 
-Open the returned URL in your browser, accept the terms, and copy the `tos_id` shown on the confirmation screen. You will need it to create the customer.
+Open the URL from the response in your browser and accept the terms. The page itself does not display the `tos_id` (`to_...`): after you accept, the browser lands on your `redirect_url` with `?tos_id=to_...` in the address bar. It is also in the response of the `tos` request in your browser's DevTools Network tab, as shown below, and in the `tos.accept` webhook. You will need it to create the customer.
 
-![Terms of service acceptance screen showing the tos_id](https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/blindpay_tos_acceptance-min.jpg)
+![Copying the tos_id from the tos request in DevTools after accepting the BlindPay terms of service](https://pub-4fabf5dd55154f19a0384b16f2b816d9.r2.dev/blindpay_tos_acceptance-min.jpg)
 
 ### Create a customer
 
@@ -335,7 +343,7 @@ curl --request POST \
   }'
 ```
 
-`request_amount` is an integer in minor units, so `10000` is $100.00. Save the quote ID (`pq_...`) and create the payin from it within 5 minutes:
+`request_amount` is an integer in minor units, so `10000` is $100.00. Save the quote ID (`qu_...`) and create the payin from it within 5 minutes:
 
 ```bash [cURL]
 curl --request POST \
@@ -343,7 +351,7 @@ curl --request POST \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "payin_quote_id": "pq_000000000000"
+    "payin_quote_id": "qu_000000000000"
   }'
 ```
 
@@ -367,7 +375,13 @@ curl --request POST \
     "routing_number": "<Replace this>",
     "account_number": "<Replace this>",
     "account_type": "checking",
-    "account_class": "individual"
+    "account_class": "individual",
+    "recipient_relationship": "other",
+    "address_line_1": "123 Main St",
+    "city": "New York",
+    "state_province_region": "NY",
+    "country": "US",
+    "postal_code": "10001"
   }'
 ```
 
@@ -392,7 +406,7 @@ curl --request POST \
   }'
 ```
 
-`request_amount` is an integer in minor units, `5000` is $50.00. `cover_fees: false` means the customer's stablecoin amount absorbs the fee, the common case. Save the quote ID (`qu_...`).
+`request_amount` is an integer in minor units, `5000` is $50.00. `cover_fees: false` means the fee is deducted from what the bank account receives, the common case. Save the quote ID (`qu_...`).
 
 ### Execute the payout
 

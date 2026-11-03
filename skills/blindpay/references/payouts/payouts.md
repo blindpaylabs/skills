@@ -27,6 +27,8 @@ Every payout follows the same three-step pattern:
 | `wire` | United States |
 | `rtp` | United States |
 | `pix` | Brazil |
+| `pix_safe` | Brazil |
+| `ted` | Brazil |
 | `spei_bitso` | Mexico |
 | `ach_cop_bitso` | Colombia |
 | `transfers_bitso` | Argentina |
@@ -45,7 +47,7 @@ You can add third-party bank accounts: a customer named "John" can have a payout
 | `sepa` | 50 USDC when quoting by sender amount, 40 EUR when quoting by receiver amount | `sepa_minimum_is_50_usdc`, `sepa_minimum_is_40_eur` |
 | `faster_payments` | 70 USDC when quoting by sender amount, 50 GBP when quoting by receiver amount | `faster_payments_minimum_is_70_usdc`, `faster_payments_minimum_is_50_gbp` |
 
-The SWIFT minimum applies to the requested amount before fees, on both quote-based and offramp wallet payouts. Other rails have no minimum beyond the fee itself.
+The SWIFT minimum applies to the requested amount before fees, on both quote-based and offramp wallet payouts. Every other rail has a 10 USD minimum sender amount, checked at quote time and rejected with `LIMITS_AMOUNT_OUT_OF_RANGE`.
 
 ### Funding source
 
@@ -97,7 +99,7 @@ Check the required fields in the [BlindPay API Docs](https://api.blindpay.com/re
 
 **Advanced flavor (stablecoin and blockchain mechanics)**
 
-Once the funding path is authorized, one call creates the payout. EVM, Solana, and managed-wallet payouts all use `/payouts/evm`; only Stellar has its own endpoint (`/payouts/stellar`, which also takes the signed transaction).
+Once the funding path is authorized, one call creates the payout. EVM and managed-wallet payouts (on any network, Solana included) use `/payouts/evm`. External Solana wallets use `/payouts/solana`, which takes the delegation signature, and external Stellar wallets use `/payouts/stellar`, which takes the signed transaction.
 
 **Remember:** replace `YOUR_API_KEY` with your API key, `in_000000000000` with your instance ID, `re_000000000000` with your customer ID, `ba_000000000000` with your bank account ID.
 
@@ -135,7 +137,7 @@ const payout = await response.json()
 
 **Warning:**
 
-Payout creation is split by destination network, each with its own endpoint and request shape: `/payouts/evm`, `/payouts/stellar`, and `/payouts/solana`. Which one you call depends on the recipient's network, not on the funding source; see [Payout with Stellar](payout-stellar.md) and [Payout with Solana](payout-solana.md) for those request shapes.
+Payout creation is split by destination network, each with its own endpoint and request shape: `/payouts/evm`, `/payouts/stellar`, and `/payouts/solana`. Which one you call depends on the quote's `network`, the chain the funding source sends from; see [Payout with Stellar](payout-stellar.md) and [Payout with Solana](payout-solana.md) for those request shapes.
 
 `quote_id` can only back one payout. A second call with the same quote returns an error; create a new quote instead.
 
@@ -169,7 +171,6 @@ curl --request POST \
   "tracking_complete": { "step": "processing" },
   "tracking_payment": { "step": "processing" },
   "tracking_transaction": { "step": "processing" },
-  "tracking_partner_fee": { "step": "on_hold" },
   "tracking_liquidity": { "step": "processing" }
 }
 ```
@@ -182,7 +183,7 @@ curl --request POST \
 | `customer_id` | string | The customer this payout belongs to (`re_...`). |
 | `bank_account_id` | string | The recipient bank account (`ba_...`). |
 | `partner_fee` | number | Nonzero only if the quote referenced a `partner_fee_id`. See [partner fees](../essentials/partner-fees.md). |
-| `tracking_complete`, `tracking_payment`, `tracking_transaction`, `tracking_partner_fee`, `tracking_liquidity` | object | Sub-status objects with a `step` of `processing`, `on_hold`, `pending_review`, or `completed`. Poll these or rely on webhooks for progress detail beyond the top-level `status`. |
+| `tracking_complete`, `tracking_payment`, `tracking_transaction`, `tracking_liquidity` | object | Sub-status objects with a `step` of `processing`, `on_hold`, `pending_review`, `pending_refund_review`, or `completed`. Poll these or rely on webhooks for progress detail beyond the top-level `status`. |
 
 **Advanced flavor (stablecoin and blockchain mechanics)**
 

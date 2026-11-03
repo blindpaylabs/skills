@@ -30,7 +30,7 @@ CDP Offramp lets Coinbase's own KYC on the end user's account stand in for onboa
 
 ### Rebuild the cash-out leg on quote then payout
 
-Replace CDP's session-token-plus-hosted-sell-URL flow with BlindPay's explicit two-step model: request a [payout quote](../payouts/payout-quotes.md), then execute the payout before `expires_at`. If funds keep custody in a CDP wallet, register that address with BlindPay through the external-wallet flow described in [offramp wallets](../payouts/offramp-wallets.md) so BlindPay can source funds from it without moving custody. Store `qu_`, `po_`, and `bw_` IDs alongside any legacy CDP transaction references.
+Replace CDP's session-token-plus-hosted-sell-URL flow with BlindPay's explicit two-step model: request a [payout quote](../payouts/payout-quotes.md), then execute the payout before `expires_at`. If funds keep custody in a CDP wallet, register that address with BlindPay through the external-wallet flow described in [blockchain wallets](../payins/blockchain-wallets.md) so BlindPay can source funds from it without moving custody. Store `qu_`, `po_`, and `bw_` IDs alongside any legacy CDP transaction references.
 
 ### Port webhooks
 

@@ -186,7 +186,7 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/payin-quotes \
   "token": "USDB",
   "payer_rules": {
     "pix_allowed_tax_ids": [
-      "14747677786"
+      "12345678909"
     ]
   }
 }'
@@ -278,7 +278,7 @@ Some `payer_rules` fields are validated against a specific format, not just chec
 
 `payment_method: "ach_pull"` has BlindPay pull the funds from a bank account the customer already connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid), instead of the payer sending a manual bank transfer. It is priced like `ach` and settles in USD.
 
-`funding_bank_account_id` (a `ba_...` id) is **required** on an `ach_pull` quote; omitting it fails with 400 `funding_bank_account_id_required`. The account must belong to the same customer and be Plaid-connected (`plaid_connected_at` set); otherwise the quote is rejected with 400 `funding_account_not_plaid_connected`. Passing `funding_bank_account_id` with any other `payment_method` fails with 400 `funding_account_invalid`. See [Payins](payins.md#pull-funding-from-a-plaid-connected-account) for the full pull flow.
+`funding_bank_account_id` (a `ba_...` id) is **required** on an `ach_pull` quote; omitting it fails with 400 `funding_bank_account_id_required`. The account must belong to the same customer (otherwise 400 `funding_account_invalid`) and be Plaid-connected, with `plaid_connected_at` set (otherwise 400 `funding_account_not_plaid_connected`). Passing `funding_bank_account_id` with any other `payment_method` fails with 400 `funding_account_invalid`. See [Payins](payins.md#pull-funding-from-a-plaid-connected-account) for the full pull flow.
 
 Pulling this way also requires the `plaid` subscription feature on the instance itself. On an instance without it, an `ach_pull` quote fails with `BANK_ACCOUNTS_PLAID_NOT_ENABLED` before BlindPay even looks up the account. Contact BlindPay to enable Plaid for your instance.
 

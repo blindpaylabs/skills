@@ -14,7 +14,7 @@ Give this to Replit Agent:
 Integrate stablecoin payments using the BlindPay API (https://api.blindpay.com).
 
 - Add a backend route that creates a payout quote and executes a payout:
-  POST /v1/instances/${BLINDPAY_INSTANCE_ID}/payouts/evm/quote and /payouts/evm.
+  POST /v1/instances/${BLINDPAY_INSTANCE_ID}/quotes and /payouts/evm.
 - Authenticate with Authorization: Bearer ${BLINDPAY_API_KEY}.
 - Read BLINDPAY_API_KEY and BLINDPAY_INSTANCE_ID from Replit Secrets (environment).
 - Build a UI: enter a USDC amount and destination, show the live quote, send the payout.
@@ -46,14 +46,21 @@ Paste the prompt into Replit Agent. Review the generated route against the [API 
 
 ```ts [server]
 const res = await fetch(
-  `https://api.blindpay.com/v1/instances/${process.env.BLINDPAY_INSTANCE_ID}/payouts/evm/quote`,
+  `https://api.blindpay.com/v1/instances/${process.env.BLINDPAY_INSTANCE_ID}/quotes`,
   {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${process.env.BLINDPAY_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ currency_type: 'sender', request_amount: 1000 }),
+    body: JSON.stringify({
+      bank_account_id: 'ba_000000000000',
+      currency_type: 'sender',
+      cover_fees: false,
+      request_amount: 1000,
+      network: 'base_sepolia',
+      token: 'USDB',
+    }),
   },
 )
 const quote = await res.json()

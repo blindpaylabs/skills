@@ -30,7 +30,7 @@ For each Fireblocks payee fiat account, create a BlindPay [customer](../essentia
 
 ### Rebuild the payout leg on the quote-then-execute model
 
-Replace Fireblocks payout instruction set creation and execution with BlindPay's two-step flow: request a [payout quote](../payouts/payout-quotes.md), then execute the [payout](../payouts/payouts.md) before `expires_at` (about 5 minutes). If funds stay in Fireblocks vault accounts, register the Fireblocks-controlled wallet with BlindPay through the [external-wallet](../payouts/offramp-wallets.md) sign-message challenge (`bw_`) so BlindPay can source funds from it. Store `qu_`, `po_`, and `bw_` IDs alongside the legacy Fireblocks IDs during the transition.
+Replace Fireblocks payout instruction set creation and execution with BlindPay's two-step flow: request a [payout quote](../payouts/payout-quotes.md), then execute the [payout](../payouts/payouts.md) before `expires_at` (about 5 minutes). If funds stay in Fireblocks vault accounts, register the Fireblocks-controlled wallet with BlindPay through the [external-wallet](../payins/blockchain-wallets.md) sign-message challenge (`bw_`) so BlindPay can source funds from it. Store `qu_`, `po_`, and `bw_` IDs alongside the legacy Fireblocks IDs during the transition.
 
 ### Port webhooks to BlindPay's Svix events
 

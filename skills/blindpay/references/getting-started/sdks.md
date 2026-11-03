@@ -13,12 +13,12 @@ BlindPay ships official SDKs for Node.js, Python, Go, PHP, and Swift. Every SDK 
 | Node.js / TypeScript | `npm install @blindpay/node` | [blindpay-node](https://github.com/blindpaylabs/blindpay-node) |
 | Python | `pip install blindpay` | [blindpay-python](https://github.com/blindpaylabs/blindpay-python) |
 | Go | `go get github.com/blindpaylabs/blindpay-go` | [blindpay-go](https://github.com/blindpaylabs/blindpay-go) |
-| PHP | Composer | [blindpay-php](https://github.com/blindpaylabs/blindpay-php) |
-| Swift | Swift Package Manager | [blindpay-swift](https://github.com/blindpaylabs/blindpay-swift) |
+| PHP | `composer require blindpay/php` | [blindpay-php](https://github.com/blindpaylabs/blindpay-php) |
+| Swift | Swift Package Manager: `https://github.com/blindpaylabs/blindpay-swift.git` | [blindpay-swift](https://github.com/blindpaylabs/blindpay-swift) |
 
 Each repository's README has the full install and usage guide.
 
-A small number of endpoints are excluded from every generated SDK, currently `POST /upload/extract` (see [Invoice payables](../payables/payable-invoice.md#read-the-invoice-with-ai)). Call them over raw HTTP even if you use an SDK for everything else.
+A small number of endpoints are excluded from every generated SDK: `POST /upload/extract` (see [Invoice payables](../payables/payable-invoice.md#read-the-invoice-with-ai)), `POST /instances/{instance_id}/tos/passthrough` (see [Terms of service](../essentials/terms-of-service.md)), the [yield](https://blindpay.com/docs/yield) endpoints under `/wallets/{id}/yield`, the card payment endpoints (`POST /instances/{instance_id}/payins/{payin_id}/card-payment` and `POST /e/payins/{payin_id}/card-payment`), and the development-only virtual account deposit simulators (`simulate-spei-deposit`, `simulate-breb-deposit`). Call them over raw HTTP even if you use an SDK for everything else.
 
 ## OpenAPI spec
 

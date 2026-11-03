@@ -14,13 +14,17 @@ Create `.cursor/mcp.json` in your project (or add to the global config):
 {
   "mcpServers": {
     "blindpay": {
-      "url": "https://mcp.blindpay.com/mcp"
+      "url": "https://mcp.blindpay.com/mcp",
+      "auth": {
+        "CLIENT_ID": "4c2rAa08DqbVvnon",
+        "scopes": ["profile", "email", "offline_access"]
+      }
     }
   }
 }
 ```
 
-Restart Cursor, enable the `blindpay` server in **Settings → MCP**, and sign in with your BlindPay account. To let the agent read without changing anything, use `https://mcp.blindpay.com/mcp/readonly` instead.
+Restart Cursor, enable the `blindpay` server in **Settings → MCP**, and sign in with your BlindPay account. `4c2rAa08DqbVvnon` is BlindPay's public OAuth client ID for Cursor. Keep the `auth` block as shown: Cursor can't register itself with BlindPay's sign-in, and a request for any other scope fails with `invalid_scope`. To let the agent read without changing anything, use `https://mcp.blindpay.com/mcp/readonly` instead.
 
 To run the server locally with an API key instead:
 

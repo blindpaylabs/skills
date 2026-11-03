@@ -74,7 +74,7 @@ A complete, high-quality submission avoids delays and follow-up requests.
 
 - Upload a **clear, color scan or photo** of the document
 - Accepted formats: **PDF, JPEG, or PNG**
-- Maximum file size: **3 MB**
+- Maximum file size: **5 MB**
 - The **entire document** must be visible — no cropped or partial images
 
 ### Photo tips

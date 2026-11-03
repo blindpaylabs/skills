@@ -42,7 +42,7 @@ curl --request POST \
   }'
 ```
 
-`request_amount` is an integer in minor units, so `10000` here means $100.00. On development instances the token is always `USDB`; in production use `USDC` or `USDT`. Save the quote ID (`pq_...`); you have 5 minutes to create the payin before it expires.
+`request_amount` is an integer in minor units, so `10000` here means $100.00. On development instances the token is always `USDB`; in production use `USDC` or `USDT`. Save the quote ID (`qu_...`); you have 5 minutes to create the payin before it expires.
 
 ### Create the payin
 
@@ -54,7 +54,7 @@ curl --request POST \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
   --data '{
-    "payin_quote_id": "pq_000000000000"
+    "payin_quote_id": "qu_000000000000"
   }'
 ```
 

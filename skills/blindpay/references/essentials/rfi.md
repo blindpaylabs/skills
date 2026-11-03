@@ -40,11 +40,11 @@ Compliance can open an RFI without pausing an already-approved customer. The cus
 | --- | --- | --- |
 | While the RFI is open | Payouts and payins are blocked | Customer keeps full access |
 | After the response is submitted | `verifying`, then compliance re-reviews | `approved` immediately, no re-review |
-| If the 27-day deadline passes | Customer is auto-rejected | Customer is **not** auto-rejected; compliance reviews the case manually |
+| If the deadline passes (27 days, or 5 business days for `approved_rfi`) | Customer is auto-rejected | Customer is **not** auto-rejected; compliance reviews the case manually |
 
 ### Deadline
 
-When an RFI is opened, the customer has **27 days** to respond. If no submission arrives within that window, BlindPay automatically rejects the customer (except customers in `approved_rfi`, who stay operational and are reviewed manually by compliance). The deadline is included as `expires_at` in the RFI payload, and every new RFI starts a fresh window.
+When an RFI is opened on a customer in `compliance_request`, the customer has **27 days** to respond; an RFI opened on an `approved_rfi` customer is due in **5 business days**. If no submission arrives within that window, BlindPay automatically rejects the customer (except customers in `approved_rfi`, who stay operational and are reviewed manually by compliance). The deadline is included as `expires_at` in the RFI payload, and every new RFI starts a fresh window.
 
 **Note:**
 

@@ -29,7 +29,7 @@ For each payee, create a [customer](../essentials/customers.md) (`re_`) with KYC
 
 ### Register external wallets if funds stay on Anchorage
 
-If stablecoins remain in an Anchorage Porto or vault wallet until payout time, register that wallet with BlindPay as an [external wallet](../payouts/offramp-wallets.md) using the sign-message challenge flow and store the resulting `bw_` ID. This lets BlindPay recognize funds sent from that wallet without taking custody of it.
+If stablecoins remain in an Anchorage Porto or vault wallet until payout time, register that wallet with BlindPay as an [external wallet](../payins/blockchain-wallets.md) using the sign-message challenge flow and store the resulting `bw_` ID. This lets BlindPay recognize funds sent from that wallet without taking custody of it.
 
 ### Rebuild the offramp on quote then payout
 

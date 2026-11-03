@@ -118,7 +118,7 @@ Webhooks behave identically on development and production: same event names, sam
 
 ## Rate limits
 
-Development instances are capped at roughly 100 requests per minute per instance, across every API key and dashboard session that uses the instance. Exceeding it returns a `429` with `development_instance_rate_limit_exceeded`, a `Retry-After` header with the seconds until the window resets, and `RateLimit-Limit` / `RateLimit-Remaining` / `RateLimit-Reset` headers on every response so your client can pace itself.
+Development instances are capped at 40 requests per minute per instance (counted per API server), across every API key and dashboard session that uses the instance. Exceeding it returns a `429` with `development_instance_rate_limit_exceeded`, a `Retry-After` header with the seconds until the window resets, and `RateLimit-Limit` / `RateLimit-Remaining` / `RateLimit-Reset` headers on every response so your client can pace itself.
 
 Production instances have no per-instance request cap.
 
@@ -128,8 +128,8 @@ On development instances, you can force a payin or payout into a specific outcom
 
 | Amount | Outcome |
 | --- | --- |
-| `666.00` | Failed |
-| `777.00` | Refunded |
+| `66600` ($666.00) | Failed |
+| `77700` ($777.00) | Refunded |
 
 Any other amount completes successfully. These overrides only work on development; production processes the real amount you send.
 

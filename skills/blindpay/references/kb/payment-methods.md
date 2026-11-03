@@ -33,7 +33,7 @@ Receiving `ted` payins requires the `ted_payin` subscription feature on your ins
 
 ## Fetch rails dynamically
 
-The table above is also available at runtime from `GET /available/rails` (no API key required). Each entry is `{ label, value, country }`; `country` is a display hint for the rail picker's flag icon, not a claim that BlindPay has a rail in that country (SEPA, for example, surfaces `DE` as its default flag).
+The send rails in the table above are also available at runtime from `GET /available/rails` (no API key required); it lists payout rail types, not payin payment methods. Each entry is `{ label, value, country }`; `country` is a display hint for the rail picker's flag icon, not a claim that BlindPay has a rail in that country (SEPA, for example, surfaces `DE` as its default flag).
 
 ## SEPA destinations
 

@@ -132,7 +132,7 @@ curl --url https://api.blindpay.com/v1/instances/in_000000000000/customers/re_00
 | `partner_fee_id` | string or null | The [partner fee](#partner-fee) charged on this wallet's payouts, if any. |
 | `created_at`, `updated_at` | date-time | |
 
-There is currently no way to list all of a bank account's offramp wallets through the API. Save the `id` you get back when you create one, and use [Retrieve an offramp wallet](#retrieve-an-offramp-wallet) to look it up later.
+To list every offramp wallet on a bank account, call `GET /v1/instances/{instance_id}/customers/{customer_id}/bank-accounts/{bank_account_id}/offramp-wallets`. It returns an array, or 404 `offramp_wallets_not_found` when the bank account has none.
 
 ## Related
 

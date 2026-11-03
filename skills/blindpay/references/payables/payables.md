@@ -62,7 +62,7 @@ curl --request DELETE \
   --header 'Authorization: Bearer YOUR_API_KEY'
 ```
 
-The payable moves to the terminal `canceled` status, a `payable.update` event fires, and the same code can be registered again afterwards. Once any payout exists for the payable the delete is rejected with `payable_not_cancelable`.
+The payable moves to the terminal `canceled` status, a `payable.update` event fires, and the same code can be registered again afterwards. Once the payable leaves `draft` (a payout is executing it, or it is paid) the delete is rejected with `payable_not_cancelable`. A failed or refunded attempt returns it to `draft`, so it can be deleted again.
 
 There is no update endpoint and no separate quote/pay/reprice/receipt endpoint for payables: paying one is a normal payout.
 
@@ -78,7 +78,7 @@ Quote an overdue boleto twice on different days and you can get two different am
 
 Quoting a boleto can also update the payable itself, not just price it: `due_date` and `to` are re-resolved against the same rail call. `due_date` is overwritten whenever the resolved code carries one; `to` is only filled in if it did not already carry a `legal_name`. A `GET` right after quoting can therefore show a different `amount`, `due_date`, or `to` than the one you got at registration.
 
-Boletos also only clear on Brazilian banking days, 06:30 through 18:30 BRT; above R$250,000.00 the same-day window closes at 14:30 BRT instead. Quoting outside those hours or on a closure defers execution to the next banking day. If that deferral would push execution past the boleto's `due_date`, the quote is rejected with `payable_boleto_would_be_overdue`.
+Boletos also only clear on Brazilian banking days, 06:30 through 18:30 BRT; above R$250,000.00 the same-day window closes at 14:30 BRT instead. Quoting after the close (18:30 BRT, or 14:30 BRT above R$250,000.00) or on a closure defers execution to the next banking day; quoting before 06:30 BRT on a banking day executes at the open. If that deferral would push execution past the boleto's `due_date`, the quote is rejected with `payable_boleto_would_be_overdue`.
 
 PIX and invoice-with-bank-details payables use the declared `amount` as-is; there is no rail-side recalculation for those. A fixed-amount PIX code sets that amount at registration; a PIX code without an embedded amount takes the `line_items` you send and pays exactly that value.
 

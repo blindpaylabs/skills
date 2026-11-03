@@ -29,15 +29,17 @@ Every time stablecoins land in a managed wallet, `wallet.inbound` fires with thi
   "address": "0x1234567890abcdef1234567890abcdef12345678",
   "network": "base",
   "token": {
-    "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-    "id": "usdc",
+    "address": "0x1234567890abcdef1234567890abcdef12345678",
+    "id": "00000000-0000-0000-0000-000000000000",
     "symbol": "USDC",
     "amount": 100
-  }
+  },
+  "deposit_id": "wd_000000000000",
+  "transaction_hash": "0x8f3e1b..."
 }
 ```
 
-`wallet.inbound` only fires for USDC and USDT deposits. See [webhooks](../essentials/webhooks.md) for endpoint setup and signature verification.
+`wallet.inbound` fires for USDC, USDT, and EURC deposits, plus the test tokens USDB and EURB on development instances. See [webhooks](../essentials/webhooks.md) for endpoint setup and signature verification.
 
 **Warning:**
 
