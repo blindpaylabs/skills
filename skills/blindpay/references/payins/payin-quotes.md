@@ -389,7 +389,7 @@ Set `is_otc: true` to price the quote through BlindPay's OTC desk instead of the
 | Constraint | Detail |
 | --- | --- |
 | Sender currency | BRL only. Any other currency fails with `QUOTES_OTC_NOT_SUPPORTED` |
-| Token | USDT only. `token: "USDC"` fails with `QUOTES_OTC_NOT_SUPPORTED` |
+| Token | USDT or USDC. USDC works only on Base, Polygon, Ethereum, Arbitrum and Solana wallets; on any other network it fails with `QUOTES_OTC_NOT_SUPPORTED` |
 | `currency_type` / `cover_fees` | Only `currency_type: "sender"` with `cover_fees: false`, or `currency_type: "receiver"` with `cover_fees: true`. Any other combination fails with `QUOTES_OTC_NOT_SUPPORTED` |
 | Minimum amount | $5,000 USD equivalent. Below that, the quote fails with `PAYOUTS_AMOUNT_BELOW_MINIMUM` |
 | Quote expiry | **10 seconds**, not 5 minutes. See [cut-off times](../kb/cut-off-times.md) |
