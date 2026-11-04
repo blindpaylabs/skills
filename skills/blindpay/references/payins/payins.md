@@ -6,7 +6,7 @@ Source: https://blindpay.com/docs/payins
 
 **Abstracted flavor (bank-rails framing, fiat-first API surface)**
 
-Receive covers the fiat-in side of BlindPay: a customer sends a bank transfer (ACH, wire, Pix, SPEI, Transfers, or PSE), and BlindPay converts it to stablecoins and credits the customer's wallet or managed balance. This section is for teams collecting money from customers, such as onramps, remittance apps, or marketplaces paying in fiat.
+Receive covers the fiat-in side of BlindPay: a customer sends a bank transfer (ACH, wire, Pix, SPEI, Transfers, or PSE) or pays by card, and BlindPay converts it to stablecoins and credits the customer's wallet or managed balance. This section is for teams collecting money from customers, such as onramps, remittance apps, or marketplaces paying in fiat.
 
 ## How it works
 
@@ -38,6 +38,7 @@ On development instances every payin completes automatically about 30 seconds af
 | `transfers` | ARS | CBU number |
 | `pse` | COP | payment link |
 | `bre_b` | COP | none: created automatically when a deposit lands on a [Bre-B virtual account](../virtual-accounts/virtual-accounts.md#colombia-bre-b-accounts), never from a quote |
+| `card` | USD | a card form: hosted checkout link, embedded card frame, or the dashboard. See [Card payins](https://blindpay.com/docs/payin-card) |
 
 For `ach`/`wire`, the memo code is shown only when the customer has no enabled virtual account; with one, BlindPay displays dedicated account details instead and ignores the memo code. See [virtual accounts](../virtual-accounts/virtual-accounts.md).
 
@@ -208,6 +209,7 @@ The virtual account behind `blindpay_bank_details` is the exact one the deposit 
 | `spei` | The CLABE number | `clabe` |
 | `transfers` | The account number (CVU, CBU, or Alias, see `type`) | `tracking_transaction.transfers_instruction.account`, `tracking_transaction.transfers_instruction.type` |
 | `pse` | The payment link | `tracking_transaction.pse_instruction.payment_link` |
+| `card` | The hosted checkout link, or your own page with the embedded card frame. See [Card payins](https://blindpay.com/docs/payin-card) | `tracking_transaction.card_instruction.checkout_url` |
 
 **Note:**
 
