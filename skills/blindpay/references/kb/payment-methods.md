@@ -43,7 +43,7 @@ Albania, Andorra, Austria, Belgium, Bulgaria, Croatia, Cyprus, Czechia, Denmark,
 
 **Note:**
 
-SEPA payouts to Austria, Estonia, Finland, France, Lithuania, Norway, and Portugal are currently limited to individual beneficiaries (`account_class: individual`).
+SEPA payouts to Austria, Estonia, Finland, France, Lithuania, and Norway are currently limited to individual beneficiaries (`account_class: individual`).
 
 **Note:**
 
