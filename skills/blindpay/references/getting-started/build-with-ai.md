@@ -208,6 +208,7 @@ Keep the secret API key server-side in all four builders: a backend/edge functio
 
 ## Related
 
+- [BlindPay MCP server](https://blindpay.com/docs/mcp)
 - [API reference](https://api.blindpay.com/reference)
 - [Fiat overview](overview.md)
 - [Stablecoin overview](overview.md)
