@@ -113,6 +113,8 @@ The transfer then moves through three legs, usually within 3 to 5 minutes and up
 2. `tracking_bridge_swap`: the funds are swapped into `customer_token` at the provider and returned to BlindPay on `customer_network`. `transfer.update` fires once the swapped funds arrive; its `transaction_hash` is that arrival.
 3. `tracking_complete`: exactly `receiver_amount` in `customer_token` is sent to `customer_wallet_address`. `status` becomes `completed` and `transfer.complete` fires.
 
+For a swap delivering on Tron, `tracking_bridge_swap.transaction_hash` is the arrival of the USDT on BlindPay's Tron wallet and `tracking_complete.transaction_hash` is the Tron transaction that pays `customer_wallet_address`.
+
 Before swapping, BlindPay re-prices the trade. If the rate moved so that the swap can no longer deliver `receiver_amount`, nothing is swapped: the collected funds go back to the source wallet, `status` becomes `failed`, `tracking_bridge_swap.error_message` explains why, and `transfer.update` fires. Create a new quote and try again. If a leg after the swap cannot finish, the transfer stays `processing` while BlindPay resolves it, and the customer is still paid `receiver_amount`.
 
 ## USDC and EURC conversion

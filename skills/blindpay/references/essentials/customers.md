@@ -83,7 +83,7 @@ An invalid value returns `400 invalid_cpf_tax_id`, `400 invalid_cpf_or_rg_tax_id
 
 ### `additional_info`
 
-`additional_info` is a list of supporting documents used for extended verification, most commonly to activate a Zenus-issued virtual account. Each entry is `{ label, value }`, where `value` is typically a file URL from the [Upload](upload.md) endpoint and `label` is one of:
+`additional_info` is a list of supporting documents used for extended verification, most commonly to activate a USD virtual account. Each entry is `{ label, value }`, where `value` is typically a file URL from the [Upload](upload.md) endpoint and `label` is one of:
 
 | Label |
 | --- |

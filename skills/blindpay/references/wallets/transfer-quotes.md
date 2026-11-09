@@ -36,10 +36,11 @@ On a production instance, a transfer can swap `USDC` into `USDT` or `USDT` into 
 
 | `sender_token` | Source wallet network | `customer_token` | `customer_network` |
 | --- | --- | --- | --- |
-| `USDC` | `polygon`, `base`, or `arbitrum` | `USDT` | `polygon` or `ethereum` |
+| `USDC` | `polygon`, `base`, or `arbitrum` | `USDT` | `polygon`, `ethereum`, or `tron` |
 | `USDT` | `polygon` | `USDC` | `polygon`, `base`, `arbitrum`, or `ethereum` |
+| `USDT` | `polygon` | `USDT` | `tron` |
 
-Any other pair of tokens and networks is not a swap and follows the usual rules: a different network fails with `cross_chain_transfers_only_support_usdc`, the same network with `sender_and_customer_tokens_must_be_the_same`. Swaps are not available on development instances.
+USDT from Polygon to Tron keeps the token and only changes network: it is priced 1:1 before the swap fee. On `tron`, `customer_wallet_address` can be any Tron address; there are no managed wallets on Tron, so a swap can deliver USDT there but not start from it. Any other pair of tokens and networks is not a swap and follows the usual rules: a different network fails with `cross_chain_transfers_only_support_usdc`, the same network with `sender_and_customer_tokens_must_be_the_same`. Swaps are not available on development instances.
 
 The quote is priced live by BlindPay's liquidity provider. `commercial_quotation` is the provider's rate and `blindpay_quotation` the rate applied to the transfer, after BlindPay's swap fee: both are units of `customer_token` per `sender_token`, times 100, so `99.97` means 1 USDC = 0.9997 USDT. The swap fee is 3 basis points (0.03%) by default and can be set per instance by BlindPay. Amounts are rounded down to the cent, so on small amounts `blindpay_quotation` can sit a few basis points further from `commercial_quotation` than the fee alone. `sender_amount` is in `sender_token` and `receiver_amount` in `customer_token`; any [partner fee](#partner-fees) is charged in `sender_token` before swapping.
 
@@ -98,7 +99,7 @@ An address that doesn't match the format for `customer_network` fails with `VALI
 
 **Note:**
 
-USDT transfers are currently restricted to Polygon and Solana, a tighter limit than payins and payouts allow for USDT. A [USDC and USDT swap](#usdc-and-usdt-swap) can also deliver USDT on Ethereum.
+USDT transfers are currently restricted to Polygon and Solana, a tighter limit than payins and payouts allow for USDT. A [USDC and USDT swap](#usdc-and-usdt-swap) can also deliver USDT on Ethereum and Tron.
 
 ## Partner fees
 
