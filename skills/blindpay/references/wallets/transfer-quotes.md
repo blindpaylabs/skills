@@ -8,7 +8,7 @@ A transfer quote locks in the details of a stablecoin move before you execute it
 
 **Warning:**
 
-`customer_token` must match `sender_token`, except for `USDC` and `EURC` on Base, which [convert into each other](#usdc-and-eurc-conversion-on-base). `customer_network` must match the source wallet's own network, except when both tokens are `USDC`: a USDC transfer can additionally cross chains using [Circle CCTP v2](#cross-chain-usdc-transfers-circle-cctp-v2).
+`customer_token` must match `sender_token`, except for a [USDC and USDT swap](#usdc-and-usdt-swap) and for `USDC` and `EURC` on Base, which [convert into each other](#usdc-and-eurc-conversion-on-base). `customer_network` must match the source wallet's own network, except when both tokens are `USDC` (a USDC transfer can cross chains using [Circle CCTP v2](#cross-chain-usdc-transfers-circle-cctp-v2)) and for a [USDC and USDT swap](#usdc-and-usdt-swap) between the supported networks.
 
 ## How it works
 
@@ -29,6 +29,23 @@ Supported networks are Ethereum, Polygon, Base, Arbitrum, and Arc on a productio
 The quote itself is unaffected by the bridge: amounts stay 1:1 and BlindPay adds no fee on top, exactly like a same-network transfer. Any [partner fee](#partner-fees) you set applies the same way on both. Circle's protocol deducts its own small fee (typically a fraction of a cent up to a few cents, a few basis points of the amount) from the amount minted on the destination chain; this is not reflected in `receiver_amount` or any other quote field. Cross-chain transfers typically settle in 8 to 20 seconds; transfers sourced from Polygon settle in around 8 seconds either way.
 
 Solana, Stellar, Tron, and Tempo are not part of cross-chain transfers yet; same-network moves on those chains are unaffected.
+
+## USDC and USDT swap
+
+On a production instance, a transfer can swap `USDC` into `USDT` or `USDT` into `USDC`: set `sender_token` to one and `customer_token` to the other. The swap can also change network on the way, so the source wallet's network and `customer_network` don't have to match. Supported routes:
+
+| `sender_token` | Source wallet network | `customer_token` | `customer_network` |
+| --- | --- | --- | --- |
+| `USDC` | `polygon`, `base`, or `arbitrum` | `USDT` | `polygon` or `ethereum` |
+| `USDT` | `polygon` | `USDC` | `polygon`, `base`, `arbitrum`, or `ethereum` |
+
+Any other pair of tokens and networks is not a swap and follows the usual rules: a different network fails with `cross_chain_transfers_only_support_usdc`, the same network with `sender_and_customer_tokens_must_be_the_same`. Swaps are not available on development instances.
+
+The quote is priced live by BlindPay's liquidity provider. `commercial_quotation` is the provider's rate and `blindpay_quotation` the rate applied to the transfer, after BlindPay's swap fee: both are units of `customer_token` per `sender_token`, times 100, so `99.97` means 1 USDC = 0.9997 USDT. The swap fee is 3 basis points (0.03%) by default and can be set per instance by BlindPay. Amounts are rounded down to the cent, so on small amounts `blindpay_quotation` can sit a few basis points further from `commercial_quotation` than the fee alone. `sender_amount` is in `sender_token` and `receiver_amount` in `customer_token`; any [partner fee](#partner-fees) is charged in `sender_token` before swapping.
+
+The smallest swap is 10 USDC, measured on the USDC side whichever direction you swap. A smaller request fails with `400` `fx_amount_below_minimum`. If the route is temporarily unavailable at the provider, the quote fails with `400` `swap_route_not_supported`.
+
+A swap settles in a few minutes, usually 3 to 5, and can take up to about 20. The destination receives exactly `receiver_amount`. If the swap can't be executed at a rate that covers `receiver_amount`, nothing is swapped: the funds go back to the source wallet and the transfer ends `failed`. See [swap execution](transfers.md#usdc-and-usdt-swap) for the legs and webhooks.
 
 ## USDC and EURC conversion on Base
 
@@ -60,8 +77,8 @@ Creating a transfer quote also requires the caller to hold the transaction-creat
 | `amount_reference` | enum | yes | `sender` or `receiver`. Which side `request_amount` refers to. Only changes the result when a [partner fee](#partner-fees) is set; without one, `sender_amount` and `receiver_amount` both equal `request_amount`. |
 | `request_amount` | integer | yes | Amount in minor units, no floats. `$100.00` sends as `10000`. Minimum is `1`. |
 | `sender_token` | enum | yes | `USDC`, `USDT`, `USDB`, `EURC`, or `EURB`. Must be a token allowed on the source wallet's network. `EURC` and `EURB` are only available on `base` and `base_sepolia`. |
-| `customer_token` | enum | yes | Must equal `sender_token`, except for a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base). |
-| `customer_network` | enum | yes | Must equal the source wallet's own network, unless `sender_token` and `customer_token` are both `USDC` and the pair is a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2). |
+| `customer_token` | enum | yes | Must equal `sender_token`, except for a [USDC and USDT swap](#usdc-and-usdt-swap) or a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base). |
+| `customer_network` | enum | yes | Must equal the source wallet's own network, unless `sender_token` and `customer_token` are both `USDC` and the pair is a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2), or the quote is a [USDC and USDT swap](#usdc-and-usdt-swap) on a supported route. |
 | `customer_wallet_address` | string | yes | The destination blockchain address, 32 to 64 characters, validated for the target network (see table below). Can be another wallet you created or any external address. |
 | `cover_fees` | boolean | yes | Who pays the [partner fee](#partner-fees). `true`: the fee is added on top and the destination receives the full amount. `false`: the fee is deducted from the amount the destination receives. Has no effect without a partner fee. |
 | `partner_percentage_fee` | integer | no | Partner percentage fee for this transfer, in hundredths of a percent: `150` is 1.50%, `1000` is 10.00%. `0` to `9900`. Defaults to `0`. |
@@ -81,7 +98,7 @@ An address that doesn't match the format for `customer_network` fails with `VALI
 
 **Note:**
 
-USDT transfers are currently restricted to Polygon and Solana, a tighter limit than payins and payouts allow for USDT.
+USDT transfers are currently restricted to Polygon and Solana, a tighter limit than payins and payouts allow for USDT. A [USDC and USDT swap](#usdc-and-usdt-swap) can also deliver USDT on Ethereum.
 
 ## Partner fees
 
@@ -156,7 +173,7 @@ const quote = await response.json()
 
 ### Examples by transfer type
 
-The quote body is what decides the kind of transfer; [executing it](transfers.md#execute-a-transfer) is the same call for all three.
+The quote body is what decides the kind of transfer; [executing it](transfers.md#execute-a-transfer) is the same call for all of them.
 
 **Same network, same stablecoin.** USDC from a Base wallet to another Base address:
 
@@ -232,6 +249,42 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/transfer-quotes \
 
 100.00 USDC leaves the wallet and 86.50 EURC reaches the destination. Swap the two tokens to convert EURC into USDC.
 
+**USDC to USDT swap.** USDC from a Polygon wallet, delivered as USDT to a Polygon address. See [USDC and USDT swap](#usdc-and-usdt-swap):
+
+```bash [cURL]
+curl https://api.blindpay.com/v1/instances/in_000000000000/transfer-quotes \
+  --request POST \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --data '{
+  "wallet_id": "bl_000000000000",
+  "amount_reference": "sender",
+  "cover_fees": false,
+  "request_amount": 10000,
+  "sender_token": "USDC",
+  "customer_token": "USDT",
+  "customer_network": "polygon",
+  "customer_wallet_address": "0xDD6a3aD0949396e57C7738ba8FC1A46A5a1C372C"
+}'
+```
+
+```json
+{
+  "id": "qu_000000000000",
+  "expires_at": 1712958191000,
+  "commercial_quotation": 100.01,
+  "blindpay_quotation": 99.98,
+  "receiver_amount": 9998,
+  "sender_amount": 10000,
+  "partner_fee_amount": 0,
+  "partner_percentage_fee": 0,
+  "partner_flat_fee": 0,
+  "flat_fee": 0
+}
+```
+
+100.00 USDC leaves the wallet and 99.98 USDT reaches the destination. To swap and change network at once, set `customer_network` to another [supported route](#usdc-and-usdt-swap), for example `ethereum`.
+
 ## Response
 
 ```json
@@ -253,8 +306,8 @@ curl https://api.blindpay.com/v1/instances/in_000000000000/transfer-quotes \
 | --- | --- | --- |
 | `id` | string (`qu_...`) | Pass this as `transfer_quote_id` when you create the transfer. |
 | `expires_at` | number | Epoch milliseconds. Execute the transfer before this passes. |
-| `commercial_quotation` | number | Rate as units of `customer_token` per `sender_token`, times 100. `100` for every transfer that keeps the same token, including a cross-chain USDC move; the live rate for a [USDC and EURC conversion](#usdc-and-eurc-conversion-on-base). |
-| `blindpay_quotation` | number | The rate applied to the transfer. Same as `commercial_quotation` for transfers today. |
+| `commercial_quotation` | number | Rate as units of `customer_token` per `sender_token`, times 100. `100` for every transfer that keeps the same token, including a cross-chain USDC move; the live provider rate for a [USDC and USDT swap](#usdc-and-usdt-swap) or a [USDC and EURC conversion](#usdc-and-eurc-conversion-on-base). |
+| `blindpay_quotation` | number | The rate applied to the transfer. Same as `commercial_quotation`, except for a [USDC and USDT swap](#usdc-and-usdt-swap), where BlindPay's swap fee is taken out. |
 | `receiver_amount` | number | Amount the destination receives, in minor units. See [partner fees](#partner-fees). |
 | `sender_amount` | number | Amount that leaves the source wallet, in minor units: `receiver_amount` plus `partner_fee_amount`. |
 | `partner_fee_amount` | number | Total partner fee for this transfer, percentage plus flat. `0` without a partner fee. |
@@ -268,7 +321,7 @@ The `qu_` prefix is shared across payin quotes, payout quotes, and transfer quot
 
 ## Validation order
 
-The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. If `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon or Solana, and that `sender_token` matches `customer_token` unless the pair is a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base) (`sender_and_customer_tokens_must_be_the_same` otherwise). Either path then checks that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`, and finally computes the [partner fee](#partner-fees) (`partner_fee_exceeds_transfer_amount` or `partner_fee_not_supported_on_network`) and, for a conversion, the live rate (`fx_amount_below_minimum` under the 10 USDC minimum, `fx_quote_unavailable` if no price can be obtained). The first failing check is the one returned.
+The API checks, in this order: the caller has permission to create transactions, the wallet exists and belongs to your instance. A quote on a supported [USDC and USDT swap](#usdc-and-usdt-swap) route goes through the same-network checks below, even when the networks differ, and is exempt from the matching-token rule. Otherwise, if `customer_network` differs from the source wallet's network, the API requires both `sender_token` and `customer_token` to be `USDC` (`cross_chain_transfers_only_support_usdc` otherwise) and the network pair to be a [supported CCTP v2 route](#cross-chain-usdc-transfers-circle-cctp-v2) (`cctp_route_not_supported` otherwise). If `customer_network` matches the source wallet's network, the API instead checks that the token and network are allowed for your instance type, that USDT is only used on Polygon or Solana, and that `sender_token` matches `customer_token` unless the pair is a [USDC and EURC conversion on Base](#usdc-and-eurc-conversion-on-base) (`sender_and_customer_tokens_must_be_the_same` otherwise). Either path then checks that the receiving customer's `kyc_status` is one of `approved`, `approved_rfi`, or `compliance_request`, and finally computes the [partner fee](#partner-fees) (`partner_fee_exceeds_transfer_amount` or `partner_fee_not_supported_on_network`) and, for a swap or conversion, the live rate (`fx_amount_below_minimum` under the 10 USDC minimum, `fx_quote_unavailable` if no price can be obtained, `swap_route_not_supported` if the provider can't settle the swap route). The first failing check is the one returned.
 
 ## Testing
 
