@@ -104,7 +104,6 @@ The table below lists every country and its current tier.
 | Japan | JP | Standard |
 | Jersey | JE | Standard |
 | Jordan | JO | Standard |
-| Kazakhstan | KZ | Standard |
 | Korea (the Republic of) | KR | Standard |
 | Kuwait | KW | Standard |
 | Latvia | LV | Standard |
@@ -141,7 +140,6 @@ The table below lists every country and its current tier.
 | Pitcairn | PN | Standard |
 | Poland | PL | Standard |
 | Portugal | PT | Standard |
-| Puerto Rico | PR | Standard |
 | Republic of North Macedonia | MK | Standard |
 | Réunion | RE | Standard |
 | Romania | RO | Standard |
@@ -151,7 +149,6 @@ The table below lists every country and its current tier.
 | Saint Vincent and the Grenadines | VC | Standard |
 | San Marino | SM | Standard |
 | Sao Tome and Principe | ST | Standard |
-| Saudi Arabia | SA | Standard |
 | Serbia | RS | Standard |
 | Seychelles | SC | Standard |
 | Singapore | SG | Standard |
@@ -174,7 +171,6 @@ The table below lists every country and its current tier.
 | United States Minor Outlying Islands | UM | Standard |
 | United States of America | US | Standard |
 | Uruguay | UY | Standard |
-| Uzbekistan | UZ | Standard |
 | Wallis and Futuna | WF | Standard |
 | Algeria | DZ | High-risk |
 | American Samoa | AS | High-risk |
@@ -188,7 +184,6 @@ The table below lists every country and its current tier.
 | Botswana | BW | High-risk |
 | British Indian Ocean Territory | IO | High-risk |
 | Burkina Faso | BF | High-risk |
-| Burundi | BI | High-risk |
 | Cambodia | KH | High-risk |
 | Cameroon | CM | High-risk |
 | Chad | TD | High-risk |
@@ -197,7 +192,6 @@ The table below lists every country and its current tier.
 | Colombia | CO | High-risk |
 | Comoros | KM | High-risk |
 | Cook Islands | CK | High-risk |
-| Côte d'Ivoire | CI | High-risk |
 | Djibouti | DJ | High-risk |
 | Dominica | DM | High-risk |
 | Egypt | EG | High-risk |
@@ -211,15 +205,10 @@ The table below lists every country and its current tier.
 | Ghana | GH | High-risk |
 | Guam | GU | High-risk |
 | Guatemala | GT | High-risk |
-| Guinea-Bissau | GW | High-risk |
 | Haiti | HT | High-risk |
 | Jamaica | JM | High-risk |
 | Kenya | KE | High-risk |
 | Kiribati | KI | High-risk |
-| Kyrgyzstan | KG | High-risk |
-| Lao People's Democratic Republic | LA | High-risk |
-| Lebanon | LB | High-risk |
-| Liberia | LR | High-risk |
 | Madagascar | MG | High-risk |
 | Mauritania | MR | High-risk |
 | Moldova (the Republic of) | MD | High-risk |
@@ -228,11 +217,9 @@ The table below lists every country and its current tier.
 | Namibia | NA | High-risk |
 | Nepal | NP | High-risk |
 | New Caledonia | NC | High-risk |
-| Nicaragua | NI | High-risk |
 | Niger | NE | High-risk |
 | Norfolk Island | NF | High-risk |
 | Northern Mariana Islands | MP | High-risk |
-| Pakistan | PK | High-risk |
 | Panama | PA | High-risk |
 | Rwanda | RW | High-risk |
 | Saint Barthélemy | BL | High-risk |
@@ -245,15 +232,12 @@ The table below lists every country and its current tier.
 | Solomon Islands | SB | High-risk |
 | South Africa | ZA | High-risk |
 | Suriname | SR | High-risk |
-| Syrian Arab Republic | SY | High-risk |
-| Tajikistan | TJ | High-risk |
 | Tanzania, United Republic of | TZ | High-risk |
 | Togo | TG | High-risk |
 | Tokelau | TK | High-risk |
 | Tonga | TO | High-risk |
 | Trinidad and Tobago | TT | High-risk |
 | Tunisia | TN | High-risk |
-| Turkmenistan | TM | High-risk |
 | Uganda | UG | High-risk |
 | Vanuatu | VU | High-risk |
 | Viet Nam | VN | High-risk |
@@ -261,30 +245,47 @@ The table below lists every country and its current tier.
 | Virgin Islands (U.S.) | VI | High-risk |
 | Western Sahara | EH | High-risk |
 | Zambia | ZM | High-risk |
-| Zimbabwe | ZW | High-risk |
 | Afghanistan | AF | Prohibited |
 | Belarus | BY | Prohibited |
+| Burundi | BI | Prohibited |
 | Central African Republic | CF | Prohibited |
 | Congo | CG | Prohibited |
 | Congo (the Democratic Republic of the) | CD | Prohibited |
+| Côte d'Ivoire | CI | Prohibited |
 | Cuba | CU | Prohibited |
 | Guinea | GN | Prohibited |
+| Guinea-Bissau | GW | Prohibited |
 | Iran (Islamic Republic of) | IR | Prohibited |
 | Iraq | IQ | Prohibited |
+| Kazakhstan | KZ | Prohibited |
 | Korea (the Democratic People's Republic of) | KP | Prohibited |
+| Kosovo | XK | Prohibited |
+| Kyrgyzstan | KG | Prohibited |
+| Lao People's Democratic Republic | LA | Prohibited |
+| Lebanon | LB | Prohibited |
+| Liberia | LR | Prohibited |
 | Libya | LY | Prohibited |
 | Mali | ML | Prohibited |
 | Myanmar | MM | Prohibited |
+| Nicaragua | NI | Prohibited |
 | Nigeria | NG | Prohibited |
+| Pakistan | PK | Prohibited |
 | Palestine, State of | PS | Prohibited |
+| Puerto Rico | PR | Prohibited |
 | Qatar | QA | Prohibited |
 | Russian Federation | RU | Prohibited |
+| Saudi Arabia | SA | Prohibited |
 | Somalia | SO | Prohibited |
 | South Sudan | SS | Prohibited |
 | Sudan | SD | Prohibited |
+| Syrian Arab Republic | SY | Prohibited |
+| Tajikistan | TJ | Prohibited |
+| Turkmenistan | TM | Prohibited |
 | Ukraine | UA | Prohibited |
+| Uzbekistan | UZ | Prohibited |
 | Venezuela (Bolivarian Republic of) | VE | Prohibited |
 | Yemen | YE | Prohibited |
+| Zimbabwe | ZW | Prohibited |
 
 Ukraine's prohibited status reflects the sanctioned regions (Crimea, Donetsk, Luhansk, Zaporizhzhia, and Kherson).
 

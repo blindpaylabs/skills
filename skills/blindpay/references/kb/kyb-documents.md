@@ -87,12 +87,13 @@ Virtual Account requests undergo a separate evaluation with their own documentat
 | **Currency Exchange** | Currency exchange houses |
 | **Digital Assets** | Cryptocurrency exchanges, virtual asset custodians, ICOs, STOs, token fundraising activities |
 | **DeFi** | DeFi platforms, staking and lending protocols |
-| **High-Value Goods** | Jewelry, art, antiques, luxury cars, yachts, or aircraft dealers |
+| **High-Value Goods** | Art, antiques, luxury cars, yachts, or aircraft dealers |
 | **Real Estate** | Real estate developers and real estate transactions |
 | **Natural Resources** | Oil, gas, and mining companies (including rare minerals) |
 | **Regulated Industries** | Chemicals and pharmaceuticals (dual-use), private security companies |
-| **Non-Profits** | NGOs, charities, and foundations |
 | **High-Risk Jurisdictions** | Companies operating in FATF high-risk jurisdictions and offshore companies (e.g., Cayman Islands, Panama, Monaco, among others) |
+
+Some activities are not supported at all, regardless of documentation, including charities and NGOs, jewelry and precious metals dealers, and gambling. See [Prohibited activities](prohibited-activities.md) for the full list.
 
 ## Related
 

@@ -10,6 +10,10 @@ NAICS (North American Industry Classification System) codes classify businesses 
 
 Below is the full list of accepted industry codes, organized by industry. It always matches [`GET /v1/available/naics`](https://api.blindpay.com/reference), which is the authoritative list the API validates against. Some codes were renumbered in NAICS 2022 (for example, Software Publishers moved from 511210 to 513210); both the 2017 and 2022 numbers below are accepted and map to the same classification with our banking partners. If your industry isn't listed, contact [compliance@blindpay.com](mailto:compliance@blindpay.com) and we'll add the appropriate code for you.
 
+**Warning:**
+
+An accepted NAICS code does not mean the activity is supported. Industries such as gambling, construction, restaurants, tobacco, telemarketing, and legal services that hold client funds are prohibited. Check [Prohibited activities](prohibited-activities.md) before onboarding.
+
 ## Agriculture
 
 | NAICS Code | Industry Description                              |
