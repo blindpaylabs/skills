@@ -120,7 +120,7 @@ Webhooks behave identically on development and production: same event names, sam
 
 Development instances are capped at 40 requests per minute per instance (counted per API server), across every API key and dashboard session that uses the instance. Exceeding it returns a `429` with `development_instance_rate_limit_exceeded`, a `Retry-After` header with the seconds until the window resets, and `RateLimit-Limit` / `RateLimit-Remaining` / `RateLimit-Reset` headers on every response so your client can pace itself.
 
-Production instances have no per-instance request cap.
+Production instances have no per-instance request cap, except on the indicative FX endpoints (`/quotes/fx` and `/payin-quotes/fx`), which allow 300 requests per minute per instance from November 17, 2026.
 
 ## Testing amounts
 

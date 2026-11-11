@@ -348,6 +348,8 @@ Pass `partner_fee_id` (prefix `pf_`) to attribute a payin to a partner fee confi
 
 Unlike `/payin-quotes`, this endpoint does not persist anything and does not reserve pricing: the numbers it returns aren't guaranteed to match the quote you get when you actually create one a moment later.
 
+From November 17, 2026, production instances can call `/payin-quotes/fx` and `/quotes/fx` up to 300 times per minute in total. Above that the API returns a `429` with `fx_quote_rate_limit_exceeded` and a `Retry-After` header with the seconds until you can try again. If you show rates on a schedule, cache them for a few minutes and spread the requests instead of refreshing every pair at once.
+
 ```bash [cURL]
 curl https://api.blindpay.com/v1/instances/in_000000000000/payin-quotes/fx \
   --request POST \
