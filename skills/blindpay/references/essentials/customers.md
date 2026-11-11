@@ -204,6 +204,8 @@ Each number is what's left, in USD cents, not what's been used: the customer's d
 
 ## Create a customer
 
+To let people fill in their own KYC or KYB on a hosted page instead, see [Onboarding links](https://blindpay.com/docs/learn/onboarding-links).
+
 You can check the required fields in the [BlindPay API Docs](https://api.blindpay.com/reference#tag/customers/POST/v1/instances/{instance_id}/customers).
 
 **Remember:** replace `YOUR_API_KEY` with your API key, `in_000000000000` with your instance ID.
