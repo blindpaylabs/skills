@@ -45,7 +45,7 @@ High transaction volumes may affect estimated payout delivery times.
 
 | Type | Required fields | Notes |
 | --- | --- | --- |
-| `international_swift` | `name`, `account_class`, `recipient_relationship`, `swift_code_bic`, `swift_account_holder_name`, `swift_account_number_iban`, full beneficiary address, full bank address | See International SWIFT rules below. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
+| `international_swift` | `name`, `account_class`, `recipient_relationship`, `swift_code_bic`, `swift_account_holder_name`, `swift_account_number_iban`, full beneficiary address, full bank address | Optional `swift_currency` (defaults to `USD`). See International SWIFT rules below. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
 | `ach` | `name`, `recipient_relationship`, `beneficiary_name`, `routing_number`, `account_number`, `account_type`, `account_class`, `address_line_1`, `city`, `state_province_region`, `country`, `postal_code` | Blocked for `light` KYC customers. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
 | `wire` | Same as `ach`, without `account_type` | Blocked for `light` KYC customers. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
 | `rtp` | Same as `wire` | `routing_number` must be RTP-eligible. Blocked for `light` KYC customers. Also picks up the [compliance fields](#compliance-fields-for-ach-wire-rtp-and-swift) below |
@@ -99,7 +99,8 @@ curl --request POST \
   "swift_bank_state_province_region": "GE",
   "swift_bank_postal_code": "1221",
   "recipient_relationship": "vendor_or_supplier",
-  "swift_payment_code": "cn_swift_cgoddr"
+  "swift_payment_code": "cn_swift_cgoddr",
+  "swift_currency": "USD"
 }'
 ```
 
@@ -390,6 +391,12 @@ International SWIFT accounts also have these extra fields, on top of the complia
 
 `swift_ifsc_branch_code` is required when `swift_bank_country` is `IN`, in the format `AAAA0NNNNNN`: a 4-letter bank code, then `0`, then a 6-character branch code (for example `HDFC0001234`). BlindPay uppercases it automatically.
 
+**Account currency**
+
+`swift_currency` is the 3-letter uppercase ISO 4217 currency the beneficiary account is denominated in. It is optional and defaults to `USD`. Set it when the beneficiary is paid in a local currency: BlindPay then converts from USD and settles in that currency.
+
+Intermediary bank details are not supported on a non-USD account and are rejected at creation.
+
 **Intermediary bank (optional)**
 
 When the payment needs to route through a correspondent bank, add:
@@ -407,6 +414,7 @@ All four are optional and independent of each other; omit them if the beneficiar
 - `swift_beneficiary_address_line_1` and `_line_2` combined must be 70 characters or fewer; the full beneficiary address (both lines, city, state/province, postal code, country) must be 140 characters or fewer combined.
 - `swift_beneficiary_state_province_region` is exactly 2 alphanumeric characters (some countries use a numeric ISO 3166-2 code here instead of letters), and `swift_beneficiary_postal_code` is capped at 16 alphanumeric characters. Both are uppercased automatically.
 - `swift_account_holder_name` has no length cap; `swift_bank_name` is capped at 80 characters.
+- `swift_currency` is exactly 3 uppercase letters (ISO 4217), for example `USD`, `EUR` or `SGD`.
 
 **Note:**
 
