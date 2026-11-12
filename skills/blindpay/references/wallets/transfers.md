@@ -123,7 +123,7 @@ When the quote converts between `USDC` and `EURC` on Base (`USDB` and `EURB` on 
 
 - If the rate moved more than 0.5% against the customer since the quote, the call fails with `409` `fx_rate_moved` and no transfer is created. Create a new quote.
 - The source wallet must hold `sender_amount` before the conversion is booked, otherwise the call fails with `400` `not_enough_balance`.
-- If the provider refuses the conversion, the call fails with `400` (`fx_trade_rejected`, or `fx_amount_below_minimum` under the 10 USDC minimum) and no transfer is created.
+- If the provider refuses the conversion, the call fails with `400` (`fx_trade_rejected`, or `fx_amount_below_minimum` under the 100 USDC minimum) and no transfer is created.
 - If the provider does not confirm in time, the call fails with `502` `fx_trade_unconfirmed` and no funds move; BlindPay reconciles the conversion on its side.
 - A quote can only be executed once: a second attempt fails with `400` `fx_quote_already_used`.
 
