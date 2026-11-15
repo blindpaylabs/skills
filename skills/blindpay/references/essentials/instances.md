@@ -117,6 +117,8 @@ curl --request DELETE \
 
 ## Team members
 
+Changing the team (updating roles, removing members, inviting people) only works from a signed-in dashboard session. API keys can list members but get `403 team_management_requires_user_session` on any change, so a key cannot be used to grant roles.
+
 ### List members
 
 ```bash [cURL]
@@ -152,7 +154,9 @@ curl --request PUT \
   }'
 ```
 
-Requires the owner, admin, or checker role on the instance. You cannot change the current owner's role this way: that request is rejected with `400 cannot_update_instance_owner`. Transfer ownership first if you need to change what the owner can do.
+Requires the owner, admin, or checker role on the instance. You can only grant roles up to your own level and only change members at or below it: owners and admins can grant `admin` and below, while a checker can only move non-admin members between non-admin roles. Anything else is rejected with `403 role_not_assignable`, and so is any request for the `owner` role.
+
+You cannot change your own role (`400 cannot_update_own_role`) or the current owner's role (`400 cannot_update_instance_owner`). Transfer ownership first if you need to change what the owner can do. A `user_id` that is not a member of the instance returns `404 member_not_found`.
 
 ### Remove a member
 
