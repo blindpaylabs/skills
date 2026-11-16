@@ -4,7 +4,7 @@ Fund a payout from an external Stellar wallet, authorize the payout, sign the XD
 
 Source: https://blindpay.com/docs/payout-stellar
 
-This tutorial funds a [payout](payouts.md) from an external [blockchain wallet](../payins/blockchain-wallets.md) on Stellar. Stellar has no allowance mechanism, so the client constructs and signs a real payment transaction to BlindPay's treasury address: authorize, sign, then create the payout.
+This tutorial funds a [payout](payouts.md) from an external [blockchain wallet](../payins/blockchain-wallets.md) on Stellar. Stellar has no allowance mechanism, so the client signs a real payment transaction to BlindPay's treasury address and BlindPay submits it: authorize, sign, then create the payout.
 
 **Note:**
 
@@ -28,7 +28,9 @@ You also need a [customer](../essentials/customers.md) with `kyc_status: "approv
 
 ### Authorize the payout
 
-Call the authorize endpoint with the quote and the sender's wallet address. This does not consume the quote or create any record, it only returns an unsigned transaction hash for the client to sign.
+Call the authorize endpoint with the quote and the sender's wallet address. This does not consume the quote or create any record. It returns the unsigned transaction envelope (XDR) for the client to sign. The field is named `transaction_hash`, but it holds the envelope, not a hash.
+
+The envelope pays the quote's exact amount to the treasury address above, uses the base fee and is valid for 30 seconds. If it expires before you create the payout, call authorize again and sign the fresh envelope while the quote is still valid.
 
 ```bash [cURL]
 curl --request POST \
@@ -41,7 +43,7 @@ curl --request POST \
 }'
 ```
 
-The response is the unsigned transaction, ready to sign:
+The response is the unsigned envelope, ready to sign:
 
 ```json
 {
@@ -49,7 +51,7 @@ The response is the unsigned transaction, ready to sign:
 }
 ```
 
-### Sign and submit the transaction
+### Sign the transaction
 
 Install the Stellar SDK:
 
@@ -57,17 +59,15 @@ Install the Stellar SDK:
 npm install @stellar/stellar-sdk
 ```
 
-Sign the returned transaction with the sender's Stellar key and submit it to the network:
+Sign the returned envelope with the sender's Stellar key. Do not submit it to the network yourself: BlindPay submits it when you create the payout, after validating it against the quote. If the create is refused, the funds never leave the wallet.
 
 ```js [index.js]
 import {
-  Horizon,
   Keypair,
   Networks,
   TransactionBuilder,
 } from '@stellar/stellar-sdk'
 
-const server = new Horizon.Server('https://horizon-testnet.stellar.org')
 const sourceKeypair = Keypair.fromSecret(process.env.STELLAR_SECRET_KEY)
 
 // Rebuild the transaction returned by the authorize endpoint
@@ -79,25 +79,25 @@ const transaction = TransactionBuilder.fromXDR(
 // Sign it with the sender's key
 transaction.sign(sourceKeypair)
 
-// Submit it to Stellar
-const result = await server.submitTransaction(transaction)
-
-console.log(result.hash)
-// Save result.hash, you need it to create the payout on BlindPay
+// The signed envelope goes in signed_transaction when you create the payout
+const signedTransaction = transaction.toXDR()
 ```
 
 ### Create the payout
 
-Create the payout with the quote, the sender's wallet address, and the signed transaction from the previous step. BlindPay independently re-validates the signed transaction against the quote (destination and amount) before dispatching the payout.
+Create the payout with the quote, the sender's wallet address and the signed envelope from the previous step as `signed_transaction`. BlindPay validates the envelope against the quote (destination, asset and amount), submits it to Stellar and then dispatches the payout. Fee-bumped envelopes are accepted.
+
+Send an `Idempotency-Key` header so a retry after a timeout returns the original payout instead of creating a second one.
 
 ```bash [cURL]
 curl --request POST \
   --url https://api.blindpay.com/v1/instances/in_000000000000/payouts/stellar \
   --header 'Authorization: Bearer YOUR_API_KEY' \
   --header 'Content-Type: application/json' \
+  --header 'Idempotency-Key: YOUR_UNIQUE_KEY' \
   --data '{
   "quote_id": "qu_000000000000",
-  "signed_transaction": "YOUR_SIGNED_TRANSACTION",
+  "signed_transaction": "YOUR_SIGNED_XDR_ENVELOPE",
   "sender_wallet_address": "YOUR_WALLET_ADDRESS"
 }'
 ```
