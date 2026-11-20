@@ -57,7 +57,14 @@ Leave `ip_whitelist` `null` or omit it (the default) to allow requests from any 
 
 ## Key types
 
-The dashboard currently creates one type of key, with full read and write access to the instance. A restricted or read-only key type with scoped permissions is not yet available, so every key for an instance carries the same level of access. Keep this in mind when deciding who on your team gets a key, since there is no way to limit a given key to, for example, read-only access.
+Every key has a `permission`, chosen when you create it:
+
+| Permission | Access |
+| --- | --- |
+| `full_access` | Read and write access to the instance. |
+| `read_only` | Read access to every resource in the instance. It cannot create, update or delete anything. |
+
+A key's permission maps to a role in the same role-based access control the dashboard uses for team members, and every endpoint checks it. A `read_only` key can list and fetch resources, request FX rates and export payins and payouts, but any request that changes state (creating quotes, payouts or customers, uploading files, editing webhooks) fails with `403 AUTH_FORBIDDEN`. It also cannot sign blockchain wallet messages, read a webhook endpoint's signing secret, or open the webhook portal, since those produce signatures or return credentials. Use read-only keys for reporting, reconciliation and dashboards that never move money.
 
 ## Related
 
