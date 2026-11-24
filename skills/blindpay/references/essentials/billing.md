@@ -4,7 +4,7 @@ How BlindPay charges for virtual accounts, transactions, and partner fees, and w
 
 Source: https://blindpay.com/docs/learn/billing
 
-BlindPay charges per active resource and per transaction. There is no setup fee and no monthly minimum. Development instances are always free.
+Production instances are billed under a monthly or annual plan, along with per-resource and per-transaction fees; see [pricing](https://blindpay.com/pricing) for details. There is no setup fee, and development instances are always free.
 
 ## Virtual accounts
 
