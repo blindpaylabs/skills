@@ -209,6 +209,7 @@ Five `kyc_status` values gate what a customer can do: `verifying`, `approved`, `
 
 ### Knowledge base (compliance, coverage, operations)
 
+- [Brazil onboarding requirements](references/kb/brazil-onboarding-requirements.md) - Restricted activities and KYC and KYB requirements for customers with a Brazilian CPF or CNPJ under Central Bank of Brazil Resolutions No. 520/2025 and No. 521/2025.
 - [Cut-off times](references/kb/cut-off-times.md) - ACH, wire, and SWIFT cut-offs and settlement, instant rails, quote expiry windows, onboarding SLAs, and refund timing.
 - [Information requests](references/kb/information-requests.md) - A Request for Information (RFI) is how BlindPay compliance asks for missing KYC or KYB details before a customer can be approved.
 - [Instance requests](references/kb/instance-requests.md) - How BlindPay compliance asks your team for additional information about your own account, and how to respond before the 27-day window closes.

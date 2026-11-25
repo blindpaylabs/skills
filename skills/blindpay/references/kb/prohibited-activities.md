@@ -66,4 +66,4 @@ Report any prohibited activities on the platform to [compliance@blindpay.com](ma
 
 ## Related
 
-- [Supported Countries](supported-countries.md) · [Customers](kyc.md)
+- [Supported Countries](supported-countries.md) · [Customers](kyc.md) · [Brazil onboarding requirements](brazil-onboarding-requirements.md)
