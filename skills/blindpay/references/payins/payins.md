@@ -236,6 +236,12 @@ BlindPay detects the destination's network from the wallet record itself, so the
 
 Stellar mainnet deliveries originate from BlindPay's treasury wallet: `GCOSSQDM2SWMHRP7CDBOLL2V45NHCRLUWUCEHPPBA2ABCOOLPOLZKIHE`. This is the address that sends stablecoins to your blockchain wallet once the fiat payment is confirmed, and it is useful for reconciling incoming transactions on an explorer.
 
+## Argentina `transfers`
+
+The account in `transfers_instruction.account` is a shared BlindPay collection account, the same for every `transfers` payin, not one issued per payin. There is no memo or reference: BlindPay matches the deposit to the payin by the sender's CUIT/CUIL, which must equal `payer_rules.transfers_allowed_tax_id`, and the exact `sender_amount` of the quote. If two open payins have the same CUIT and amount, the deposit goes to the most recent one, so avoid creating duplicates.
+
+A deposit from a different CUIT or for a different amount does not match any payin. The funds stay with BlindPay and our team resolves it with you. `memo_code` is always `null` for `transfers` payins.
+
 ## Pull funding from a Plaid-connected account
 
 With `payment_method: "ach_pull"`, instead of the payer sending a manual bank transfer, BlindPay pulls the funds directly from a bank account the customer connected through [Plaid](../payouts/bank-accounts.md#connect-with-plaid). Set `funding_bank_account_id` (a `ba_...` id) on the payin quote to a Plaid-connected account belonging to the same customer; it is required for `ach_pull`, a bank account that is not Plaid-connected is rejected with 400 `funding_account_not_plaid_connected`, and one that is deleted or belongs to another customer with 400 `funding_account_invalid`.
