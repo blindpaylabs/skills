@@ -51,7 +51,8 @@ Required information and documents:
 | **Proof of address** | Proof of residential address issued within the last 90 days. |
 | **Identity verification** | Selfie, liveness check and biometric match, or an equivalent mechanism. |
 | **Financial profile** | Occupation, employer or economic activity, declared monthly income and net worth, purpose of the relationship, and expected activity (volume, frequency and counterparties). |
-| **Source of funds** | When required: income tax return (IRPF) and filing receipt, payslips, pró-labore, DECORE, employment or service contract, or other supporting documents such as a sale contract, deed or inheritance records. |
+| **Source of wealth** | Income tax return (IRPF) and filing receipt, payslips, pró-labore, DECORE, employment or service contract, or other supporting documents such as a sale contract, deed or inheritance records. |
+| **Source of funds** | Bank statements for the last 3 months, showing the account holder's name. |
 | **Virtual assets** | Declaration of the purpose and nature of the operations, the virtual assets and self-custody wallets used and, when applicable, reasonable evidence of wallet ownership. |
 
 ## Know your business (KYB)
@@ -64,7 +65,8 @@ Required information and documents:
 | **Proof of address** | Proof of the company's address. |
 | **Ownership structure** | Corporate structure chart showing the ownership chain up to the ultimate beneficial owners (natural persons). |
 | **Partners and representatives** | ID documents of partners and legal representatives; power of attorney, when applicable, and the attorney's ID document. |
-| **Financial documents** | Balance sheet or income statement (DRE) and revenue for the last 12 months, signed by the responsible accountant and the company's administrator. |
+| **Source of wealth** | Income tax return (IRPF) or income statement (DRE) and revenue for the last 12 months, signed by the responsible accountant and the company's administrator. |
+| **Source of funds** | Bank statements for the last 3 months, showing the account holder's name. |
 | **Business profile** | Description of the business model, products and services, main clients and suppliers, countries of operation, purpose of the relationship, source of funds and expected activity. |
 | **Accounts and wallets** | Bank accounts and wallets to be used, expected inflows and outflows, and relevant counterparties, when applicable. |
 
