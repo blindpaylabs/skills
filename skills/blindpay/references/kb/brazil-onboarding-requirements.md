@@ -90,7 +90,23 @@ Always provide a detailed and accurate description of the Nature of Business. Ex
 
 ## Onboarding flow updates
 
-BlindPay is updating its onboarding flow so that the information and documents listed above are requested during onboarding. Until this update is complete, additional documents may be requested through an RFI ([Request for Information](information-requests.md)), sent via API or email.
+The BlindPay dashboard and the hosted [onboarding links](https://blindpay.com/docs/learn/onboarding-links) now collect the information and documents listed above. Customers created through the API can send the same data in these fields:
+
+| Requirement | API fields |
+| --- | --- |
+| Nationality | `nationality` |
+| Occupation and employer | `occupation`, `employer` |
+| Monthly income and net worth (USD cents) | `monthly_income_amount`, `net_worth_amount` |
+| Purpose of the relationship | `account_purpose` (individuals), `account_purposes` and `account_purpose_other` (businesses) |
+| Expected activity | `expected_monthly_volume` and `transaction_frequency` (individuals), `monthly_payment_volume` and `payments_per_month` (businesses), `expected_transaction_countries` |
+| Source of funds | `source_of_funds_doc_type`, `source_of_funds_description`, `source_of_funds_doc_file` (bank statements) |
+| Source of wealth | `source_of_wealth`, `source_of_wealth_doc_file` |
+| Corporate documents | `incorporation_doc_file`, `cnpj_registration_doc_file` |
+| Ownership structure | `proof_of_ownership_doc_file` |
+| Partners and representatives | `owners[].role` (`partner`, `legal_representative`, `attorney_in_fact`), `owners[].power_of_attorney_doc_file` |
+| Business profile | `business_description`, `business_activities`, `client_profiles`, `main_suppliers`, `country_of_incorporation` |
+
+These fields are optional on the API today and will become required for customers with a Brazilian CPF or CNPJ. See [Customers](../essentials/customers.md#onboarding-profile-fields) for the accepted values. Until a customer carries this data, additional documents may be requested through an RFI ([Request for Information](information-requests.md)), sent via API or email.
 
 Questions about a specific rejection? Reach our team at [compliance@blindpay.com](mailto:compliance@blindpay.com).
 

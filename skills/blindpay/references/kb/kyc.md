@@ -37,7 +37,7 @@ Fields marked optional below are not required to create the customer, but missin
 | Country, address line 1, city, state/province/region, postal code | Yes |
 | Address line 2 | Optional |
 | Tax ID (government ID number) | Yes |
-| ID document: country, type (`PASSPORT`, `ID_CARD`, or `DRIVERS`), front file | Yes |
+| ID document: country, type (`PASSPORT`, `ID_CARD`, `DRIVERS`, or `RESIDENCE_PERMIT`), front file | Yes |
 | ID document: back file | Optional |
 | Proof of address: type (`UTILITY_BILL`, `BANK_STATEMENT`, `RENTAL_AGREEMENT`, `TAX_DOCUMENT`, `GOVERNMENT_CORRESPONDENCE`), file | Optional |
 | Selfie file | Yes |
@@ -64,7 +64,7 @@ Everything from KYC Standard, plus mandatory:
 | Proof of address: type, file | Yes |
 | Owners (UBOs and controlling persons) | Yes, at least 1 |
 
-Each owner provides the same fields as a Standard KYC individual (excluding phone number and IP address), plus a `role` (`beneficial_controlling`, `beneficial_owner`, or `controlling_person`) and optional `ownership_percentage` and `title`. Unlike the primary individual, where proof of address is optional, owners must provide proof of address (type and file). Owners with `country: "US"` must also send `tax_type` (`SSN` or `ITIN`) matching the format of their `tax_id`.
+Each owner provides the same fields as a Standard KYC individual (excluding phone number and IP address), plus a `role` (`beneficial_controlling`, `beneficial_owner`, or `controlling_person`; Brazilian businesses can also list a `partner`, `legal_representative`, or `attorney_in_fact`, with an optional `power_of_attorney_doc_file`) and optional `ownership_percentage` and `title`. Unlike the primary individual, where proof of address is optional, owners must provide proof of address (type and file). Owners with `country: "US"` must also send `tax_type` (`SSN` or `ITIN`) matching the format of their `tax_id`.
 
 **Note:**
 

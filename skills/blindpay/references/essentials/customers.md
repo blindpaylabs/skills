@@ -81,6 +81,68 @@ When the customer's country is `BR`:
 
 An invalid value returns `400 invalid_cpf_tax_id`, `400 invalid_cpf_or_rg_tax_id`, or `400 invalid_cnpj_tax_id`. The same checks run on both create and update.
 
+### Onboarding profile fields
+
+The dashboard and hosted onboarding links collect a financial and business profile for every new customer. The API accepts the same fields on create and update. They are **optional on the API today** and will become required for customers with a Brazilian CPF or CNPJ (see [Brazil onboarding requirements](../kb/brazil-onboarding-requirements.md)). Amounts are integers in USD cents.
+
+**Individual**
+
+| Field | Values |
+| --- | --- |
+| `nationality` | ISO 3166-1 alpha-2 country code |
+| `employer` | Text, up to 255 characters |
+| `monthly_income_amount`, `net_worth_amount` | Integer, USD cents |
+| `expected_monthly_volume` | `under_1k`, `1k_5k`, `5k_10k`, `10k_50k`, `50k_100k`, `over_100k` |
+| `transaction_frequency` (per month) | `under_1`, `1_5`, `6_20`, `21_50`, `over_50` |
+
+**Business**
+
+| Field | Values |
+| --- | --- |
+| `country_of_incorporation` | ISO 3166-1 alpha-2 country code |
+| `business_activities` | Up to 12 items: `software_saas`, `ecommerce_retail`, `professional_services`, `financial_services`, `marketplace_platform`, `other`, or free text (80 characters each) |
+| `business_activity_description` | Text, up to 2000 characters, expected with `other` |
+| `no_website_reason`, `online_presence` | Text, up to 1000 characters each, for a business without a `website` |
+| `operates_from` | `registered`, `ubo`, `operational` |
+| `operational_address_declaration_doc_file` | File URL, expected with `ubo` or `operational` |
+| `account_purposes` | `receive_customer_payments`, `send_vendor_payouts`, `convert_currencies`, `pay_suppliers`, `run_payroll`, `create_virtual_accounts`, `manage_expenses`, `issue_invoices`, `treasury_management`, `other` (describe it in `account_purpose_other`) |
+| `client_profiles` | `b2c`, `smb`, `enterprise`, `financial_institutions`, `marketplaces`, `freelancers`, `non_profits`, `government` |
+| `main_suppliers` | Text, up to 1000 characters |
+| `monthly_payment_volume` | `under_10k`, `10k_50k`, `50k_250k`, `over_250k` |
+| `payments_per_month` | `1_10`, `11_50`, `51_250`, `over_250` |
+| `prohibited_countries_confirmed` | Boolean |
+| `cnpj_registration_doc_file` | File URL (PDF), Brazilian businesses |
+
+**Both**
+
+| Field | Values |
+| --- | --- |
+| `expected_transaction_countries` | List of ISO 3166-1 alpha-2 country codes |
+| `source_of_funds_description` | Text, 30 to 1000 characters |
+| `source_of_wealth_doc_file` | File URL (.jpg, .jpeg, .png or .pdf) |
+
+Owners accept three more roles for Brazilian businesses (`partner`, `legal_representative`, `attorney_in_fact`) and an optional `power_of_attorney_doc_file`. Individuals and owners can also send `RESIDENCE_PERMIT` as `id_doc_type`. Upload files first with the [Upload](upload.md) endpoint.
+
+```json
+{
+  "type": "individual",
+  "nationality": "BR",
+  "occupation": "Software engineer",
+  "employer": "Acme Ltda",
+  "monthly_income_amount": 500000,
+  "net_worth_amount": 10000000,
+  "account_purpose": "personal_or_living_expenses",
+  "expected_monthly_volume": "1k_5k",
+  "transaction_frequency": "1_5",
+  "expected_transaction_countries": ["BR", "US"],
+  "source_of_funds_description": "Monthly salary as a software engineer at Acme Ltda",
+  "source_of_wealth": "salary_or_wages",
+  "source_of_wealth_doc_file": "https://files.blindpay.com/irpf-2025.pdf"
+}
+```
+
+These fields are returned on the customer object and in customer webhooks.
+
 ### `additional_info`
 
 `additional_info` is a list of supporting documents used for extended verification, most commonly to activate a USD virtual account. Each entry is `{ label, value }`, where `value` is typically a file URL from the [Upload](upload.md) endpoint and `label` is one of:
