@@ -83,7 +83,7 @@ An invalid value returns `400 invalid_cpf_tax_id`, `400 invalid_cpf_or_rg_tax_id
 
 ### Onboarding profile fields
 
-The dashboard and hosted onboarding links collect a financial and business profile for every new customer. The API accepts the same fields on create and update. They are **optional on the API today** and will become required for customers with a Brazilian CPF or CNPJ (see [Brazil onboarding requirements](../kb/brazil-onboarding-requirements.md)). Amounts are integers in USD cents.
+The dashboard and hosted onboarding links collect a financial and business profile for Brazilian customers: individuals with Brazilian nationality and businesses incorporated in Brazil. The API accepts the same fields on create and update. They are **optional on the API today** and will become required for customers with a Brazilian CPF or CNPJ (see [Brazil onboarding requirements](../kb/brazil-onboarding-requirements.md)). Amounts are integers in USD cents.
 
 **Individual**
 
